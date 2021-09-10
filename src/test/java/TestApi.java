@@ -32,43 +32,32 @@ class ServerTest {
         Thread.sleep(50);//fix bug java, https://bugs.openjdk.java.net/browse/JDK-8214300
     }
 
-    /*@Test
-    void serverRegistration() throws Exception {
-        String api = "api/registration";
-
-        String name = "testName";
-        String surname = "testSurname";
-        String patronymic = "testPatronymic";
-        String groups = "pks-020";
-        String mail = "mail222";
-        String password = "asdf";
-        String params = String.format("name=%s&surname=%s&patronymic=%s&groups=%s&password=%s&mail=%s",
-                name, surname, patronymic, groups, password, mail);
-        String paramEnc = URLEncoder.encode(params, StandardCharsets.UTF_8);
-        String result = sendInquiry(api, paramEnc);
-        try {
-            String token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
-            this.token = token;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("Json get: " + result);
-    }*/
-
-/*    @Test
-    void serverAuthorizationTest() throws Exception {
-        String api = "api/authorization";
-        String paramEnc = URLEncoder.encode(String.format("login=%s&password=%s", "Mail", "pass"), StandardCharsets.UTF_8);
-        String jsonToken = sendInquiry(api, paramEnc);
-        this.token = JsonParser.parseString(jsonToken).getAsJsonObject().get("token").getAsString();
-
-        System.out.println("Json get: " + jsonToken);
-    }*/
-
     @Test
     void serverNewsGet() throws Exception {
         String api = "api/news";
         String result = sendInquiry(api, "");
+        System.out.println(result);
+    }
+
+    @Test
+    void serverRegistration() throws Exception {
+        String api = "api/registration";
+        String result = sendInquiry(api, "");
+        token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
+        System.out.println(result);
+    }
+
+    @Test
+    void getQrCode() throws Exception {
+        String api = "api/qrCode";
+        String result = sendInquiry(api, "token=" + token);
+        System.out.println(result);
+    }
+
+    @Test
+    void setPersonData() throws Exception {
+        String api = "api/setPersonDate";
+        String result = sendInquiry(api, String.format("token=%s&email=cany245",  token));
         System.out.println(result);
     }
 

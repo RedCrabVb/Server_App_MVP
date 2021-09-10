@@ -15,6 +15,15 @@ public class Server {
     @Autowired
     @Qualifier("apiGetNews")
     private HandlerAPI apiGetNews;
+    @Autowired
+    @Qualifier("apiRegistration")
+    private HandlerAPI apiRegistration;
+    @Autowired
+    @Qualifier("apiGetQrCode")
+    private HandlerAPI apiGetQrCode;
+    @Autowired
+    @Qualifier("apiSetPersonDate")
+    private HandlerAPI apiSetPersonDate;
 
 
     public Server(int port,
@@ -25,6 +34,9 @@ public class Server {
 
     public void run() {
         serverHttp.createContext("/api/news", apiGetNews);
+        serverHttp.createContext("/api/registration", apiRegistration);
+        serverHttp.createContext("/api/qrCode", apiGetQrCode);
+        serverHttp.createContext("/api/setPersonDate", apiSetPersonDate);
         serverHttp.setExecutor(null); // creates a default executor
         serverHttp.start();
     }

@@ -1,8 +1,12 @@
 package ru.vivt;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.vivt.api.GetNews;
+import ru.vivt.api.GetQrCode;
+import ru.vivt.api.Registration;
+import ru.vivt.api.SetPersonData;
 import ru.vivt.dataBase.DataBase;
-import ru.vivt.dataBase.MySqlDataBase;
+import ru.vivt.dataBase.HibernateDataBase;
 import ru.vivt.server.HandlerAPI;
 import ru.vivt.server.Server;
 import ru.vivt.server.ServerControl;
@@ -14,18 +18,10 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @ComponentScan("com.vivt")
 @PropertySource("classpath:config.properties")
 public class SpringConfig {
-    private DataBase dataBase;
-    private Server server;
-
     @Value("${serverPort}") int serverPort;
     @Value("${logConfPath}") String logConfig;
 
     @Value("${typeBase}") String typeBase;
-/*    @Value("${userParameterDB}") String userParameterDB;
-    @Value("${passwordParameterDB}") String passwordParameterDB;
-    @Value("${portParameterDB}") String portParameterDB;
-    @Value("${serverNameDB}") String serverNameDB;
-    @Value("${databaseNameParameterDB}") String databaseNameParameterDB;*/
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -34,33 +30,40 @@ public class SpringConfig {
 
     @Bean
     public DataBase dataBase() throws Exception {
-        if (dataBase == null) {
-            if (typeBase.equals("mysql")) {
-                return new MySqlDataBase();
-            } else {
-                throw new Exception("Config error, type base = " + typeBase);
-            }
+        if (typeBase.equals("mysql")) {
+            return new HibernateDataBase();
         } else {
-            return dataBase;
+            throw new Exception("Config error, type base = " + typeBase);
         }
     }
 
     @Bean
     public Server server() throws Exception {
-        if (server == null) {
-            return new Server(serverPort, dataBase());
-        } else {
-            return server;
-        }
+        return new Server(serverPort, dataBase());
     }
 
     @Bean
-    public ServerControl serverControl() throws Exception {
+    public ServerControl serverControl(@Autowired Server server) throws Exception {
         return new ServerControl(logConfig, server());
     }
 
     @Bean
-    public HandlerAPI apiGetNews() throws Exception {
-        return new HandlerAPI(new GetNews(dataBase()), server());
+    public HandlerAPI apiGetNews(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
+        return new HandlerAPI(new GetNews(dataBase), server);
+    }
+
+    @Bean
+    public HandlerAPI apiRegistration(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
+        return new HandlerAPI(new Registration(dataBase), server);
+    }
+
+    @Bean
+    public HandlerAPI apiGetQrCode(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
+        return new HandlerAPI(new GetQrCode(dataBase), server);
+    }
+
+    @Bean
+    public HandlerAPI apiSetPersonDate(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
+        return new HandlerAPI(new SetPersonData(dataBase), server);
     }
 }
