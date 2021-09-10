@@ -9,9 +9,6 @@ import ru.vivt.server.ServerControl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import ru.vivt.dataBase.DataBase;
-import ru.vivt.server.HandlerAPI;
-import ru.vivt.server.ServerControl;
 
 @Configuration
 @ComponentScan("com.vivt")
@@ -24,11 +21,11 @@ public class SpringConfig {
     @Value("${logConfPath}") String logConfig;
 
     @Value("${typeBase}") String typeBase;
-    @Value("${userParameterDB}") String userParameterDB;
+/*    @Value("${userParameterDB}") String userParameterDB;
     @Value("${passwordParameterDB}") String passwordParameterDB;
     @Value("${portParameterDB}") String portParameterDB;
     @Value("${serverNameDB}") String serverNameDB;
-    @Value("${databaseNameParameterDB}") String databaseNameParameterDB;
+    @Value("${databaseNameParameterDB}") String databaseNameParameterDB;*/
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -64,6 +61,6 @@ public class SpringConfig {
 
     @Bean
     public HandlerAPI apiGetNews() throws Exception {
-        return new HandlerAPI(new GetNews(), server());
+        return new HandlerAPI(new GetNews(dataBase()), server());
     }
 }

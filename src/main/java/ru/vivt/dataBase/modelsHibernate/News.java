@@ -11,4 +11,8 @@ public class News {
     private String title;
     private String body;
     private String imgPath;
+
+    public News() {
+
+    }
 }

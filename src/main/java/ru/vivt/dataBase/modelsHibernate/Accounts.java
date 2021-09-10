@@ -3,7 +3,7 @@ package ru.vivt.dataBase.modelsHibernate;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Account")
+@Table(name = "Accounts")
 public class Accounts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,4 +14,8 @@ public class Accounts {
     private String username;
     private String email;
     private String phoneNumber;
+
+    public Accounts() {
+
+    }
 }
