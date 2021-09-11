@@ -1,10 +1,7 @@
 package ru.vivt;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.vivt.api.GetNews;
-import ru.vivt.api.GetQrCode;
-import ru.vivt.api.Registration;
-import ru.vivt.api.SetPersonData;
+import ru.vivt.api.*;
 import ru.vivt.dataBase.DataBase;
 import ru.vivt.dataBase.HibernateDataBase;
 import ru.vivt.server.HandlerAPI;
@@ -38,13 +35,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public Server server() throws Exception {
-        return new Server(serverPort, dataBase());
+    public Server server(@Autowired DataBase dataBase) throws Exception {
+        return new Server(serverPort, dataBase);
     }
 
     @Bean
     public ServerControl serverControl(@Autowired Server server) throws Exception {
-        return new ServerControl(logConfig, server());
+        return new ServerControl(logConfig, server);
     }
 
     @Bean
@@ -66,4 +63,9 @@ public class SpringConfig {
     public HandlerAPI apiSetPersonDate(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
         return new HandlerAPI(new SetPersonData(dataBase), server);
     }
+
+    @Bean
+    public HandlerAPI apiGetStatusToken(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
+        return new HandlerAPI(new GetStatusToken(dataBase), server);
+    };
 }

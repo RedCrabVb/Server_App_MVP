@@ -1,3 +1,4 @@
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import ru.vivt.Main;
 import org.junit.jupiter.api.AfterEach;
@@ -24,6 +25,8 @@ class ServerTest {
         if (!isRunning) {
             Main.main(new String[]{});
             isRunning = true;
+
+            serverRegistration();
         }
     }
 
@@ -36,6 +39,7 @@ class ServerTest {
     void serverNewsGet() throws Exception {
         String api = "api/news";
         String result = sendInquiry(api, "");
+        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("News").toString().isEmpty());
         System.out.println(result);
     }
 
@@ -51,6 +55,7 @@ class ServerTest {
     void getQrCode() throws Exception {
         String api = "api/qrCode";
         String result = sendInquiry(api, "token=" + token);
+        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("qrCode").getAsString().isEmpty());
         System.out.println(result);
     }
 
@@ -59,6 +64,13 @@ class ServerTest {
         String api = "api/setPersonDate";
         String result = sendInquiry(api, String.format("token=%s&email=cany245",  token));
         System.out.println(result);
+    }
+
+    @Test
+    void getStatusToken() throws Exception {
+        String api = "api/getStatusToken";
+        assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  token)))
+                .getAsJsonObject().get("result").getAsBoolean());
     }
 
     private String sendInquiry(String api, String json) throws Exception {

@@ -9,4 +9,5 @@ public interface DataBase {
     JsonObject generateAccount();
     JsonObject setPersonData(JsonObject jsonPersonData);
     JsonObject getQrCode(String token);
+    boolean isActiveToken(String token);
 }

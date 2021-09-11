@@ -100,6 +100,17 @@ public class HibernateDataBase implements DataBase {
     }
 
     @Override
+    public boolean isActiveToken(String token) {
+        try {
+            Session session = sessionFactory.openSession();
+            Accounts accounts = (Accounts) session.createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), token)).uniqueResult();
+            return  accounts != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
     public JsonObject getQrCode(String token) {
         Accounts accounts = (Accounts) sessionFactory
                 .openSession()

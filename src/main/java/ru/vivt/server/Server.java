@@ -24,6 +24,9 @@ public class Server {
     @Autowired
     @Qualifier("apiSetPersonDate")
     private HandlerAPI apiSetPersonDate;
+    @Autowired
+    @Qualifier("apiGetStatusToken")
+    private HandlerAPI apiGetStatusToken;
 
 
     public Server(int port,
@@ -37,6 +40,7 @@ public class Server {
         serverHttp.createContext("/api/registration", apiRegistration);
         serverHttp.createContext("/api/qrCode", apiGetQrCode);
         serverHttp.createContext("/api/setPersonDate", apiSetPersonDate);
+        serverHttp.createContext("/api/getStatusToken", apiGetStatusToken);
         serverHttp.setExecutor(null); // creates a default executor
         serverHttp.start();
     }
