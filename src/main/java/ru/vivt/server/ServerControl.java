@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  * */
 public class ServerControl extends Thread {
     private Server server;
-    private static boolean showLog = false;
+    private static boolean showLog = true;
     private final String cls = "/cls",
             info = "/info", sendMessage = "/msg", logShow = "/logShow", close = "/close",
             help = "/help";

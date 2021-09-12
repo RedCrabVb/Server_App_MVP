@@ -19,6 +19,7 @@ public class SpringConfig {
     @Value("${logConfPath}") String logConfig;
 
     @Value("${typeBase}") String typeBase;
+    @Value("${imagePath}") String imgPath;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -67,5 +68,10 @@ public class SpringConfig {
     @Bean
     public HandlerAPI apiGetStatusToken(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
         return new HandlerAPI(new GetStatusToken(dataBase), server);
-    };
+    }
+
+    @Bean
+    public String imgPath() {
+        return imgPath;
+    }
 }

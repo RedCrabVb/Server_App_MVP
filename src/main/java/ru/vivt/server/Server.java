@@ -1,11 +1,18 @@
 package ru.vivt.server;
 
+import com.sun.net.httpserver.HttpHandler;
 import ru.vivt.dataBase.DataBase;
 import com.sun.net.httpserver.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Server {
@@ -27,6 +34,9 @@ public class Server {
     @Autowired
     @Qualifier("apiGetStatusToken")
     private HandlerAPI apiGetStatusToken;
+    @Autowired
+    @Qualifier("imgPath")
+    private String imgPath;
 
 
     public Server(int port,
@@ -41,11 +51,25 @@ public class Server {
         serverHttp.createContext("/api/qrCode", apiGetQrCode);
         serverHttp.createContext("/api/setPersonDate", apiSetPersonDate);
         serverHttp.createContext("/api/getStatusToken", apiGetStatusToken);
+
+
+        try {
+            Files.walk(Paths.get(imgPath)).forEach(filePath -> {
+                if (Files.isRegularFile(filePath)) {
+                    String imgFile = filePath.getFileName().toString();
+                    System.out.println(filePath.toAbsolutePath().toString());
+                    serverHttp.createContext("/src/img/" + imgFile, new ImageHandler(filePath.toAbsolutePath().toString()));
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         serverHttp.setExecutor(null); // creates a default executor
         serverHttp.start();
     }
 
-    public Map<String, String> queryToMap(String query) {
+    public static Map<String, String> queryToMap(String query) {
         if (query == null) {
             return null;
         }
