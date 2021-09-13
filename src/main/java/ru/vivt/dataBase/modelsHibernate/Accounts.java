@@ -14,19 +14,19 @@ public class Accounts {
     private LocalDate accountActiveTime;
     private String username;
     private String email;
-    private String phoneNumber;
+    private String password;
 
     public Accounts() {
 
     }
 
-    public Accounts(String qrCode, String token, LocalDate accountActiveTime, String username, String email, String phoneNumber) {
+    public Accounts(String qrCode, String token, LocalDate accountActiveTime, String username, String email, String password) {
         this.qrCode = qrCode;
         this.token = token;
         this.accountActiveTime = accountActiveTime;
         this.username = username;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.password = password;
     }
 
     public String getQrCode() {
@@ -45,11 +45,11 @@ public class Accounts {
         this.email = email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPassword() {
+        return password;
     }
 }

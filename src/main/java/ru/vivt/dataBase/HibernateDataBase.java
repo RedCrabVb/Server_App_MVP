@@ -11,14 +11,20 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import ru.vivt.dataBase.modelsHibernate.*;
 import ru.vivt.dataBase.modelsHibernate.News;
+import ru.vivt.server.ServerControl;
 
 import javax.xml.crypto.Data;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,17 +92,43 @@ public class HibernateDataBase implements DataBase {
                 .createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), jsonPersonData.get("token").getAsString()))
                 .uniqueResult();
 
-        accounts.setEmail(jsonPersonData.keySet().contains("email") ? jsonPersonData.get("email").getAsString() : "");
-        accounts.setUsername(jsonPersonData.keySet().contains("username") ? jsonPersonData.get("username").getAsString() : "");
-        accounts.setPhoneNumber(jsonPersonData.keySet().contains("phoneNumber") ? jsonPersonData.get("phoneNumber").getAsString() : "");
+        JsonObject json = new JsonObject();
+        String email, password;
+        try {
+            if (!jsonPersonData.has("password")) {
+                throw new Exception("password not set");
+            } else {
+                password = jsonPersonData.get("password").getAsString();
+            }
 
-        session.saveOrUpdate(accounts);
-        transaction.commit();
+            if (!accounts.getPassword().isEmpty() && !accounts.getPassword().equals(toSHA1(jsonPersonData.get("password").getAsString()))) {
+                throw new Exception("Password incorrect");
+            }
 
-        JsonObject jsonOkey = new JsonObject();
-        jsonOkey.addProperty("okey", "okey");
-        jsonOkey.addProperty("account", gson.toJson(accounts));
-        return jsonOkey;
+            if (!jsonPersonData.has("email")) {
+                throw new Exception("email not set");
+            } else {
+                email = jsonPersonData.get("email").getAsString();
+            }
+
+            List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
+            if (accountsOnEqualsEmail.size() > 1) {
+                throw new Exception("Mail is already in the database");
+            }
+            accounts.setEmail(email);
+            accounts.setUsername(jsonPersonData.has("username") ? jsonPersonData.get("username").getAsString() : "");
+            accounts.setPassword(password);
+
+            session.saveOrUpdate(accounts);
+            transaction.commit();
+
+            json.addProperty("status", true);
+            json.addProperty("account", gson.toJson(accounts));
+        } catch (Exception e) {
+            json.addProperty("status", false);
+            json.addProperty("error", e.getMessage());
+        }
+        return json;
     }
 
     @Override
@@ -119,5 +151,12 @@ public class HibernateDataBase implements DataBase {
         JsonObject jsonQrCode = new JsonObject();
         jsonQrCode.addProperty("qrCode", accounts.getQrCode());
         return jsonQrCode;
+    }
+
+    private static String toSHA1(String value) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        digest.reset();
+        digest.update(value.getBytes(StandardCharsets.UTF_8));
+        return String.format("%040x", new BigInteger(1, digest.digest()));
     }
 }

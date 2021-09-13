@@ -1,9 +1,9 @@
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import ru.vivt.Main;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.vivt.Main;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,14 +11,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class ServerTest {
-    private static String token;
+public class TestApiCurrentAccount {
+    private static final String token = "[B@52aff286";
     private static boolean isRunning;
 
     @BeforeEach
@@ -37,33 +34,26 @@ class ServerTest {
     }
 
     @Test
-    void serverNewsGet() throws Exception {
-        String api = "api/news";
-        String result = sendInquiry(api, "");
-        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("News").toString().isEmpty());
-        System.out.println(result);
-    }
-
-    @Test
     void serverRegistration() throws Exception {
         String api = "api/registration";
         String result = sendInquiry(api, "");
-        token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
+//         = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
         System.out.println(result);
     }
 
     @Test
     void getQrCode() throws Exception {
         String api = "api/qrCode";
-        String result = sendInquiry(api, "token=" + token);
-        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("qrCode").getAsString().isEmpty());
-        System.out.println(result);
+        java.io.IOException thrown = assertThrows(java.io.IOException.class,
+                () -> {sendInquiry(api, "token=" + token + "error");});
+//        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("qrCode").getAsString().isEmpty());
+//        System.out.println(result);
     }
 
     @Test
     void setPersonData() throws Exception {
         String api = "api/setPersonDate";
-        String result = sendInquiry(api, String.format("token=%s&email=cany245&password=newPassword",  token));
+        String result = sendInquiry(api, String.format("token=%s&email=cany24f5&password=1234pass",  token));
         assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
         System.out.println(result);
     }
@@ -74,10 +64,6 @@ class ServerTest {
         assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  token)))
                 .getAsJsonObject().get("result").getAsBoolean());
     }
-
-
-
-
 
     private static String sendInquiry(String api, String json) throws Exception {
         json = json.replace("+", "%20"); // fix space encoder
