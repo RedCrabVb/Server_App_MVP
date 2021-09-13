@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.logging.Level;
 
 public class HibernateDataBase implements DataBase {
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
@@ -110,7 +111,7 @@ public class HibernateDataBase implements DataBase {
             }
 
             List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
-            if (accountsOnEqualsEmail.size() > 1) {
+            if (accountsOnEqualsEmail.size() != 0) {
                 throw new Exception("Mail is already in the database");
             }
             accounts.setEmail(email);
@@ -141,7 +142,7 @@ public class HibernateDataBase implements DataBase {
     }
 
     @Override
-    public String addRequestOnchangePassword(String email) {
+    public Map addRequestOnchangePassword(String email) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
@@ -155,7 +156,37 @@ public class HibernateDataBase implements DataBase {
         transaction.commit();
         session.close();
 
-        return token;
+        Map<String, String> maps = new HashMap<>();
+        maps.put("token", token);
+        maps.put("tmpPassword", password);
+
+        return maps;
+    }
+
+    @Override
+    public JsonObject changePassword(String token) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        ResetPassword resetPassword = (ResetPassword) session
+                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", ResetPassword.class.getName(), token))
+                .uniqueResult();
+
+        JsonObject json = new JsonObject();
+        try {
+            // TODO: 13.09.2021 chick date
+            resetPassword.getAccount().setPassword(resetPassword.getTmpPassword());
+
+            session.saveOrUpdate(resetPassword);
+            session.delete(resetPassword);
+            transaction.commit();
+
+            json.addProperty("status", true);
+        } catch (Exception e) {
+            json.addProperty("status", false);
+            json.addProperty("error", e.getMessage());
+            ServerControl.LOGGER.log(Level.WARNING, "error in change password", e);
+        }
+        return json;
     }
 
     @Override

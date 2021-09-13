@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Server {
+public class Server extends Thread {
     private HttpServer serverHttp;
     private DataBase dataBase;
 
@@ -48,6 +48,7 @@ public class Server {
         this.serverHttp = HttpServer.create(new InetSocketAddress(port), 0);
     }
 
+    @Override
     public void run() {
         serverHttp.createContext("/api/news", apiGetNews);
         serverHttp.createContext("/api/registration", apiRegistration);

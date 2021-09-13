@@ -28,7 +28,7 @@ public class MailSender {
     }
 
     //header - Password recovery
-    //body - "Your new password ###, <a href='api/resetPas=###&&tokenNew(DB)=###> click here to reset your old password"
+    //body - "Your new password %s, <a href="%s">click here</a> to reset your old password"
     public boolean sendMessage(String recipient, String header, String body) {
         try {
             Message message = new MimeMessage(session);
@@ -36,7 +36,7 @@ public class MailSender {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recipient));
             message.setSubject(header);
-            message.setText(body);
+            message.setContent(body, "text/html");
 
             Transport.send(message);
 

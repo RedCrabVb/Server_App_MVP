@@ -101,7 +101,8 @@ public class TestApi {
     @Test
     public void setPersonDataForCurrentAccount() throws Exception {
         String api = "api/setPersonDate";
-        String result = sendInquiry(api, String.format("token=%s&email=%s&password=%s",  token,
+        String result = sendInquiry(api, String.format("token=%s&email=%s&password=%s",
+                propertySourceDataTestUser.getTokenCurrentAccount(),
                 propertySourceDataTestUser.getEmailUserTest(),
                 propertySourceDataTestUser.getUserTestPassword()));
         assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
