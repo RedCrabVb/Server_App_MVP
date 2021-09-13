@@ -21,3 +21,13 @@ to send a notification you have to set up your mail a little, mail.properties lo
 username=eamil@email.com
 password=pass
 ---
+
+The settings for the tests were also placed in a separate file, I don't want to receive spam
+test.properties
+---
+user.test.Token=bdToken
+user.test.Email=BdEmail@test.com
+user.test.password=passTest
+---
+
+There is a database in the project files, you only need to import it
