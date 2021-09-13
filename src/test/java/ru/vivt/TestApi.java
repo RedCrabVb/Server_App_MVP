@@ -33,14 +33,15 @@ public class TestApi {
 
     private static String token;
 
-    private static boolean isRunning;
-
     @BeforeTestClass
     public void serverStart() throws Exception {
         server.start();
-        if (!isRunning) {
-//            server.run();
-            isRunning = true;
+        serverRegistration();
+    }
+
+    @BeforeEach
+    public void test() throws Exception {
+        if (token == null) {
             serverRegistration();
         }
     }
@@ -85,7 +86,7 @@ public class TestApi {
     @Test
     public void getStatusToken() throws Exception {
         String api = "api/getStatusToken";
-        assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  token)))
+        assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  propertySourceDataTestUser.getTokenCurrentAccount())))
                 .getAsJsonObject().get("result").getAsBoolean());
     }
 
@@ -101,9 +102,8 @@ public class TestApi {
     @Test
     public void setPersonDataForCurrentAccount() throws Exception {
         String api = "api/setPersonDate";
-        String result = sendInquiry(api, String.format("token=%s&email=%s&password=%s",
+        String result = sendInquiry(api, String.format("token=%s&password=%s",
                 propertySourceDataTestUser.getTokenCurrentAccount(),
-                propertySourceDataTestUser.getEmailUserTest(),
                 propertySourceDataTestUser.getUserTestPassword()));
         assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
         System.out.println(result);
@@ -120,6 +120,7 @@ public class TestApi {
     public void resetPassword() throws Exception {
         String api = "api/resetPassword";
         String result = sendInquiry(api, String.format("email=%s", propertySourceDataTestUser.getEmailUserTest()));
+        System.out.println(result);
     }
 
 

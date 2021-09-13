@@ -104,19 +104,17 @@ public class HibernateDataBase implements DataBase {
                 throw new Exception("Password incorrect");
             }
 
-            if (!jsonPersonData.has("email")) {
-                throw new Exception("email not set");
-            } else {
+            if (jsonPersonData.has("email")) {
                 email = jsonPersonData.get("email").getAsString();
+                List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
+                if (accountsOnEqualsEmail.size() != 0) {
+                    throw new Exception("Mail is already in the database");
+                }
+                accounts.setEmail(email);
             }
 
-            List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
-            if (accountsOnEqualsEmail.size() != 0) {
-                throw new Exception("Mail is already in the database");
-            }
-            accounts.setEmail(email);
             accounts.setUsername(jsonPersonData.has("username") ? jsonPersonData.get("username").getAsString() : "");
-            accounts.setPassword(password);
+            accounts.setPassword(toSHA1(password));
 
             session.saveOrUpdate(accounts);
             transaction.commit();
@@ -174,7 +172,7 @@ public class HibernateDataBase implements DataBase {
         JsonObject json = new JsonObject();
         try {
             // TODO: 13.09.2021 chick date
-            resetPassword.getAccount().setPassword(resetPassword.getTmpPassword());
+            resetPassword.getAccount().setPassword(toSHA1(resetPassword.getTmpPassword()));
 
             session.saveOrUpdate(resetPassword);
             session.delete(resetPassword);
