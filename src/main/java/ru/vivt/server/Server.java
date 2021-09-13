@@ -35,6 +35,9 @@ public class Server {
     @Qualifier("apiGetStatusToken")
     private HandlerAPI apiGetStatusToken;
     @Autowired
+    @Qualifier("resetPassword")
+    private HandlerAPI resetPassword;
+    @Autowired
     @Qualifier("imgPath")
     private String imgPath;
 
@@ -51,13 +54,13 @@ public class Server {
         serverHttp.createContext("/api/qrCode", apiGetQrCode);
         serverHttp.createContext("/api/setPersonDate", apiSetPersonDate);
         serverHttp.createContext("/api/getStatusToken", apiGetStatusToken);
+        serverHttp.createContext("/api/resetPassword", resetPassword);
 
 
         try {
             Files.walk(Paths.get(imgPath)).forEach(filePath -> {
                 if (Files.isRegularFile(filePath)) {
                     String imgFile = filePath.getFileName().toString();
-                    System.out.println(filePath.toAbsolutePath().toString());
                     serverHttp.createContext("/src/img/" + imgFile, new ImageHandler(filePath.toAbsolutePath().toString()));
                 }
             });

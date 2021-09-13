@@ -17,11 +17,12 @@ public class ImageHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange http) throws IOException {
         if (http.getRequestMethod().equals("GET")) {
-            System.out.println("img transfered..." + imgPath);
             ServerControl.LOGGER.log(Level.INFO, "img transfered ", imgPath);
             try {
                 File file = new File(imgPath);
                 http.sendResponseHeaders(200, file.length());
+
+                Thread.sleep(4000); //for test
 
                 OutputStream outputStream = http.getResponseBody();
                 Files.copy(file.toPath(), outputStream);

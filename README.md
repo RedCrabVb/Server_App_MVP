@@ -12,3 +12,12 @@ then write a server with the following logic:
 * api / new - here is json (header, body, img), then you still need to make the qr code, it will be constant, you will need to take it only once from the database (from the customer, I don’t know why once)
 * api / lk - password set, nickname change, etc.
 * well, changing the password, ease of registration - we will somehow fix the security problems
+
+
+the file with the settings for mail has been sent to .gitignore, 
+since it is not safe, in any case, I will say, it worked through mail ru, 
+to send a notification you have to set up your mail a little, mail.properties looks like the following
+---
+username=eamil@email.com
+password=pass
+---

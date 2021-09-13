@@ -4,6 +4,9 @@
 *.iws
 out/
 
+src/main/resources/mail.properties
+src/main/resources/log.txt
+
 # Maven
 log/
 target/
