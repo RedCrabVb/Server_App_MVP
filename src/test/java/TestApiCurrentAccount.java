@@ -37,7 +37,6 @@ public class TestApiCurrentAccount {
     void serverRegistration() throws Exception {
         String api = "api/registration";
         String result = sendInquiry(api, "");
-//         = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
         System.out.println(result);
     }
 
@@ -46,8 +45,6 @@ public class TestApiCurrentAccount {
         String api = "api/qrCode";
         java.io.IOException thrown = assertThrows(java.io.IOException.class,
                 () -> {sendInquiry(api, "token=" + token + "error");});
-//        assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("qrCode").getAsString().isEmpty());
-//        System.out.println(result);
     }
 
     @Test
@@ -64,6 +61,16 @@ public class TestApiCurrentAccount {
         assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  token)))
                 .getAsJsonObject().get("result").getAsBoolean());
     }
+
+    @Test
+    void resetPassword() throws Exception {
+        String api = "api/resetPassword";
+        String result = sendInquiry(api, String.format(""));
+    }
+
+
+
+
 
     private static String sendInquiry(String api, String json) throws Exception {
         json = json.replace("+", "%20"); // fix space encoder

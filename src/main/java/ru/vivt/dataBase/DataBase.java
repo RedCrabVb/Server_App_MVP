@@ -11,4 +11,5 @@ public interface DataBase {
     JsonObject setPersonData(JsonObject jsonPersonData) throws Exception;
     JsonObject getQrCode(String token);
     boolean isActiveToken(String token);
+    String addRequestOnchangePassword(String email);
 }

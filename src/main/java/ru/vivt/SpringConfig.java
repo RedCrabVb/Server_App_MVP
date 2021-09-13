@@ -22,7 +22,6 @@ public class SpringConfig {
 
     @Value("${typeBase}") String typeBase;
     @Value("${imagePath}") String imgPath;
-//    @Value("${usernameEmail}") String usernameEamil;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -79,8 +78,8 @@ public class SpringConfig {
     }
 
     @Bean
-    public HandlerAPI resetPassword(@Autowired MailSender mailSender, @Autowired Server server) {
-        return new HandlerAPI(new ResetPassword(mailSender), server);
+    public HandlerAPI resetPassword(@Autowired MailSender mailSender, @Autowired Server server, @Autowired DataBase dataBase) {
+        return new HandlerAPI(new ResetPassword(mailSender, dataBase), server);
     }
 
     @Bean

@@ -24,9 +24,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class HibernateDataBase implements DataBase {
     private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
@@ -45,6 +42,7 @@ public class HibernateDataBase implements DataBase {
         Configuration configuration =  new Configuration().configure();
         configuration.addAnnotatedClass(Accounts.class);
         configuration.addAnnotatedClass(News.class);
+        configuration.addAnnotatedClass(ResetPassword.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(builder.build());
         gson = new Gson();
@@ -140,6 +138,24 @@ public class HibernateDataBase implements DataBase {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public String addRequestOnchangePassword(String email) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        String token = generateNewToken();
+        String password = generateNewToken().substring(0, 8);
+        Accounts accounts = (Accounts) session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).uniqueResult();
+        LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
+
+        session.save(new ResetPassword(token, password, timeActive, accounts));
+
+        transaction.commit();
+        session.close();
+
+        return token;
     }
 
     @Override
