@@ -1,9 +1,18 @@
-import com.google.gson.JsonObject;
+package ru.vivt;
+
 import com.google.gson.JsonParser;
-import ru.vivt.Main;
+import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.vivt.server.Server;
+import ru.vivt.server.ServerControl;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,33 +20,38 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.*;
 
-class ServerTest {
+
+//@SpringBootApplication
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class TestApi {
+    @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
+    @Autowired public Server server;
+
     private static String token;
+
     private static boolean isRunning;
 
-    @BeforeEach
-    void serverStart() throws Exception {
+    @BeforeTestClass
+    public void serverStart() throws Exception {
+        server.start();
         if (!isRunning) {
-            Main.main(new String[]{});
+//            server.run();
             isRunning = true;
-
             serverRegistration();
         }
     }
 
     @AfterEach
-    void endTest() throws Exception {
+    public void endTest() throws Exception {
         Thread.sleep(50);//fix bug java, https://bugs.openjdk.java.net/browse/JDK-8214300
     }
 
     @Test
-    void serverNewsGet() throws Exception {
+    public void serverNewsGet() throws Exception {
         String api = "api/news";
         String result = sendInquiry(api, "");
         assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("News").toString().isEmpty());
@@ -45,7 +59,7 @@ class ServerTest {
     }
 
     @Test
-    void serverRegistration() throws Exception {
+    public void serverRegistration() throws Exception {
         String api = "api/registration";
         String result = sendInquiry(api, "");
         token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();
@@ -53,7 +67,7 @@ class ServerTest {
     }
 
     @Test
-    void getQrCode() throws Exception {
+    public void getQrCode() throws Exception {
         String api = "api/qrCode";
         String result = sendInquiry(api, "token=" + token);
         assertEquals(true, !JsonParser.parseString(result).getAsJsonObject().get("qrCode").getAsString().isEmpty());
@@ -61,22 +75,51 @@ class ServerTest {
     }
 
     @Test
-    void setPersonData() throws Exception {
+    public void setPersonData() throws Exception {
         String api = "api/setPersonDate";
-        String result = sendInquiry(api, String.format("token=%s&email=cany245&password=newPassword",  token));
+        String result = sendInquiry(api, String.format("token=%s&email=emailTest&password=newPassword",  token));
         assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
         System.out.println(result);
     }
 
     @Test
-    void getStatusToken() throws Exception {
+    public void getStatusToken() throws Exception {
         String api = "api/getStatusToken";
         assertEquals(true, JsonParser.parseString(sendInquiry(api, String.format("token=%s",  token)))
                 .getAsJsonObject().get("result").getAsBoolean());
     }
 
+    @Test
+    public void getQrCodeError() throws Exception {
+        server.start();
+        String api = "api/qrCode";
+        java.io.IOException thrown = assertThrows(java.io.IOException.class,
+                () -> {sendInquiry(api, "token=" + propertySourceDataTestUser.getUserTestPassword() + "error");});
+    }
 
 
+    @Test
+    public void setPersonDataForCurrentAccount() throws Exception {
+        String api = "api/setPersonDate";
+        String result = sendInquiry(api, String.format("token=%s&email=%s&password=%s",  token,
+                propertySourceDataTestUser.getEmailUserTest(),
+                propertySourceDataTestUser.getUserTestPassword()));
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
+        System.out.println(result);
+    }
+
+    @Test
+    public void getStatusTokenError() throws Exception {
+        String api = "api/getStatusToken";
+        assertEquals(false, JsonParser.parseString(sendInquiry(api, String.format("token=%serror",  token)))
+                .getAsJsonObject().get("result").getAsBoolean());
+    }
+
+    @Test
+    public void resetPassword() throws Exception {
+        String api = "api/resetPassword";
+        String result = sendInquiry(api, String.format("email=%s", propertySourceDataTestUser.getEmailUserTest()));
+    }
 
 
     private static String sendInquiry(String api, String json) throws Exception {

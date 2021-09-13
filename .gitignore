@@ -6,6 +6,7 @@ out/
 
 src/main/resources/mail.properties
 src/main/resources/log.txt
+src/main/resources/test.properties
 
 # Maven
 log/
