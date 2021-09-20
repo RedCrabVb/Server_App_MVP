@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -56,6 +57,7 @@ public class TestApi {
     @Order(1)
     public void serverRegistration() throws Exception {
         server.start();
+        SpringApplication.run(Main.class);
 
         String result = sendInquiry(apiRegistration, "");
         token = JsonParser.parseString(result).getAsJsonObject().get("token").getAsString();

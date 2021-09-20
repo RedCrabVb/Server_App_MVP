@@ -19,7 +19,7 @@ public class Server extends Thread {
     private HttpServer serverHttp;
     private DataBase dataBase;
 
-    @Autowired
+/*    @Autowired
     @Qualifier("apiGetNews")
     private HandlerAPI apiGetNews;
     @Autowired
@@ -39,18 +39,19 @@ public class Server extends Thread {
     private HandlerAPI resetPassword;
     @Autowired
     @Qualifier("imgPath")
-    private String imgPath;
+    private String imgPath;*/
 
 
     public Server(int port,
                   DataBase dataBase) throws Exception {
-        this.dataBase = dataBase;
-        this.serverHttp = HttpServer.create(new InetSocketAddress(port), 0);
+//        this.dataBase = dataBase;
+//        this.serverHttp = HttpServer.create(new InetSocketAddress(port), 0);
     }
 
     @Override
     public void run() {
-        serverHttp.createContext("/api/news", apiGetNews);
+
+/*        serverHttp.createContext("/api/news", apiGetNews);
         serverHttp.createContext("/api/registration", apiRegistration);
         serverHttp.createContext("/api/qrCode", apiGetQrCode);
         serverHttp.createContext("/api/setPersonDate", apiSetPersonDate);
@@ -69,8 +70,8 @@ public class Server extends Thread {
             e.printStackTrace();
         }
 
-        serverHttp.setExecutor(null); // creates a default executor
-        serverHttp.start();
+        serverHttp.setExecutor(null); // creates a default executor*/
+//        serverHttp.start();
     }
 
     public static Map<String, String> queryToMap(String query) {

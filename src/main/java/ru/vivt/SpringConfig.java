@@ -1,6 +1,9 @@
 package ru.vivt;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.vivt.api.*;
 import ru.vivt.dataBase.DataBase;
 import ru.vivt.dataBase.HibernateDataBase;
@@ -16,7 +19,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @ComponentScan("com.vivt")
 @PropertySource("classpath:config.properties")
 @PropertySource("classpath:mail.properties")
-public class SpringConfig {
+public class SpringConfig implements WebMvcConfigurer {
     @Value("${serverPort}") int serverPort;
     @Value("${logConfPath}") String logConfig;
 
@@ -86,4 +89,12 @@ public class SpringConfig {
     public String imgPath() {
         return imgPath;
     }
+
+    private final ApplicationContext applicationContext;
+
+    @Autowired
+    public SpringConfig(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
 }
