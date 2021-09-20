@@ -16,4 +16,11 @@ public class QrCodeController {
     public JsonObject getQrCode (@RequestParam String token) {
         return dataBase.getQrCode(token);
     }
+
+    @GetMapping("/api/getStatusToken")
+    public JsonObject getStatusToken(@RequestParam String token) {
+        JsonObject json = new JsonObject();
+        json.addProperty("result", dataBase.isActiveToken(token));
+        return json;
+    }
 }

@@ -84,36 +84,36 @@ public class HibernateDataBase implements DataBase {
     }
 
     @Override
-    public JsonObject setPersonData(JsonObject jsonPersonData) {
+    public JsonObject setPersonData(String password, String email, String token, String username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Accounts accounts = (Accounts) session
-                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), jsonPersonData.get("token").getAsString()))
+                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), token))
                 .uniqueResult();
 
         JsonObject json = new JsonObject();
-        String email, password;
+//        String email, password;
         try {
-            if (!jsonPersonData.has("password")) {
-                throw new Exception("password not set");
-            } else {
-                password = jsonPersonData.get("password").getAsString();
-            }
+//            if (!jsonPersonData.has("password")) {
+//                throw new Exception("password not set");
+//            } else {
+//                password = jsonPersonData.get("password").getAsString();
+//            }
 
-            if (!accounts.getPassword().isEmpty() && !accounts.getPassword().equals(toSHA1(jsonPersonData.get("password").getAsString()))) {
+            if (!accounts.getPassword().isEmpty() && !accounts.getPassword().equals(toSHA1(password))) {
                 throw new Exception("Password incorrect");
             }
 
-            if (jsonPersonData.has("email")) {
-                email = jsonPersonData.get("email").getAsString();
+//            if (jsonPersonData.has("email")) {
+//                email = jsonPersonData.get("email").getAsString();
                 List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
                 if (accountsOnEqualsEmail.size() != 0) {
                     throw new Exception("Mail is already in the database");
                 }
                 accounts.setEmail(email);
-            }
+//            }
 
-            accounts.setUsername(jsonPersonData.has("username") ? jsonPersonData.get("username").getAsString() : "");
+            accounts.setUsername(username);
             accounts.setPassword(toSHA1(password));
 
             session.saveOrUpdate(accounts);

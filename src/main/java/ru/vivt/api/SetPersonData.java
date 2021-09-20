@@ -18,6 +18,6 @@ public class SetPersonData implements Command {
 
     @Override
     public JsonObject execute(Map<String, String> params) throws Exception {
-        return dataBase.setPersonData(JsonParser.parseString(gson.toJson(params)).getAsJsonObject());
+        return null;
     }
 }
