@@ -20,5 +20,8 @@
         <property name="hibernate.connection.characterEncoding">utf8</property>
         <property name="hibernate.connection.useUnicode">true</property>
 
+        <!-- For test -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
     </session-factory>
 </hibernate-configuration>
