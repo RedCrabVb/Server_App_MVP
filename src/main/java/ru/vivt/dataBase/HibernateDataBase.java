@@ -83,6 +83,14 @@ public class HibernateDataBase implements DataBase {
         return jsonReg;
     }
 
+    /**
+     *
+     * @param password
+     * @param email
+     * @param token
+     * @param username
+     * @return
+     */
     @Override
     public JsonObject setPersonData(String password, String email, String token, String username) {
         Session session = sessionFactory.openSession();

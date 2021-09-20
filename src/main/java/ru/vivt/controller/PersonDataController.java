@@ -19,7 +19,7 @@ public class PersonDataController {
 
     @GetMapping("/api/setPersonDate")
     public JsonObject setPersonData (@RequestParam Map<String,String> params) throws Exception { //@RequestParam Map<String,String> params
-        return dataBase.setPersonData(params.get("token"), params.get("email"), params.get("password"), params.containsKey("username") ? params.get("username") : ""); //@RequestParam String token, @RequestParam String email, @RequestParam String password
+        return dataBase.setPersonData(params.get("password"), params.get("email"), params.get("token"), params.containsKey("username") ? params.get("username") : ""); //@RequestParam String token, @RequestParam String email, @RequestParam String password
     }
 
     @GetMapping("/api/resetPassword")

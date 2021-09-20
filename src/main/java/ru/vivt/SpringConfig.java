@@ -56,45 +56,17 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public HandlerAPI apiGetNews(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
-        return new HandlerAPI(new GetNews(dataBase), server);
-    }
-
-    @Bean
-    public HandlerAPI apiRegistration(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
-        return new HandlerAPI(new Registration(dataBase), server);
-    }
-
-    @Bean
-    public HandlerAPI apiGetQrCode(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
-        return new HandlerAPI(new GetQrCode(dataBase), server);
-    }
-
-    @Bean
-    public HandlerAPI apiSetPersonDate(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
-        return new HandlerAPI(new SetPersonData(dataBase), server);
-    }
-
-    @Bean
-    public HandlerAPI apiGetStatusToken(@Autowired DataBase dataBase, @Autowired Server server) throws Exception {
-        return new HandlerAPI(new GetStatusToken(dataBase), server);
-    }
-
-    @Bean
-    public HandlerAPI resetPassword(@Autowired MailSender mailSender, @Autowired Server server, @Autowired DataBase dataBase) {
-        return new HandlerAPI(new ResetPassword(mailSender, dataBase), server);
-    }
-
-    @Bean
     public String imgPath() {
         return imgPath;
     }
 
+/*
     private final ApplicationContext applicationContext;
 
     @Autowired
     public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
+*/
 
 }
