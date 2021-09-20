@@ -10,13 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import ru.vivt.server.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +44,6 @@ public class TestApi {
 
 
     @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
-    @Autowired public Server server;
 
 
     private static String token;
@@ -56,7 +52,6 @@ public class TestApi {
     @Test
     @Order(1)
     public void serverRegistration() throws Exception {
-        server.start();
         SpringApplication.run(Main.class);
 
         String result = sendInquiry(apiRegistration, "");

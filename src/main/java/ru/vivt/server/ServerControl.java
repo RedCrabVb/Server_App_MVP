@@ -14,7 +14,6 @@ import java.util.logging.Logger;
  * The single-responsibility principle may be violated
  * */
 public class ServerControl extends Thread {
-    private Server server;
     private static boolean showLog = true;
     private final String cls = "/cls",
             info = "/info", sendMessage = "/msg", logShow = "/logShow", close = "/close",
@@ -22,15 +21,13 @@ public class ServerControl extends Thread {
 
     public static Logger LOGGER;
 
-    public ServerControl(String configPath, Server server) {
+    public ServerControl(String configPath) {
         try (FileInputStream ins = new FileInputStream(configPath)) {
             LogManager.getLogManager().readConfiguration(ins);
             LOGGER = Logger.getLogger(Main.class.getName());
         } catch (Exception ignore) {
             ignore.printStackTrace();
         }
-
-        this.server = server;
 
         LOGGER.setLevel(!showLog ? Level.OFF : Level.ALL);
         start();

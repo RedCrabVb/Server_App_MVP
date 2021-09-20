@@ -1,15 +1,9 @@
 package ru.vivt;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.vivt.api.*;
 import ru.vivt.dataBase.DataBase;
 import ru.vivt.dataBase.HibernateDataBase;
-import ru.vivt.server.HandlerAPI;
 import ru.vivt.server.MailSender;
-import ru.vivt.server.Server;
 import ru.vivt.server.ServerControl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -46,27 +40,12 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public Server server(@Autowired DataBase dataBase) throws Exception {
-        return new Server(serverPort, dataBase);
-    }
-
-    @Bean
-    public ServerControl serverControl(@Autowired Server server) throws Exception {
-        return new ServerControl(logConfig, server);
+    public ServerControl serverControl() throws Exception {
+        return new ServerControl(logConfig);
     }
 
     @Bean
     public String imgPath() {
         return imgPath;
     }
-
-/*
-    private final ApplicationContext applicationContext;
-
-    @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-*/
-
 }
