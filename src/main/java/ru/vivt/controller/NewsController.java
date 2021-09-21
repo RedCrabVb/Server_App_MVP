@@ -10,7 +10,7 @@ public class NewsController {
     @GetMapping("/api/news")
     public JsonObject getNews () {
         JsonObject json = new JsonObject();
-        json.addProperty("News", "news");
+        json.addProperty("News", "https://habr.com/ru/news/");
         return json;
     }
 }
