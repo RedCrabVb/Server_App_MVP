@@ -2,10 +2,11 @@ package ru.vivt.dataBase;
 
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.AccountDAOImp;
+import ru.vivt.dataBase.dao.ResetPasswordDAOImp;
 
 public class Factory {
-    private static AccountDAO accountDAO = null;
-//    private static ItemDAO ItemDAO = null;
+    private static AccountDAO accountDAO;
+    private static ResetPasswordDAOImp resetPasswordDAO;
     private static Factory instance = null;
 
     public static synchronized Factory getInstance(){
@@ -15,17 +16,17 @@ public class Factory {
         return instance;
     }
 
-/*    public ItemDAO getItemDAO(){
-        if (ItemDAO == null){
-            ItemDAO = new ItemDAOImpl();
-        }
-        return ItemDAO;
-    }*/
-
     public AccountDAO getAccountDAO(){
         if (accountDAO == null){
             accountDAO = new AccountDAOImp();
         }
         return accountDAO;
+    }
+
+    public ResetPasswordDAOImp getResetPasswordDAO() {
+        if (resetPasswordDAO == null){
+            resetPasswordDAO = new ResetPasswordDAOImp();
+        }
+        return resetPasswordDAO;
     }
 }

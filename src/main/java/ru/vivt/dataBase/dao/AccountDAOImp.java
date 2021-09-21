@@ -1,62 +1,76 @@
 package ru.vivt.dataBase.dao;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import ru.vivt.dataBase.HibernateSessionFactory;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
+import javax.persistence.TypedQuery;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class AccountDAOImp implements AccountDAO {
+public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
     @Override
-    public void addAccounts(AccountsEntity customer) throws SQLException {
-        Session session = null;
-        try {
-            session = HibernateSessionFactory.getSessionFactory().openSession();
+    public void addAccounts(AccountsEntity entity) throws SQLException {
+        try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(customer);
+            session.save(entity);
             session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-
-                session.close();
-            }
         }
     }
 
     @Override
-    public void updateAccounts(AccountsEntity customer) throws SQLException {
-
+    public void updateAccounts(AccountsEntity entity) throws SQLException {
+        try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.update(entity);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public AccountsEntity getCustomerByID(int customer_id) throws SQLException {
-        return null;
+    public AccountsEntity getAccountByID(int customer_id) throws SQLException {
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        AccountsEntity customer = session.load(AccountsEntity.class, customer_id);
+        Hibernate.initialize(customer);
+        return customer;
     }
 
     @Override
-    public Collection getAllAccounts() throws SQLException {
-        Session session = null;
+    public AccountsEntity getAccountByToken(String token) throws SQLException {
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Query query = session.createQuery(String.format("FROM %s WHERE token = :token", AccountsEntity.class.getName()));
+        AccountsEntity accounts = (AccountsEntity) query.setParameter("token", token).uniqueResult();
+        Hibernate.initialize(accounts);
+        return accounts;
+    }
+
+    @Override
+     public Collection<ArrayList> getAllAccounts() throws SQLException {
         List accountsEntities = new ArrayList<AccountsEntity>();
-        try {
-            session = HibernateSessionFactory.getSessionFactory().openSession();
+        try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {
             accountsEntities = session.createCriteria(AccountsEntity.class).list();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return accountsEntities;
     }
 
     @Override
     public void deleteAccounts(AccountsEntity customer) throws SQLException {
-
+        try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.delete(customer);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }
