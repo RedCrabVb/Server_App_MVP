@@ -1,5 +1,6 @@
 package ru.vivt;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 //import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -79,7 +80,7 @@ public class TestApi {
     @Order(4)
     public void setPersonData() throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&email=emailTest&password=%s",  token, passwordNewAccount));
-        assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().has("error"));
         System.out.println(result);
     }
 
@@ -92,34 +93,52 @@ public class TestApi {
 
     @Test
     @Order(6)
-    public void getQrCodeError() throws Exception {
-       assertThrows(java.io.IOException.class,
-                () -> {sendInquiry(apiQrCode, "token=" + token + "error");});
-    }
-
-
-    @Test
-    @Order(7)
     public void setPersonDataForCurrentAccount() throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&password=%s",
                 token,
                 passwordNewAccount));
-        assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().has("error"));
         System.out.println(result);
+    }
+
+    @Test
+    @Order(7)
+    public void getStatusTokenError() throws Exception {
+        JsonObject json = JsonParser.parseString(sendInquiry(apiStatusToken, String.format("token=%serror",  token)))
+                .getAsJsonObject();
+        assertEquals(false, json.get("result").getAsBoolean());
+        System.out.println(json);
     }
 
     @Test
     @Order(8)
-    public void getStatusTokenError() throws Exception {
-        assertEquals(false, JsonParser.parseString(sendInquiry(apiStatusToken, String.format("token=%serror",  token)))
-                .getAsJsonObject().get("result").getAsBoolean());
+    public void resetPassword() throws Exception {
+        String result = sendInquiry(apiResetPassword, String.format("email=%s", propertySourceDataTestUser.getEmailUserTest()));
+        System.out.println(result);
     }
 
     @Test
     @Order(9)
-    public void resetPassword() throws Exception {
-        String result = sendInquiry(apiResetPassword, String.format("email=%s", propertySourceDataTestUser.getEmailUserTest()));
-        System.out.println(result);
+    public void getQrCodeError() throws Exception {
+        JsonObject jsonError = JsonParser.parseString(sendInquiry(apiQrCode, "token=" + token + "error")).getAsJsonObject();
+        assertTrue(jsonError.has("error"));
+        System.out.println(jsonError);
+    }
+
+    @Test
+    @Order(10)
+    public void setPersonDataError() throws Exception {
+        JsonObject jsonError = JsonParser.parseString(sendInquiry(apiPersonData, "token=" + token + "error")).getAsJsonObject();
+        assertTrue(jsonError.has("error"));
+        System.out.println(jsonError);
+    }
+
+    @Test
+    @Order(11)
+    public void resetPasswordError() throws Exception {
+        JsonObject jsonError = JsonParser.parseString(sendInquiry(apiResetPassword, String.format("var=%s", "user"))).getAsJsonObject();
+        assertTrue(jsonError.has("error"));
+        System.out.println(jsonError);
     }
 
 

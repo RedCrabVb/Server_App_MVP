@@ -12,16 +12,29 @@ import java.sql.SQLException;
 @RestController
 public class QrCodeController {
     @GetMapping("/api/qrCode")
-    public JsonObject getQrCode (@RequestParam String token) throws SQLException {
-        JsonObject jsonQrCode = new JsonObject();
-        jsonQrCode.addProperty("qrCode", Factory.getInstance().getAccountDAO().getAccountByToken(token).getQrCode());
-        return jsonQrCode;
+    public JsonObject getQrCode (@RequestParam String token) {
+        try {
+            JsonObject jsonQrCode = new JsonObject();
+            jsonQrCode.addProperty("qrCode", Factory.getInstance().getAccountDAO().getAccountByToken(token).getQrCode());
+            return jsonQrCode;
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "qr get from DB error or input bad");
+            return error;
+        }
     }
 
     @GetMapping("/api/getStatusToken")
-    public JsonObject getStatusToken(@RequestParam String token) throws SQLException {
-        JsonObject json = new JsonObject();
-        json.addProperty("result", Factory.getInstance().getAccountDAO().getAccountByToken(token) != null);
-        return json;
+    public JsonObject getStatusToken(@RequestParam String token) {
+        try {
+            // TODO: 21.09.2021 time check
+            JsonObject json = new JsonObject();
+            json.addProperty("result", Factory.getInstance().getAccountDAO().getAccountByToken(token) != null);
+            return json;
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "token get from DB error or input bad");
+            return error;
+        }
     }
 }

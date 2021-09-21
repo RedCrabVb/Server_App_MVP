@@ -15,8 +15,8 @@ import java.util.Base64;
 
 @RestController
 public class RegistrationController {
-    private static final SecureRandom secureRandom = new SecureRandom(); //threadsafe
-    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); //threadsafe
+    private static final SecureRandom secureRandom = new SecureRandom();
+    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
@@ -26,17 +26,23 @@ public class RegistrationController {
 
 
     @GetMapping("/api/registration")
-    public JsonObject registration () throws SQLException {
-        String token = generateNewToken();
-        String qrCode = generateNewToken();
-        LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
+    public JsonObject registration () {
+        try {
+            String token = generateNewToken();
+            String qrCode = generateNewToken();
+            LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
-        Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
+            Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "None", "None", "None"));
 
-        JsonObject jsonReg = new JsonObject();
-        jsonReg.addProperty("qrCode", qrCode);
-        jsonReg.addProperty("token", token);
+            JsonObject jsonReg = new JsonObject();
+            jsonReg.addProperty("qrCode", qrCode);
+            jsonReg.addProperty("token", token);
 
-        return jsonReg;
+            return jsonReg;
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "error when server");
+            return error;
+        }
     }
 }
