@@ -1,7 +1,6 @@
 package ru.vivt.dataBase;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.hibernate.Session;
@@ -9,11 +8,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import ru.vivt.dataBase.modelsHibernate.*;
-import ru.vivt.dataBase.modelsHibernate.News;
+import ru.vivt.dataBase.entity.*;
+import ru.vivt.dataBase.entity.NewsEntity;
 import ru.vivt.server.ServerControl;
 
-import javax.xml.crypto.Data;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -21,7 +19,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
@@ -41,9 +38,9 @@ public class HibernateDataBase implements DataBase {
 
     public HibernateDataBase() {
         Configuration configuration =  new Configuration().configure();
-        configuration.addAnnotatedClass(Accounts.class);
-        configuration.addAnnotatedClass(News.class);
-        configuration.addAnnotatedClass(ResetPassword.class);
+        configuration.addAnnotatedClass(AccountsEntity.class);
+        configuration.addAnnotatedClass(NewsEntity.class);
+        configuration.addAnnotatedClass(ResetPasswordEntity.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(builder.build());
         gson = new Gson();
@@ -51,8 +48,8 @@ public class HibernateDataBase implements DataBase {
 
     @Override
     public JsonObject lastNews(int number) {
-        List<News> listNews = sessionFactory.openSession()
-                .createQuery(String.format("FROM %s f ORDER BY f.id DESC", News.class.getName()))
+        List<NewsEntity> listNews = sessionFactory.openSession()
+                .createQuery(String.format("FROM %s f ORDER BY f.id DESC", NewsEntity.class.getName()))
                 .setMaxResults(number)
                 .list();
         JsonObject jsonNews = new JsonObject();
@@ -69,7 +66,7 @@ public class HibernateDataBase implements DataBase {
         String qrCode = generateNewToken();
         LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
-        session.save(new Accounts(qrCode, token,
+        session.save(new AccountsEntity(qrCode, token,
                 timeActive,
                 "", "", ""));
 
@@ -95,8 +92,8 @@ public class HibernateDataBase implements DataBase {
     public JsonObject setPersonData(String password, String email, String token, String username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Accounts accounts = (Accounts) session
-                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), token))
+        AccountsEntity accounts = (AccountsEntity) session
+                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", AccountsEntity.class.getName(), token))
                 .uniqueResult();
 
         JsonObject json = new JsonObject();
@@ -114,7 +111,7 @@ public class HibernateDataBase implements DataBase {
 
 //            if (jsonPersonData.has("email")) {
 //                email = jsonPersonData.get("email").getAsString();
-                List<Accounts> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).list();
+                List<AccountsEntity> accountsOnEqualsEmail  = session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", AccountsEntity.class.getName(), email)).list();
                 if (accountsOnEqualsEmail.size() != 0) {
                     throw new Exception("Mail is already in the database");
                 }
@@ -140,7 +137,7 @@ public class HibernateDataBase implements DataBase {
     public boolean isActiveToken(String token) {
         try {
             Session session = sessionFactory.openSession();
-            Accounts accounts = (Accounts) session.createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), token)).uniqueResult();
+            AccountsEntity accounts = (AccountsEntity) session.createQuery(String.format("FROM %s s WHERE s.token = '%s'", AccountsEntity.class.getName(), token)).uniqueResult();
             return  accounts != null;
         } catch (Exception e) {
             return false;
@@ -154,10 +151,10 @@ public class HibernateDataBase implements DataBase {
 
         String token = generateNewToken();
         String password = generateNewToken().substring(0, 8);
-        Accounts accounts = (Accounts) session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", Accounts.class.getName(), email)).uniqueResult();
+        AccountsEntity accounts = (AccountsEntity) session.createQuery(String.format("FROM %s s WHERE s.email = '%s'", AccountsEntity.class.getName(), email)).uniqueResult();
         LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
 
-        session.save(new ResetPassword(token, password, timeActive, accounts));
+        session.save(new ResetPasswordEntity(token, password, timeActive, accounts));
 
         transaction.commit();
         session.close();
@@ -173,8 +170,8 @@ public class HibernateDataBase implements DataBase {
     public JsonObject changePassword(String token) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        ResetPassword resetPassword = (ResetPassword) session
-                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", ResetPassword.class.getName(), token))
+        ResetPasswordEntity resetPassword = (ResetPasswordEntity) session
+                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", ResetPasswordEntity.class.getName(), token))
                 .uniqueResult();
 
         JsonObject json = new JsonObject();
@@ -197,9 +194,9 @@ public class HibernateDataBase implements DataBase {
 
     @Override
     public JsonObject getQrCode(String token) {
-        Accounts accounts = (Accounts) sessionFactory
+        AccountsEntity accounts = (AccountsEntity) sessionFactory
                 .openSession()
-                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", Accounts.class.getName(), token))
+                .createQuery(String.format("FROM %s s WHERE s.token = '%s'", AccountsEntity.class.getName(), token))
                 .uniqueResult();
         JsonObject jsonQrCode = new JsonObject();
         jsonQrCode.addProperty("qrCode", accounts.getQrCode());

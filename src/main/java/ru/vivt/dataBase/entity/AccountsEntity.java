@@ -1,11 +1,11 @@
-package ru.vivt.dataBase.modelsHibernate;
+package ru.vivt.dataBase.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Accounts")
-public class Accounts {
+public class AccountsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAccount;
@@ -16,11 +16,11 @@ public class Accounts {
     private String email;
     private String password;
 
-    public Accounts() {
+    public AccountsEntity() {
 
     }
 
-    public Accounts(String qrCode, String token, LocalDate accountActiveTime, String username, String email, String password) {
+    public AccountsEntity(String qrCode, String token, LocalDate accountActiveTime, String username, String email, String password) {
         this.qrCode = qrCode;
         this.token = token;
         this.accountActiveTime = accountActiveTime;

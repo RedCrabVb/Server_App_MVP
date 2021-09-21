@@ -1,10 +1,10 @@
-package ru.vivt.dataBase.modelsHibernate;
+package ru.vivt.dataBase.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "News")
-public class News {
+public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNews;
@@ -12,7 +12,7 @@ public class News {
     private String body;
     private String imgPath;
 
-    public News() {
+    public NewsEntity() {
 
     }
 }

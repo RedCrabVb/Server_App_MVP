@@ -1,12 +1,11 @@
-package ru.vivt.dataBase.modelsHibernate;
+package ru.vivt.dataBase.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "ResetPassword")
-public class ResetPassword {
+public class ResetPasswordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idResetPassword;
@@ -15,9 +14,9 @@ public class ResetPassword {
     private LocalDate dateActiveToken;
     @ManyToOne
     @JoinColumn(name = "idAccount")
-    private Accounts account;
+    private AccountsEntity account;
 
-    public ResetPassword() {
+    public ResetPasswordEntity() {
 
     }
 
@@ -28,7 +27,7 @@ public class ResetPassword {
      * @param dateActiveToken
      * @param account
      */
-    public ResetPassword(String token, String tmpPassword, LocalDate dateActiveToken, Accounts account) {
+    public ResetPasswordEntity(String token, String tmpPassword, LocalDate dateActiveToken, AccountsEntity account) {
         this.token = token;
         this.tmpPassword = tmpPassword;
         this.dateActiveToken = dateActiveToken;
@@ -51,7 +50,7 @@ public class ResetPassword {
         return dateActiveToken;
     }
 
-    public Accounts getAccount() {
+    public AccountsEntity getAccount() {
         return account;
     }
 }
