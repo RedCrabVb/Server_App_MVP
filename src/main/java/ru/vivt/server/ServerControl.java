@@ -14,30 +14,19 @@ import java.util.logging.Logger;
  * The single-responsibility principle may be violated
  * */
 public class ServerControl extends Thread {
-    private static boolean showLog = true;
     private final String cls = "/cls",
             info = "/info", sendMessage = "/msg", logShow = "/logShow", close = "/close",
             help = "/help";
 
-    public static Logger LOGGER;
 
-    public ServerControl(String configPath) {
-        try (FileInputStream ins = new FileInputStream(configPath)) {
-            LogManager.getLogManager().readConfiguration(ins);
-            LOGGER = Logger.getLogger(Main.class.getName());
-        } catch (Exception ignore) {
-            ignore.printStackTrace();
-        }
-
-        LOGGER.setLevel(!showLog ? Level.OFF : Level.ALL);
+    public ServerControl() {
         start();
     }
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
 
-        String _help = " /cls - clear terminal \n /logShow - send message " +
-                "/info - server status information \n /close \n /help - it is reference\n";
+        String _help = " /cls - clear terminal /info - server status information \n /close \n /help - it is reference\n";
         System.out.println(_help);
 
         while (true) {
@@ -49,11 +38,6 @@ public class ServerControl extends Thread {
                     case info:
                         System.out.println("Active streams: " + Thread.getAllStackTraces().keySet().size());
                         System.out.println("Memory: " + (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
-                        break;
-                    case logShow:
-                        showLog = !showLog;
-                        LOGGER.setLevel(!showLog ? Level.OFF : Level.ALL);
-                        System.out.println("Log output is " + showLog);
                         break;
                     case help:
                         System.out.println(_help);

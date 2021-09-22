@@ -14,6 +14,6 @@ public class Main {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class);
 
-        ServerControl.LOGGER.log(Level.INFO, "Server start " + new Date().toString());
+//        ServerControl.LOGGER.log(Level.INFO, "Server start " + new Date().toString());
     }
 }

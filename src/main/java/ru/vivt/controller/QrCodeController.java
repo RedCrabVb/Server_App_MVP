@@ -1,6 +1,8 @@
 package ru.vivt.controller;
 
 import com.google.gson.JsonObject;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,8 +13,11 @@ import java.sql.SQLException;
 
 @RestController
 public class QrCodeController {
+    private final Log logger = LogFactory.getLog(getClass());
+
     @GetMapping("/api/qrCode")
     public JsonObject getQrCode (@RequestParam String token) {
+        logger.info("/api/qrCode?token=" + token);
         try {
             JsonObject jsonQrCode = new JsonObject();
             jsonQrCode.addProperty("qrCode", Factory.getInstance().getAccountDAO().getAccountByToken(token).getQrCode());
@@ -26,6 +31,7 @@ public class QrCodeController {
 
     @GetMapping("/api/getStatusToken")
     public JsonObject getStatusToken(@RequestParam String token) {
+        logger.info("/api/qrCode?token=" + token);
         try {
             // TODO: 21.09.2021 time check
             JsonObject json = new JsonObject();

@@ -1,10 +1,13 @@
 package ru.vivt.controller;
 
 import com.google.gson.JsonObject;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import ru.vivt.dataBase.Factory;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
@@ -28,6 +31,8 @@ import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
 public class PersonDataController {
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Autowired
     private MailSender mailSender;
 
@@ -40,6 +45,7 @@ public class PersonDataController {
 
     @GetMapping("/api/setPersonDate")
     public JsonObject setPersonData(@RequestParam Map<String, String> params) throws Exception {
+        logger.info("params: " + params.toString());
         try {
             AccountDAO accountDAO = Factory.getInstance().getAccountDAO();
             AccountsEntity accounts = accountDAO.getAccountByToken(params.get("token"));
@@ -65,12 +71,14 @@ public class PersonDataController {
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
             jsonError.addProperty("error", "bad input data or error server");
+            logger.error("error", e);
             return jsonError;
         }
     }
 
     @GetMapping("/api/resetPassword")
     public JsonObject resetPassword(@RequestParam Map<String, String> params) {
+        logger.info("params" + params.toString());
         try {
             if (params.containsKey("email")) {
 
@@ -109,6 +117,7 @@ public class PersonDataController {
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
             jsonError.addProperty("error", "bad input data or error server");
+            logger.error("error", e);
             return jsonError;
         }
     }

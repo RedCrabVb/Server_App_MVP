@@ -1,6 +1,8 @@
 package ru.vivt.controller;
 
 import com.google.gson.JsonObject;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.Factory;
@@ -15,6 +17,8 @@ import java.util.Base64;
 
 @RestController
 public class RegistrationController {
+    private final Log logger = LogFactory.getLog(getClass());
+
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
@@ -25,8 +29,10 @@ public class RegistrationController {
     }
 
 
+
     @GetMapping("/api/registration")
     public JsonObject registration () {
+        logger.info("/api/registration");
         try {
             String token = generateNewToken();
             String qrCode = generateNewToken();
@@ -42,6 +48,7 @@ public class RegistrationController {
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "error when server");
+            logger.error("error registration", e);
             return error;
         }
     }

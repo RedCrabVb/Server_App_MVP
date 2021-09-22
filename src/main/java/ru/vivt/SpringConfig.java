@@ -9,13 +9,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan("com.vivt")
-@PropertySource("classpath:config.properties")
 @PropertySource("classpath:mail.properties")
 public class SpringConfig implements WebMvcConfigurer {
-    @Value("${serverPort}") int serverPort;
-    @Value("${logConfPath}") String logConfig;
-
-    @Value("${imagePath}") String imgPath;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
@@ -29,11 +24,7 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Bean
     public ServerControl serverControl() throws Exception {
-        return new ServerControl(logConfig);
+        return new ServerControl();
     }
 
-    @Bean
-    public String imgPath() {
-        return imgPath;
-    }
 }

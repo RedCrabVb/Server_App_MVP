@@ -1,5 +1,8 @@
 package ru.vivt.server;
 
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -7,6 +10,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 public class MailSender {
+    private final Log logger = LogFactory.getLog(getClass());
+
     private final Session session;
     private final String emailServer;
 
@@ -40,10 +45,10 @@ public class MailSender {
 
             Transport.send(message);
 
-            ServerControl.LOGGER.log(Level.INFO, "Send message to email " + recipient);
+            logger.info("Send message to email " + recipient);
             return true;
         } catch (MessagingException e) {
-            ServerControl.LOGGER.log(Level.WARNING, "Error send message to email", e);
+            logger.error("Error send message to email", e);
             return false;
         }
     }
