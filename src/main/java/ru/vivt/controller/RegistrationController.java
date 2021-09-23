@@ -38,7 +38,7 @@ public class RegistrationController {
             String qrCode = generateNewToken();
             LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
-            Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "None", "None", "None"));
+            Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
 
             JsonObject jsonReg = new JsonObject();
             jsonReg.addProperty("qrCode", qrCode);
