@@ -121,4 +121,22 @@ public class PersonDataController {
             return jsonError;
         }
     }
+
+    @GetMapping("/api/personData")
+    public JsonObject personData(@RequestParam String token) {
+        logger.info("/api/personData?token=" + token);
+        try {
+            AccountsEntity accountsEntity = Factory.getInstance().getAccountDAO().getAccountByToken(token);
+            JsonObject jsonQrCode = new JsonObject();
+            jsonQrCode.addProperty("email", Optional.ofNullable(accountsEntity.getEmail()).orElse(""));
+            jsonQrCode.addProperty("username", Optional.ofNullable(accountsEntity.getUsername()).orElse(""));
+            jsonQrCode.addProperty("qrCode", accountsEntity.getQrCode());
+            return jsonQrCode;
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "qr get from DB error or input bad");
+            logger.error("error", e);
+            return error;
+        }
+    }
 }

@@ -42,7 +42,7 @@ public class TestApi {
     private final String apiStatusToken = "api/getStatusToken";
     private final String apiResetPassword = "api/resetPassword";
     private final String apiAuthorization = "api/authorization";
-
+    private final String apiPersonDataGet = "api/personData";
 
     @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
 
@@ -110,7 +110,13 @@ public class TestApi {
     }
 
     @Test
-    @Order(7)
+    public void testPersonDataGet() throws Exception {
+        String result = sendInquiry(apiPersonDataGet, String.format("token=%s",  token));
+        System.out.println(result);
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().has("email"));
+    }
+
+    @Test
     public void getStatusTokenError() throws Exception {
         JsonObject json = JsonParser.parseString(sendInquiry(apiStatusToken, String.format("token=%serror",  token)))
                 .getAsJsonObject();
@@ -126,7 +132,6 @@ public class TestApi {
     }
 
     @Test
-    @Order(9)
     public void getQrCodeError() throws Exception {
         JsonObject jsonError = JsonParser.parseString(sendInquiry(apiQrCode, "token=" + token + "error")).getAsJsonObject();
         assertTrue(jsonError.has("error"));
@@ -134,7 +139,6 @@ public class TestApi {
     }
 
     @Test
-    @Order(10)
     public void setPersonDataError() throws Exception {
         JsonObject jsonError = JsonParser.parseString(sendInquiry(apiPersonData, "token=" + token + "error")).getAsJsonObject();
         assertTrue(jsonError.has("error"));
@@ -142,7 +146,6 @@ public class TestApi {
     }
 
     @Test
-    @Order(11)
     public void resetPasswordError() throws Exception {
         JsonObject jsonError = JsonParser.parseString(sendInquiry(apiResetPassword, String.format("var=%s", "user"))).getAsJsonObject();
         assertTrue(jsonError.has("error"));

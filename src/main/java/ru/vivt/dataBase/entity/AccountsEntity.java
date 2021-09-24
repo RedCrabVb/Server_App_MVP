@@ -68,4 +68,8 @@ public class AccountsEntity {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
