@@ -38,7 +38,7 @@ public class RegistrationController {
         logger.info("/api/registration");
         try {
             String token = generateNewToken();
-            String qrCode = generateNewToken();
+            String qrCode = generateNewToken().substring(5);
             LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
             Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));

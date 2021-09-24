@@ -56,4 +56,16 @@ public class AccountsEntity {
     public String getToken() {
         return token;
     }
+
+    public LocalDate getAccountActiveTime() {
+        return accountActiveTime;
+    }
+
+    public void setAccountActiveTime(LocalDate accountActiveTime) {
+        this.accountActiveTime = accountActiveTime;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

@@ -8,8 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.Factory;
+import ru.vivt.dataBase.entity.AccountsEntity;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
 public class QrCodeController {
@@ -29,13 +35,29 @@ public class QrCodeController {
         }
     }
 
+    /**
+     * Will return the status token, if the token is out of date, update it
+     * @param token
+     * @return Json
+     */
     @GetMapping("/api/getStatusToken")
     public JsonObject getStatusToken(@RequestParam String token) {
-        logger.info("/api/qrCode?token=" + token);
+        logger.info("/api/getStatusToken?token=" + token);
         try {
-            // TODO: 21.09.2021 time check
+            AccountsEntity account = Factory.getInstance().getAccountDAO().getAccountByToken(token);
+            boolean statusToken = account != null;
+
+            if (account != null) {
+                if (account.getAccountActiveTime().isBefore(LocalDate.now())) {
+                    account.setToken(generateNewToken());
+                    account.setAccountActiveTime(LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate());
+                    Factory.getInstance().getAccountDAO().updateAccounts(account);
+                    statusToken = false;
+                }
+            }
+
             JsonObject json = new JsonObject();
-            json.addProperty("result", Factory.getInstance().getAccountDAO().getAccountByToken(token) != null);
+            json.addProperty("result",  statusToken);
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
