@@ -11,6 +11,8 @@ public interface AccountDAO<T extends Collection> {
     void updateAccounts(AccountsEntity customer) throws SQLException;
     AccountsEntity getAccountByID(int customer_id) throws SQLException;
     AccountsEntity getAccountByToken(String token) throws SQLException;
+    AccountsEntity getAccountByEmailAndPassword(String email, String password);
+    List<AccountsEntity> getAccountByEmail(String email);
     T getAllAccounts() throws SQLException;
     void deleteAccounts(AccountsEntity customer) throws SQLException;
 }

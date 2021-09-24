@@ -53,6 +53,24 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
     }
 
     @Override
+    public AccountsEntity getAccountByEmailAndPassword(String email, String password) {
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Query query = session.createQuery(String.format("FROM %s WHERE password = :password AND email = :email", AccountsEntity.class.getName()));
+        AccountsEntity accounts = (AccountsEntity) query.setParameter("password", password).setParameter("email", email).uniqueResult();
+        Hibernate.initialize(accounts);
+        return accounts;
+    }
+
+    @Override
+    public List getAccountByEmail(String email) {
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
+        Query query = session.createQuery(String.format("FROM %s WHERE email = :email", AccountsEntity.class.getName()));
+        List<AccountsEntity> accounts = query.setParameter("email", email).list();
+        Hibernate.initialize(accounts);
+        return accounts;
+    }
+
+    @Override
      public Collection<ArrayList> getAllAccounts() throws SQLException {
         List accountsEntities = new ArrayList<AccountsEntity>();
         try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {

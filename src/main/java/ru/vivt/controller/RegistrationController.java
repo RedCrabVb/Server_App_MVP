@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.Factory;
 import ru.vivt.dataBase.entity.AccountsEntity;
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
+
+import static ru.vivt.controller.PersonDataController.toSHA1;
 
 @RestController
 public class RegistrationController {
@@ -48,6 +51,28 @@ public class RegistrationController {
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "error when server");
+            logger.error("error registration", e);
+            return error;
+        }
+    }
+
+    @GetMapping("/api/authorization")
+    public JsonObject authorization(@RequestParam String email, @RequestParam String password) {
+        logger.info("/api/authorization");
+        try {
+            if (email.isEmpty() || password.isEmpty()) {
+                throw new Exception("email or password empty");
+            }
+
+            String token = Factory.getInstance().getAccountDAO().getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
+
+            JsonObject jsonReg = new JsonObject();
+            jsonReg.addProperty("token", token);
+
+            return jsonReg;
+        } catch (Exception e) {
+            JsonObject error = new JsonObject();
+            error.addProperty("error", "error in server (authorization)");
             logger.error("error registration", e);
             return error;
         }

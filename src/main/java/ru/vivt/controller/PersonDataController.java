@@ -22,10 +22,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ru.vivt.controller.RegistrationController.generateNewToken;
 
@@ -36,7 +33,7 @@ public class PersonDataController {
     @Autowired
     private MailSender mailSender;
 
-    private static String toSHA1(String value) throws NoSuchAlgorithmException {
+    public static String toSHA1(String value) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
         digest.update(value.getBytes(StandardCharsets.UTF_8));
@@ -54,11 +51,14 @@ public class PersonDataController {
                 throw new Exception("Password incorrect");
             }
 
-            List<AccountsEntity> accountsOnEqualsEmail = new ArrayList<>();
-            if (accountsOnEqualsEmail.size() != 0) {
-                throw new Exception("Mail is already in the database");
+            String email = params.get("email");
+            if (email != null) {
+                List<AccountsEntity> accountsOnEqualsEmail = Factory.getInstance().getAccountDAO().getAccountByEmail(email);
+                if (accountsOnEqualsEmail.size() != 0) {
+                    throw new Exception("Mail is already in the database");
+                }
+                accounts.setEmail(email);
             }
-            accounts.setEmail(params.get("email"));
 
             accounts.setUsername(params.get("username"));
             accounts.setPassword(toSHA1(params.get("password")));

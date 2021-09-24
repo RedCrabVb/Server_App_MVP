@@ -52,4 +52,8 @@ public class AccountsEntity {
     public String getPassword() {
         return password;
     }
+
+    public String getToken() {
+        return token;
+    }
 }

@@ -39,9 +39,9 @@ public class TestApi {
     private final String apiQrCode = "api/qrCode";
     private final String apiPersonData = "api/setPersonDate";
     private final String apiRegistration = "api/registration";
-    private final String apiImgNews = "src/img";
     private final String apiStatusToken = "api/getStatusToken";
     private final String apiResetPassword = "api/resetPassword";
+    private final String apiAuthorization = "api/authorization";
 
 
     @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
@@ -49,6 +49,7 @@ public class TestApi {
 
     private static String token;
     private static String passwordNewAccount = "newPassword";
+    private static String emailTest = "emailTest";
 
     @Test
     @Order(1)
@@ -79,9 +80,9 @@ public class TestApi {
     @Test
     @Order(4)
     public void setPersonData() throws Exception {
-        String result = sendInquiry(apiPersonData, String.format("token=%s&email=emailTest&password=%s",  token, passwordNewAccount));
-        assertTrue(JsonParser.parseString(result).getAsJsonObject().has("error"));
+        String result = sendInquiry(apiPersonData, String.format("token=%s&email=%s&password=%s",  token, emailTest, passwordNewAccount));
         System.out.println(result);
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
     }
 
     @Test
@@ -92,13 +93,20 @@ public class TestApi {
     }
 
     @Test
+    public void authorization() throws Exception {
+        String result = sendInquiry(apiAuthorization, String.format("email=%s&password=%s",  emailTest, passwordNewAccount));
+        JsonParser.parseString(result).getAsJsonObject().get("token");
+        System.out.println(result);
+    }
+
+    @Test
     @Order(6)
     public void setPersonDataForCurrentAccount() throws Exception {
         String result = sendInquiry(apiPersonData, String.format("token=%s&password=%s",
                 token,
                 passwordNewAccount));
-        assertTrue(JsonParser.parseString(result).getAsJsonObject().has("error"));
         System.out.println(result);
+        assertTrue(JsonParser.parseString(result).getAsJsonObject().get("status").getAsBoolean());
     }
 
     @Test
