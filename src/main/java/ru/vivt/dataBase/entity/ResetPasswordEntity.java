@@ -21,7 +21,6 @@ public class ResetPasswordEntity {
     }
 
     /**
-     *
      * @param token
      * @param tmpPassword
      * @param dateActiveToken

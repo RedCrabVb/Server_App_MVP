@@ -29,7 +29,7 @@ public class MailSender {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(username, password);
                     }
-        });
+                });
     }
 
     //header - Password recovery

@@ -22,7 +22,7 @@ public class QrCodeController {
     private final Log logger = LogFactory.getLog(getClass());
 
     @GetMapping("/api/qrCode")
-    public JsonObject getQrCode (@RequestParam String token) {
+    public JsonObject getQrCode(@RequestParam String token) {
         logger.info("/api/qrCode?token=" + token);
         try {
             JsonObject jsonQrCode = new JsonObject();
@@ -37,6 +37,7 @@ public class QrCodeController {
 
     /**
      * Will return the status token, if the token is out of date, update it
+     *
      * @param token
      * @return Json
      */
@@ -57,7 +58,7 @@ public class QrCodeController {
             }
 
             JsonObject json = new JsonObject();
-            json.addProperty("result",  statusToken);
+            json.addProperty("result", statusToken);
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();

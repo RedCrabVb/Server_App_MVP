@@ -20,10 +20,9 @@ import static ru.vivt.controller.PersonDataController.toSHA1;
 
 @RestController
 public class RegistrationController {
-    private final Log logger = LogFactory.getLog(getClass());
-
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+    private final Log logger = LogFactory.getLog(getClass());
 
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
@@ -32,13 +31,13 @@ public class RegistrationController {
     }
 
 
-
     @GetMapping("/api/registration")
-    public JsonObject registration () {
+    public JsonObject registration() {
         logger.info("/api/registration");
         try {
             String token = generateNewToken();
             String qrCode = generateNewToken().substring(5);
+
             LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
             Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));

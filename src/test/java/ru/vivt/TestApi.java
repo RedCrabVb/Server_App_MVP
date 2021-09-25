@@ -23,13 +23,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-//import static org.junit.Assert.*;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-@RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration
 @SpringBootTest
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
