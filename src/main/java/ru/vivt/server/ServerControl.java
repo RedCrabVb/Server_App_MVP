@@ -52,6 +52,7 @@ public class ServerControl extends Thread {
                 }
             } catch (Exception e) {
                 System.out.println("Error enter data");
+                break;
             }
         }
     }

@@ -12,6 +12,6 @@ import java.util.logging.Level;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(Main.class);
+        SpringApplication.run(Main.class, args);
     }
 }

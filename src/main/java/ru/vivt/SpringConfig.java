@@ -9,7 +9,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan("com.vivt")
-@PropertySource("classpath:mail.properties")
+@PropertySource(value = "classpath:application-${spring.profiles.active}.properties", ignoreResourceNotFound = true)
 public class SpringConfig implements WebMvcConfigurer {
 
     @Bean
@@ -26,5 +26,4 @@ public class SpringConfig implements WebMvcConfigurer {
     public ServerControl serverControl() throws Exception {
         return new ServerControl();
     }
-
 }

@@ -32,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestApi {
+    private static final String serverName = "localhost";//"servermvp.ru:49379";
+
     private final String apiNews = "api/news";
     private final String apiQrCode = "api/qrCode";
     private final String apiPersonData = "api/setPersonDate";
@@ -152,7 +154,7 @@ public class TestApi {
 
     private static String sendInquiry(String api, String json) throws Exception {
         json = json.replace("+", "%20"); // fix space encoder
-        URL url = new URL(String.format("http://localhost:8080/%s?%s", api, json));
+        URL url = new URL(String.format("http://" + serverName +":8080/%s?%s", api, json));
         HttpURLConnection connection = getResponseServer(url);
         String response = connectionResponseToString(connection);
 
