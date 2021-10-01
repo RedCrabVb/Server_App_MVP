@@ -5,7 +5,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
-@PropertySource(value = "classpath:test-${spring.profiles.active}.properties", ignoreResourceNotFound = true)
+@PropertySource(value = "classpath:test-dev.properties", ignoreResourceNotFound = true)
 public class PropertySourceDataTestUser {
     @Value("${user.test.Token}")  private String tokenCurrentAccount;
     @Value("${user.test.Email}") private String emailUserTest;

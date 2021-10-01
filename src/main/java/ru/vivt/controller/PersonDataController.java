@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import ru.vivt.dataBase.Factory;
 import ru.vivt.dataBase.dao.AccountDAO;
+import ru.vivt.dataBase.dao.ResetPasswordDAOImp;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
 import ru.vivt.server.MailSender;
@@ -18,7 +17,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -33,6 +31,12 @@ public class PersonDataController {
     @Autowired
     private MailSender mailSender;
 
+    @Autowired
+    private AccountDAO<Collection<ArrayList>> accountDAO;
+
+    @Autowired
+    private ResetPasswordDAOImp resetPasswordDAOImp;
+
     public static String toSHA1(String value) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
@@ -41,10 +45,10 @@ public class PersonDataController {
     }
 
     @GetMapping("/api/setPersonDate")
-    public JsonObject setPersonData(@RequestParam Map<String, String> params) throws Exception {
+    public JsonObject setPersonData(@RequestParam Map<String, String> params) {
         logger.info("params: " + params.toString());
         try {
-            AccountDAO accountDAO = Factory.getInstance().getAccountDAO();
+            AccountDAO<Collection<ArrayList>> accountDAO = this.accountDAO;
             AccountsEntity accounts = accountDAO.getAccountByToken(params.get("token"));
 
             if (!accounts.getPassword().isEmpty() && !accounts.getPassword().equals(toSHA1(params.get("password")))) {
@@ -53,7 +57,7 @@ public class PersonDataController {
 
             String email = params.get("email");
             if (email != null) {
-                List<AccountsEntity> accountsOnEqualsEmail = Factory.getInstance().getAccountDAO().getAccountByEmail(email);
+                List<AccountsEntity> accountsOnEqualsEmail = this.accountDAO.getAccountByEmail(email);
                 if (accountsOnEqualsEmail.size() != 0) {
                     throw new Exception("Mail is already in the database");
                 }
@@ -84,9 +88,9 @@ public class PersonDataController {
 
                 String token = generateNewToken();
                 String password = generateNewToken().substring(0, 8);
-                AccountsEntity accounts = Factory.getInstance().getAccountDAO().getAccountByToken(params.get("token"));
+                AccountsEntity accounts = this.accountDAO.getAccountByToken(params.get("token"));
                 LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
-                Factory.getInstance().getResetPasswordDAO().addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
+                resetPasswordDAOImp.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
 
                 Map<String, String> maps = new HashMap<>();
                 maps.put("token", token);
@@ -103,9 +107,9 @@ public class PersonDataController {
                 return jsonResetPass;
             } else if (params.containsKey("token")) {
                 String token = params.get("token");
-                ResetPasswordEntity resetPasswordEntity = Factory.getInstance().getResetPasswordDAO().getResetPasswordByToken(token);
+                ResetPasswordEntity resetPasswordEntity = resetPasswordDAOImp.getResetPasswordByToken(token);
                 resetPasswordEntity.getAccount().setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
-                Factory.getInstance().getResetPasswordDAO().deleteResetPassword(resetPasswordEntity);
+                resetPasswordDAOImp.deleteResetPassword(resetPasswordEntity);
 
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "reset password");
@@ -126,7 +130,7 @@ public class PersonDataController {
     public JsonObject personData(@RequestParam String token) {
         logger.info("/api/personData?token=" + token);
         try {
-            AccountsEntity accountsEntity = Factory.getInstance().getAccountDAO().getAccountByToken(token);
+            AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
             JsonObject jsonQrCode = new JsonObject();
             jsonQrCode.addProperty("email", Optional.ofNullable(accountsEntity.getEmail()).orElse(""));
             jsonQrCode.addProperty("username", Optional.ofNullable(accountsEntity.getUsername()).orElse(""));

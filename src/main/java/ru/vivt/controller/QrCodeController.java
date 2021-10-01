@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.vivt.dataBase.Factory;
+import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
 import java.sql.SQLException;
@@ -21,12 +21,15 @@ import static ru.vivt.controller.RegistrationController.generateNewToken;
 public class QrCodeController {
     private final Log logger = LogFactory.getLog(getClass());
 
+    @Autowired
+    private AccountDAO accountDAO;
+
     @GetMapping("/api/qrCode")
     public JsonObject getQrCode(@RequestParam String token) {
         logger.info("/api/qrCode?token=" + token);
         try {
             JsonObject jsonQrCode = new JsonObject();
-            jsonQrCode.addProperty("qrCode", Factory.getInstance().getAccountDAO().getAccountByToken(token).getQrCode());
+            jsonQrCode.addProperty("qrCode", accountDAO.getAccountByToken(token).getQrCode());
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
@@ -45,14 +48,14 @@ public class QrCodeController {
     public JsonObject getStatusToken(@RequestParam String token) {
         logger.info("/api/getStatusToken?token=" + token);
         try {
-            AccountsEntity account = Factory.getInstance().getAccountDAO().getAccountByToken(token);
+            AccountsEntity account = accountDAO.getAccountByToken(token);
             boolean statusToken = account != null;
 
             if (account != null) {
                 if (account.getAccountActiveTime().isBefore(LocalDate.now())) {
                     account.setToken(generateNewToken());
                     account.setAccountActiveTime(LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate());
-                    Factory.getInstance().getAccountDAO().updateAccounts(account);
+                    accountDAO.updateAccounts(account);
                     statusToken = false;
                 }
             }

@@ -4,7 +4,6 @@
 *.iws
 out/
 
-src/main/resources/application.properties
 src/main/resources/test.properties
 
 # Maven

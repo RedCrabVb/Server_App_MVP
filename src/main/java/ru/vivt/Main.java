@@ -2,16 +2,12 @@ package ru.vivt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import ru.vivt.server.ServerControl;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Date;
-import java.util.logging.Level;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
 }

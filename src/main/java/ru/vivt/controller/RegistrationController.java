@@ -3,10 +3,11 @@ package ru.vivt.controller;
 import com.google.gson.JsonObject;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.vivt.dataBase.Factory;
+import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
 import java.security.SecureRandom;
@@ -24,6 +25,9 @@ public class RegistrationController {
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
     private final Log logger = LogFactory.getLog(getClass());
 
+    @Autowired
+    private AccountDAO accountDAO;
+    
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
         secureRandom.nextBytes(randomBytes);
@@ -40,7 +44,7 @@ public class RegistrationController {
 
             LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
-            Factory.getInstance().getAccountDAO().addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
+            accountDAO.addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
 
             JsonObject jsonReg = new JsonObject();
             jsonReg.addProperty("qrCode", qrCode);
@@ -63,7 +67,7 @@ public class RegistrationController {
                 throw new Exception("email or password empty");
             }
 
-            String token = Factory.getInstance().getAccountDAO().getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
+            String token = accountDAO.getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
 
             JsonObject jsonReg = new JsonObject();
             jsonReg.addProperty("token", token);

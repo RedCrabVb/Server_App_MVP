@@ -1,21 +1,16 @@
 package ru.vivt.server;
 
-import ru.vivt.Main;
+//import ru.vivt.dataBase.HibernateSessionFactory;
 
-import java.io.FileInputStream;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 /*
  * Responsible for entering data for the administrator.
- * Responsible for logging.
- * The single-responsibility principle may be violated
  * */
 public class ServerControl extends Thread {
-    private final String cls = "/cls",
-            info = "/info", sendMessage = "/msg", logShow = "/logShow", close = "/close",
+    private static final String cls = "/cls",
+            info = "/info", sendMessage = "/msg", close = "/close",
             help = "/help";
 
 
@@ -27,13 +22,14 @@ public class ServerControl extends Thread {
         Scanner scanner = new Scanner(System.in);
 
         String _help = " /cls - clear terminal /info - server status information \n /close \n /help - it is reference\n";
+
         System.out.println(_help);
 
         while (true) {
             try {
                 switch (scanner.next()) {
                     case cls:
-                        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                        Stream.iterate(0, (n) -> n + 1).limit(100).forEach(x -> System.out.println("\n"));
                         break;
                     case info:
                         System.out.println("Active streams: " + Thread.getAllStackTraces().keySet().size());
@@ -43,6 +39,7 @@ public class ServerControl extends Thread {
                         System.out.println(_help);
                         break;
                     case close:
+//                        HibernateSessionFactory.shutdown();
                         System.exit(0);
                         return;
                     case sendMessage:
