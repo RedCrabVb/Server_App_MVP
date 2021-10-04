@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.AccountDAO;
+import ru.vivt.dataBase.dao.ResetPasswordDAO;
 import ru.vivt.dataBase.dao.ResetPasswordDAOImp;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
@@ -35,7 +36,7 @@ public class PersonDataController {
     private AccountDAO<Collection<ArrayList>> accountDAO;
 
     @Autowired
-    private ResetPasswordDAOImp resetPasswordDAOImp;
+    private ResetPasswordDAO resetPasswordDAO;
 
     public static String toSHA1(String value) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -46,12 +47,16 @@ public class PersonDataController {
 
     @GetMapping("/api/setPersonDate")
     public JsonObject setPersonData(@RequestParam Map<String, String> params) {
-        logger.info("params: " + params.toString());
+        logger.info("/api/setPersonDate, params: " + params.toString());
         try {
-            AccountDAO<Collection<ArrayList>> accountDAO = this.accountDAO;
             AccountsEntity accounts = accountDAO.getAccountByToken(params.get("token"));
 
-            if (!accounts.getPassword().isEmpty() && !accounts.getPassword().equals(toSHA1(params.get("password")))) {
+            if (accounts == null) {
+                throw new Exception("not found Accounts");
+            }
+
+            String accountsPassword = accounts.getPassword();
+            if (!accountsPassword.isEmpty() && !accountsPassword.equals(toSHA1(params.get("password")))) {
                 throw new Exception("Password incorrect");
             }
 
@@ -74,15 +79,15 @@ public class PersonDataController {
             return jsonStatus;
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
-            jsonError.addProperty("error", "bad input data or error server");
-            logger.error("error", e);
+            jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
+            logger.info("error: " + e.getMessage());
             return jsonError;
         }
     }
 
     @GetMapping("/api/resetPassword")
     public JsonObject resetPassword(@RequestParam Map<String, String> params) {
-        logger.info("params" + params.toString());
+        logger.info("/api/resetPassword params: " + params.toString());
         try {
             if (params.containsKey("email")) {
 
@@ -90,13 +95,13 @@ public class PersonDataController {
                 String password = generateNewToken().substring(0, 8);
                 AccountsEntity accounts = this.accountDAO.getAccountByToken(params.get("token"));
                 LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
-                resetPasswordDAOImp.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
+                resetPasswordDAO.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
 
                 Map<String, String> maps = new HashMap<>();
                 maps.put("token", token);
                 maps.put("tmpPassword", password);
 
-                String url = "http://localhost:8080/api/resetPassword?token=" + token;
+                String url = "http://servermvp.ru:49379/api/resetPassword?token=" + token;
                 String body = String.format("Your new password %s, <a href=\"%s\">click here</a> to reset your old password", password, url);
 
                 new Thread(() -> mailSender.sendMessage(params.get("email"), "Password reset", body)).start();
@@ -107,9 +112,9 @@ public class PersonDataController {
                 return jsonResetPass;
             } else if (params.containsKey("token")) {
                 String token = params.get("token");
-                ResetPasswordEntity resetPasswordEntity = resetPasswordDAOImp.getResetPasswordByToken(token);
+                ResetPasswordEntity resetPasswordEntity = resetPasswordDAO.getResetPasswordByToken(token);
                 resetPasswordEntity.getAccount().setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
-                resetPasswordDAOImp.deleteResetPassword(resetPasswordEntity);
+                resetPasswordDAO.deleteResetPassword(resetPasswordEntity);
 
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "reset password");
@@ -120,15 +125,15 @@ public class PersonDataController {
             }
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
-            jsonError.addProperty("error", "bad input data or error server");
-            logger.error("error", e);
+            jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
+            logger.info("error:  " + e.getMessage());
             return jsonError;
         }
     }
 
     @GetMapping("/api/personData")
     public JsonObject personData(@RequestParam String token) {
-        logger.info("/api/personData?token=" + token);
+        logger.info("/api/personData params: token=" + token);
         try {
             AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
             JsonObject jsonQrCode = new JsonObject();
@@ -138,8 +143,8 @@ public class PersonDataController {
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "qr get from DB error or input bad");
-            logger.error("error", e);
+            error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
+            logger.info("error:  " + e.getMessage());
             return error;
         }
     }

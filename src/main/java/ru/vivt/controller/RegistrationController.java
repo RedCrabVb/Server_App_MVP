@@ -53,8 +53,8 @@ public class RegistrationController {
             return jsonReg;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "error when server");
-            logger.error("error registration", e);
+            error.addProperty("error", "error when server " + e.getMessage());
+            logger.info("error:  " + e.getMessage());
             return error;
         }
     }
@@ -69,14 +69,17 @@ public class RegistrationController {
 
             String token = accountDAO.getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
 
-            JsonObject jsonReg = new JsonObject();
-            jsonReg.addProperty("token", token);
-
-            return jsonReg;
+            if (token != null) {
+                JsonObject jsonReg = new JsonObject();
+                jsonReg.addProperty("token", token);
+                return jsonReg;
+            } else {
+                throw new Exception("not found accounts with this email");
+            }
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "error in server (authorization)");
-            logger.error("error registration", e);
+            error.addProperty("error", "error in server (authorization) + " + e.getMessage());
+            logger.info("error:  " + e.getMessage());
             return error;
         }
     }

@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 
 @Configuration
@@ -62,7 +64,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public AccountDAO accountDAO(@Autowired SessionFactory sessionFactory) {
+    public AccountDAO<Collection<ArrayList>> accountDAO(@Autowired SessionFactory sessionFactory) {
         return new AccountDAOImp(sessionFactory);
     }
 }

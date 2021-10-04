@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 
 import static ru.vivt.controller.RegistrationController.generateNewToken;
 
@@ -26,14 +27,21 @@ public class QrCodeController {
 
     @GetMapping("/api/qrCode")
     public JsonObject getQrCode(@RequestParam String token) {
-        logger.info("/api/qrCode?token=" + token);
+        logger.info("/api/qrCode params: token=" + token);
         try {
+            AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
+
+            if (accountsEntity == null) {
+                throw new Exception("Not found accounts");
+            }
+
             JsonObject jsonQrCode = new JsonObject();
-            jsonQrCode.addProperty("qrCode", accountDAO.getAccountByToken(token).getQrCode());
+            jsonQrCode.addProperty("qrCode", accountsEntity.getQrCode());
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "qr get from DB error or input bad");
+            error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
+            logger.info("error: " + e.getMessage());
             return error;
         }
     }
@@ -51,13 +59,11 @@ public class QrCodeController {
             AccountsEntity account = accountDAO.getAccountByToken(token);
             boolean statusToken = account != null;
 
-            if (account != null) {
-                if (account.getAccountActiveTime().isBefore(LocalDate.now())) {
-                    account.setToken(generateNewToken());
-                    account.setAccountActiveTime(LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate());
-                    accountDAO.updateAccounts(account);
-                    statusToken = false;
-                }
+            if (statusToken && account.getAccountActiveTime().isBefore(LocalDate.now())) {
+                account.setToken(generateNewToken());
+                account.setAccountActiveTime(LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate());
+                accountDAO.updateAccounts(account);
+                statusToken = false;
             }
 
             JsonObject json = new JsonObject();
@@ -65,7 +71,8 @@ public class QrCodeController {
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "token get from DB error or input bad");
+            error.addProperty("error", "token get from DB error or input bad " + e.getMessage());
+            logger.info("error: " + e.getMessage());
             return error;
         }
     }
