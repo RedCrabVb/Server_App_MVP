@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.ResetPasswordDAO;
-import ru.vivt.dataBase.dao.ResetPasswordDAOImp;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
 import ru.vivt.server.MailSender;
@@ -26,6 +27,7 @@ import java.util.*;
 import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
+@PropertySource("classpath:mail.properties")
 public class PersonDataController {
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -37,6 +39,15 @@ public class PersonDataController {
 
     @Autowired
     private ResetPasswordDAO resetPasswordDAO;
+
+    @Value("${mailTextResetPassword}")
+    private String mailText;
+
+    @Value("${mailHrefResetPassword}")
+    private String mailHref;
+
+    @Value("${mailHeader}")
+    private String mailHeader;
 
     public static String toSHA1(String value) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
@@ -101,10 +112,10 @@ public class PersonDataController {
                 maps.put("token", token);
                 maps.put("tmpPassword", password);
 
-                String url = "http://servermvp.ru:49379/api/resetPassword?token=" + token;
-                String body = String.format("Your new password %s, <a href=\"%s\">click here</a> to reset your old password", password, url);
+                String url = String.format(token, Optional.of(mailHref).orElseThrow());
+                String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
 
-                new Thread(() -> mailSender.sendMessage(params.get("email"), "Password reset", body)).start();
+                new Thread(() -> mailSender.sendMessage(params.get("email"), Optional.of(mailHeader).orElseThrow(), body)).start();
 
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "check your email");
