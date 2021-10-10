@@ -104,7 +104,7 @@ public class PersonDataController {
 
                 String token = generateNewToken();
                 String password = generateNewToken().substring(0, 8);
-                AccountsEntity accounts = this.accountDAO.getAccountByToken(params.get("token"));
+                AccountsEntity accounts = this.accountDAO.getAccountByEmail(params.get("email")).stream().findFirst().orElseThrow();
                 LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
                 resetPasswordDAO.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
 
@@ -112,10 +112,12 @@ public class PersonDataController {
                 maps.put("token", token);
                 maps.put("tmpPassword", password);
 
-                String url = String.format(token, Optional.of(mailHref).orElseThrow());
+                String url = String.format(Optional.of(mailHref).orElseThrow(), token);
                 String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
 
-                new Thread(() -> mailSender.sendMessage(params.get("email"), Optional.of(mailHeader).orElseThrow(), body)).start();
+                new Thread(() -> {
+                    mailSender.sendMessage(params.get("email"), mailHeader, body);
+                }).start();
 
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "check your email");

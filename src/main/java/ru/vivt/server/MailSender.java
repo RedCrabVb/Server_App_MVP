@@ -32,8 +32,6 @@ public class MailSender {
                 });
     }
 
-    //header - Password recovery
-    //body - "Your new password %s, <a href="%s">click here</a> to reset your old password"
     public boolean sendMessage(String recipient, String header, String body) {
         try {
             Message message = new MimeMessage(session);
