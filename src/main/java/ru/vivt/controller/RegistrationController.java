@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
+import java.util.NoSuchElementException;
 
 import static ru.vivt.controller.PersonDataController.toSHA1;
 
@@ -50,6 +51,7 @@ public class RegistrationController {
             jsonReg.addProperty("qrCode", qrCode);
             jsonReg.addProperty("token", token);
 
+            logger.info("send qrCode and token " + jsonReg);
             return jsonReg;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
@@ -72,9 +74,10 @@ public class RegistrationController {
             if (token != null) {
                 JsonObject jsonReg = new JsonObject();
                 jsonReg.addProperty("token", token);
+                logger.info("send token: " + token);
                 return jsonReg;
             } else {
-                throw new Exception("not found accounts with this email");
+                throw new NoSuchElementException("not found accounts with this email");
             }
         } catch (Exception e) {
             JsonObject error = new JsonObject();

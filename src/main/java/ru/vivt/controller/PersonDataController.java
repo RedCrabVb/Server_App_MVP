@@ -87,6 +87,7 @@ public class PersonDataController {
 
             JsonObject jsonStatus = new JsonObject();
             jsonStatus.addProperty("status", true);
+            logger.info("send status: " + jsonStatus);
             return jsonStatus;
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
@@ -122,6 +123,7 @@ public class PersonDataController {
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "check your email");
 
+                logger.info("send status reset password: " + jsonResetPass);
                 return jsonResetPass;
             } else if (params.containsKey("token")) {
                 String token = params.get("token");
@@ -132,6 +134,7 @@ public class PersonDataController {
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "reset password");
 
+                logger.info("send status reset password: " + jsonResetPass);
                 return jsonResetPass;
             } else {
                 throw new Exception("bad input data");
@@ -149,11 +152,13 @@ public class PersonDataController {
         logger.info("/api/personData params: token=" + token);
         try {
             AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
-            JsonObject jsonQrCode = new JsonObject();
-            jsonQrCode.addProperty("email", Optional.ofNullable(accountsEntity.getEmail()).orElse(""));
-            jsonQrCode.addProperty("username", Optional.ofNullable(accountsEntity.getUsername()).orElse(""));
-            jsonQrCode.addProperty("qrCode", accountsEntity.getQrCode());
-            return jsonQrCode;
+            JsonObject json = new JsonObject();
+            json.addProperty("email", Optional.ofNullable(accountsEntity.getEmail()).orElse(""));
+            json.addProperty("username", Optional.ofNullable(accountsEntity.getUsername()).orElse(""));
+            json.addProperty("qrCode", accountsEntity.getQrCode());
+
+            logger.info("send status: " + json);
+            return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());

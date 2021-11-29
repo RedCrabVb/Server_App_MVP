@@ -37,6 +37,7 @@ public class QrCodeController {
 
             JsonObject jsonQrCode = new JsonObject();
             jsonQrCode.addProperty("qrCode", accountsEntity.getQrCode());
+            logger.info("send qrCode: " + jsonQrCode);
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
@@ -68,6 +69,7 @@ public class QrCodeController {
 
             JsonObject json = new JsonObject();
             json.addProperty("result", statusToken);
+            logger.info("status token + " + token + " : " + json);
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
