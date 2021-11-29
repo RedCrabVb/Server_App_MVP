@@ -29,6 +29,8 @@
           /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
           background: linear-gradient(to right, rgba(230, 233, 240, 0.55), rgba(238, 241, 245, 0.55))
         }
+
+
     </style>
 </head>
 <body>
@@ -36,30 +38,67 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-<p th:text="'Hello, ' + ${message} + '!'"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="script.js"></script>
+<script>
+$(document).ready(function(){
+    $("#addCaseTest").click(function(){
+         var $div = $('div[id^="testNumber"]:last');
 
-<div class="container p-3 mb-2 gradient-main text-dark">
+         var num = parseInt( $div.prop("id").match(/\d+/g), 10 ) +1;
+
+         var $klon = $div.clone().prop('id', 'testNumber'+num );
+         $klon.children("#qiText").text("Вопрос №" + num);
+
+         console.log("#nameQuestion"+(num-1))
+         $klon.children("#question"+(num-1)).prop('id', 'question'+num).prop('id', 'nameQuestion_'+num).val("");
+         $klon.children("#response"+(num-1)).prop('id', 'response'+num).prop('name', 'nameResponse_'+num).val("");
+
+
+
+
+         $klon.appendTo("#test")
+        //$("#testNumber1").clone().appendTo("#test")/
+    });
+});
+
+
+</script>
+
+
+<!--<p th:text="'Hello, ' + ${message} + '!'"/>-->
+
+
+<div class="container-sm p-3 mb-2 gradient-main text-dark">
+    <form method="GET"
+          action="/testAdd"
+          name="test">
+
     <h1>Название теста</h1>
-    <input id="testName" class="form-control" type="text">
+    <input id="testName" name="testName" class="form-control" required="required" type="text">
     <h2>Описание теста</h2>
-    <input id="testDescription" class="form-control" type="text">
+    <input id="testDescription" name="testDescription" class="form-control" required="required" type="text">
     <br>
 
-    <div class="container p-5 mb-5 gradient-test text-white border rounded-pill">
-        <h1>Вопрос №1</h1>
-        <input id="nameQuestion" class="form-control mb-2" type="text">
-        <h6>Название вопроса</h6>
-        <input id="nameResponse" class="form-control mb-2" type="text">
-        <h6>Ответ</h6>
-    </div>
 
-    <div class="col text-center">
-        <button type="button" class="btn btn-outline-primary">Добавить тест</button>
-    </div>
-    <br>
-    <div class="col text-center">
-        <button type="button" class="btn btn-outline-success">Завершить</button>
-    </div>
+        <div id="test">
+            <div id="testNumber1" class="container p-5 mb-5 gradient-test text-white border rounded-pill">
+                <h1 id="qiText">Вопрос №1</h1>
+                <input id="question1" name="nameQuestion_1" class="form-control mb-2" required="required" type="text">
+                <h6>Название вопроса</h6>
+                <input id="response1" name="nameResponse_1" class="form-control mb-2" required="required" type="text">
+                <h6>Ответ</h6>
+            </div>
+        </div>
+
+        <div class="col text-center">
+            <button id="addCaseTest" type="button" class="btn btn-outline-primary">Добавить тест</button>
+        </div>
+        <br>
+        <div class="col text-center">
+            <button id="endTest" type="submit" class="btn btn-outline-success">Завершить</button>
+        </div>
+    </form>
 </div>
 </body>
 </html>
