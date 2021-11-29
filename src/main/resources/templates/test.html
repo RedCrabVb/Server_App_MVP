@@ -51,14 +51,10 @@ $(document).ready(function(){
          $klon.children("#qiText").text("Вопрос №" + num);
 
          console.log("#nameQuestion"+(num-1))
-         $klon.children("#question"+(num-1)).prop('id', 'question'+num).prop('id', 'nameQuestion_'+num).val("");
-         $klon.children("#response"+(num-1)).prop('id', 'response'+num).prop('name', 'nameResponse_'+num).val("");
-
-
-
+         $klon.children("#question"+(num-1)).prop('id', 'question'+num).prop('name', 'nameQ_'+num).val("");
+         $klon.children("#response"+(num-1)).prop('id', 'response'+num).prop('name', 'nameR_'+num).val("");
 
          $klon.appendTo("#test")
-        //$("#testNumber1").clone().appendTo("#test")/
     });
 });
 
@@ -84,9 +80,9 @@ $(document).ready(function(){
         <div id="test">
             <div id="testNumber1" class="container p-5 mb-5 gradient-test text-white border rounded-pill">
                 <h1 id="qiText">Вопрос №1</h1>
-                <input id="question1" name="nameQuestion_1" class="form-control mb-2" required="required" type="text">
+                <input id="question1" name="nameQ_1" class="form-control mb-2" required="required" type="text">
                 <h6>Название вопроса</h6>
-                <input id="response1" name="nameResponse_1" class="form-control mb-2" required="required" type="text">
+                <input id="response1" name="nameR_1" class="form-control mb-2" required="required" type="text">
                 <h6>Ответ</h6>
             </div>
         </div>

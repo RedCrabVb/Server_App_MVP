@@ -38,7 +38,27 @@
 
 <div class="container-sm p-3 mb-2 gradient-main text-dark">
     <h1>Название теста</h1>
+    <p th:text="${testName}"/>
     <h2>Описание теста</h2>
+    <p th:text="${testDescription}"/>
+
+    <table>
+        <thead>
+        <tr>
+            <th> Вопрос </th>
+            <th> Ответ </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${answers.empty}">
+            <td colspan="2"> No Books Available </td>
+        </tr>
+        <tr th:each="answer : ${answers}">
+            <td><span th:text="${answer.question}"> Вопрос </span></td>
+            <td><span th:text="${answer.response}"> Ответ </span></td>
+        </tr>
+        </tbody>
+    </table>
 
 </div>
 </body>
