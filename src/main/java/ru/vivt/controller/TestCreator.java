@@ -3,12 +3,13 @@ package ru.vivt.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class TestCreator {
     @GetMapping("/testCreator")
-    public String testCreatorPage(Model model) {
-        model.addAttribute("message", "Hello world");
+    public String testCreatorPage(@RequestParam String token, Model model) {
+        model.addAttribute("message", token);
         return "test";
     }
 }
