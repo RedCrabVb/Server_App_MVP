@@ -39,10 +39,7 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer{" +
-                "question='" + question + '\'' +
-                ", response='" + response + '\'' +
-                '}';
+        return "Answer@" + hashCode();
     }
 
     @Override

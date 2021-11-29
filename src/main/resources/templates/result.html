@@ -38,7 +38,10 @@
         <tr th:if="${!answers.empty}">
         <tr th:each="answer : ${answers}">
             <td><span scope="row" th:text="${answer.question}">  </span></td>
-            <td><span scope="row" th:id="${answer.id}" th:text="${answer.response}">  </span></td>
+            <td>
+                <div class="container d-flex align-items-center justify-content-center" scope="row" th:id="${answer.id}" th:text="${answer}">  </div>
+                <span th:text="${answer.response}"/>
+            </td>
         </tr>
         </tr>
         <td th:if="${answers.empty}" colspan="2"> Нет данных</td>
@@ -49,7 +52,7 @@
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
     <script type="text/javascript">
-        $('span[id^="answer-"]').each(function (index, value) {
+        $('div[id^="answer-"]').each(function (index, value) {
             console.log('span' + index + ':' + $(this).text());
             var textSpan = $(this).text();
             $(this).text("");
