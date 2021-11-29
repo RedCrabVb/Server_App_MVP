@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -31,9 +34,9 @@ public class TestCreator {
         var listQ = List.of(map.keySet().stream().filter(f -> f.startsWith("nameQ")).toArray());
         var listR = List.of(map.keySet().stream().filter(f -> f.startsWith("nameR")).toArray());
 
-        var answers = List.of(IntStream
+        var answers = IntStream
                 .range(0, listQ.size())
-                .mapToObj(i -> new Answer(map.get(listQ.get(i)), map.get(listR.get(i)))).toArray());
+                .mapToObj(i -> new Answer(i, map.get(listQ.get(i)), map.get(listR.get(i)))).collect(Collectors.toCollection(LinkedList::new));
 
         answers.forEach(s -> System.out.println(s));
 

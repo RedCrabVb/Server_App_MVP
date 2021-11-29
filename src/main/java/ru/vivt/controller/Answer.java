@@ -3,12 +3,14 @@ package ru.vivt.controller;
 import java.util.Objects;
 
 public class Answer {
+    private int id;
     private String question;
     private String response;
 
-    public Answer(String question, String response) {
+    public Answer(int id, String question, String response) {
         this.question = question;
         this.response = response;
+        this.id = id;
     }
 
     public String getResponse() {
@@ -25,6 +27,14 @@ public class Answer {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getId() {
+        return "answer-" + id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -47,4 +57,6 @@ public class Answer {
     public int hashCode() {
         return Objects.hash(question, response);
     }
+
+
 }
