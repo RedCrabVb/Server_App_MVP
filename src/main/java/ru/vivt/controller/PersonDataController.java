@@ -49,6 +49,9 @@ public class PersonDataController {
     @Value("${mailHeader}")
     private String mailHeader;
 
+    public PersonDataController() {
+    }
+
     public static String toSHA1(String value) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.reset();
@@ -116,9 +119,7 @@ public class PersonDataController {
                 String url = String.format(Optional.of(mailHref).orElseThrow(), token);
                 String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
 
-                new Thread(() -> {
-                    mailSender.sendMessage(params.get("email"), mailHeader, body);
-                }).start();
+                new Thread(() -> mailSender.sendMessage(params.get("email"), mailHeader, body)).start();
 
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "check your email");
@@ -165,5 +166,9 @@ public class PersonDataController {
             logger.info("error:  " + e.getMessage());
             return error;
         }
+    }
+
+    public void setResetPasswordDAO(ResetPasswordDAO resetPasswordDAO) {
+        this.resetPasswordDAO = resetPasswordDAO;
     }
 }

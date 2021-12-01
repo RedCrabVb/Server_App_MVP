@@ -6,20 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.AccountDAOImp;
-import ru.vivt.dataBase.entity.AccountsEntity;
-import ru.vivt.dataBase.entity.NewsEntity;
-import ru.vivt.dataBase.entity.ResetPasswordEntity;
+import ru.vivt.dataBase.dao.QuestionDAO;
+import ru.vivt.dataBase.entity.*;
 import ru.vivt.server.MailSender;
 import ru.vivt.server.ServerControl;
 
-import javax.servlet.ServletContext;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -61,6 +55,8 @@ public class SpringConfig implements WebMvcConfigurer {
         configuration.addAnnotatedClass(AccountsEntity.class);
         configuration.addAnnotatedClass(NewsEntity.class);
         configuration.addAnnotatedClass(ResetPasswordEntity.class);
+        configuration.addAnnotatedClass(TestEntity.class);
+        configuration.addAnnotatedClass(QuestionEntity.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         return configuration.buildSessionFactory(builder.build());
     }

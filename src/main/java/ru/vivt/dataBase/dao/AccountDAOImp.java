@@ -25,8 +25,6 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
             session.beginTransaction();
             session.save(entity);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -36,8 +34,6 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
             session.beginTransaction();
             session.update(entity);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -82,7 +78,7 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             accountsEntities = session.createCriteria(AccountsEntity.class).list();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw e;
         }
         return accountsEntities;
     }
@@ -93,8 +89,6 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
             session.beginTransaction();
             session.delete(customer);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw e;
         }
     }
 }

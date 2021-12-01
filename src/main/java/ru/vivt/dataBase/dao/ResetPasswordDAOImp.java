@@ -24,8 +24,6 @@ public class ResetPasswordDAOImp implements ResetPasswordDAO {
             session.beginTransaction();
             session.save(entity);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw e;
         }
     }
 
@@ -36,8 +34,6 @@ public class ResetPasswordDAOImp implements ResetPasswordDAO {
             ResetPasswordEntity resetPasswordEntity = (ResetPasswordEntity) query.setParameter("token", token).uniqueResult();
             Hibernate.initialize(resetPasswordEntity);
             return resetPasswordEntity;
-        } catch (Exception e) {
-            throw e;
         }
     }
 
@@ -47,8 +43,6 @@ public class ResetPasswordDAOImp implements ResetPasswordDAO {
             session.beginTransaction();
             session.delete(entity);
             session.getTransaction().commit();
-        } catch (Exception e) {
-            throw e;
         }
     }
 }

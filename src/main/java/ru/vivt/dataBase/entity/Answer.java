@@ -1,4 +1,4 @@
-package ru.vivt.controller;
+package ru.vivt.dataBase.entity;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer@" + hashCode();
+        return "Answer@" + question.hashCode() + response.hashCode();
     }
 
     @Override

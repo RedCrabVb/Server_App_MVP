@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestApi {
+public class TestEntityApi {
     private static final String serverName = "localhost";//"servermvp.ru:49379";
 
     private final String apiNews = "api/news";
