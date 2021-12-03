@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.vivt.dataBase.entity.TestEntity;
 
+import java.util.Comparator;
+import java.util.List;
+
 @Component
 public class TestDAOImp implements TestDAO {
     @Autowired
@@ -27,6 +30,17 @@ public class TestDAOImp implements TestDAO {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             Query query = session.createQuery(String.format("FROM %s WHERE idTest = :idTest", TestEntity.class.getName()));
             TestEntity question = (TestEntity) query.setParameter("idTest", id).uniqueResult();
+            Hibernate.initialize(question);
+            return question;
+        }
+    }
+
+    @Override
+    public List<TestEntity> getAllTest(int maxCount) {
+        try (Session session = sessionFactory.getSessionFactory().openSession()) {
+            Query query = session.createQuery(String.format("FROM %s", TestEntity.class.getName()));
+            List<TestEntity> question = query.getResultList();
+            //TODO limit the output
             Hibernate.initialize(question);
             return question;
         }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.vivt.dataBase.entity.QuestionEntity;
 
+import java.util.List;
+
 
 @Component
 public class QuestionDAOImp implements QuestionDAO {
@@ -28,6 +30,16 @@ public class QuestionDAOImp implements QuestionDAO {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             Query query = session.createQuery(String.format("FROM %s WHERE idQuestion = :id", QuestionEntity.class.getName()));
             QuestionEntity question = (QuestionEntity) query.setParameter("idQuestion", id).uniqueResult();
+            Hibernate.initialize(question);
+            return question;
+        }
+    }
+
+    @Override
+    public List<QuestionEntity> getAllQuestionByIdTest(int id) {
+        try (Session session = sessionFactory.getSessionFactory().openSession()) {
+            Query query = session.createQuery(String.format("FROM %s WHERE idTest = :id", QuestionEntity.class.getName()));
+            List<QuestionEntity> question = query.setParameter("id", id).getResultList();
             Hibernate.initialize(question);
             return question;
         }
