@@ -32,14 +32,14 @@ public class TestController {
         logger.info("/api/testAll");
         JsonObject jsonTest = new JsonObject();
 
-        jsonTest.add("test", gson.toJsonTree(testDAO.getAllTest(-1)));
+        jsonTest.add("test", gson.toJsonTree(testDAO.getAllTest(5)));
 
 
         return jsonTest;
     }
 
     @GetMapping("/api/test")
-    public JsonObject authorization(@RequestParam int id) {
+    public JsonObject test(@RequestParam int id) {
         logger.info("/api/test");
         JsonObject jsonTest = new JsonObject();
 

@@ -3,6 +3,7 @@ package ru.vivt.controller;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -28,16 +29,24 @@ public class TestCreator {
     @Autowired
     private QuestionDAO questionDAO;
 
+    @Value("${admin.token}")
+    private String token;
+
 
     @GetMapping("/testCreator")
-    public String testCreatorPage(@RequestParam String token, Model model) {
-        model.addAttribute("message", token);
+    public String testCreatorPage(Model model) {
+//        model.addAttribute("message", token);
         return "test";
     }
 
     @GetMapping("/testAdd")
     public String testAdd(@RequestParam Map<String, String> map, ModelMap model) {
         logger.info("test add, parameter: " + map.toString());
+
+        if (!map.get("token").equals(token)) {
+            model.addAttribute("message", "Токен не верный");
+            return "error";
+        }
 
         String testName = map.get("testName");
         String testDescription = map.get("testDescription");
@@ -69,6 +78,5 @@ public class TestCreator {
         return "result";
     }
 
-    //TODO: select test api for android
     //TODO: send answer android and check right this
 }
