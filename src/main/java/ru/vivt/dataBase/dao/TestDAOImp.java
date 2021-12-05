@@ -38,9 +38,8 @@ public class TestDAOImp implements TestDAO {
     @Override
     public List<TestEntity> getAllTest(int maxCount) {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
-            Query query = session.createQuery(String.format("FROM %s", TestEntity.class.getName()));
-            List<TestEntity> question = query.getResultList();
-            //TODO limit the output
+            Query query = session.createQuery(String.format("FROM %s order by idTest desc", TestEntity.class.getName()));
+            List<TestEntity> question = query.setMaxResults(maxCount).getResultList();
             Hibernate.initialize(question);
             return question;
         }
