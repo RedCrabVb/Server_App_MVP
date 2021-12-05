@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.TestDAO;
+import ru.vivt.dataBase.entity.Answer;
 import ru.vivt.dataBase.entity.QuestionEntity;
 
 import java.util.NoSuchElementException;
@@ -37,7 +38,7 @@ public class TestController {
 
         return jsonTest;
     }
-
+    //fixme: the user with the necessary skills will simply get all the answers
     @GetMapping("/api/test")
     public JsonObject test(@RequestParam int id) {
         logger.info("/api/test");
@@ -48,5 +49,12 @@ public class TestController {
         jsonTest.add("question", gson.toJsonTree(questionDAO.getAllQuestionByIdTest(id)));
 
         return jsonTest;
+    }
+
+    @GetMapping("/api/getHashAnswer")
+    public JsonObject getHash(@RequestParam String question, @RequestParam String answer) {
+        JsonObject json = new JsonObject();
+        json.addProperty("hash", new Answer(1, question, answer).toString());
+        return json;
     }
 }
