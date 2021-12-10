@@ -10,16 +10,18 @@ public class QuestionEntity {
     private int idQuestion;
     private String text;
     private String answer;
+    private String comment;
     private int idTest;
 
     public QuestionEntity() {
 
     }
 
-    public QuestionEntity(String text, String answer, int idTest) {
+    public QuestionEntity(String text, String answer, int idTest, String comment) {
         this.text = text;
         this.answer = answer;
         this.idTest = idTest;
+        this.comment = comment;
     }
 
     public String getAnswer() {
@@ -44,5 +46,13 @@ public class QuestionEntity {
 
     public void setIdTest(int idTest) {
         this.idTest = idTest;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

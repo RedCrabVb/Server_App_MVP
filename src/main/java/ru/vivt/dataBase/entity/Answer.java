@@ -6,28 +6,24 @@ public class Answer {
     private int id;
     private String question;
     private String response;
+    private String comment;
 
-    public Answer(int id, String question, String response) {
+    public Answer(int id, String question, String response, String comment) {
         this.question = question;
         this.response = response;
         this.id = id;
+        this.comment = comment;
     }
 
     public String getResponse() {
         return response;
     }
 
-    public void setResponse(String response) {
-        this.response = response;
-    }
 
     public String getQuestion() {
         return question;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
-    }
 
     public String getId() {
         return "answer-" + id;
@@ -55,5 +51,9 @@ public class Answer {
         return Objects.hash(question, response);
     }
 
+
+    public String getComment() {
+        return comment;
+    }
 
 }

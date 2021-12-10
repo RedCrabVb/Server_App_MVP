@@ -54,7 +54,7 @@ public class TestController {
     @GetMapping("/api/getHashAnswer")
     public JsonObject getHash(@RequestParam String question, @RequestParam String answer) {
         JsonObject json = new JsonObject();
-        json.addProperty("hash", new Answer(1, question, answer).toString());
+        json.addProperty("hash", new Answer(1, question, answer, "").toString());
         return json;
     }
 }

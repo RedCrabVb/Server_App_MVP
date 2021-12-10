@@ -20,6 +20,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@FunctionalInterface
+interface GetAllCoincidences {
+    List<Object> getAll(String key);
+}
+
 @Controller
 public class TestCreator {
     private final Log logger = LogFactory.getLog(getClass());
@@ -35,8 +40,7 @@ public class TestCreator {
 
 
     @GetMapping("/testCreator")
-    public String testCreatorPage(Model model) {
-//        model.addAttribute("message", token);
+    public String testCreatorPage() {
         return "test";
     }
 
@@ -55,12 +59,17 @@ public class TestCreator {
         model.addAttribute("testName", testName);
         model.addAttribute("testDescription", testDescription);
 
-        var listQ = List.of(map.keySet().stream().filter(f -> f.startsWith("nameQ")).toArray());
-        var listR = List.of(map.keySet().stream().filter(f -> f.startsWith("nameR")).toArray());
+        GetAllCoincidences getAllCoincidences = (String key) ->
+                List.of(map.keySet().stream().filter(f -> f.startsWith(key)).toArray());
+
+
+        var listQ = getAllCoincidences.getAll("nameQ");
+        var listR = getAllCoincidences.getAll("nameR");
+        var listC = getAllCoincidences.getAll("nameС");
 
         var answers = IntStream
                 .range(0, listQ.size())
-                .mapToObj(i -> new Answer(i, map.get(listQ.get(i)), map.get(listR.get(i)))).collect(Collectors.toCollection(LinkedList::new));
+                .mapToObj(i -> new Answer(i, map.get(listQ.get(i)), map.get(listR.get(i)), map.get(listC.get(i)))).collect(Collectors.toCollection(LinkedList::new));
 
         answers.forEach(s -> logger.info("answer test: " + s));
 
@@ -72,7 +81,8 @@ public class TestCreator {
                         new QuestionEntity(
                                 answer.getQuestion(),
                                 answer.getResponse(),
-                                testEntity.getIdTest())
+                                testEntity.getIdTest(),
+                                answer.getComment())
                 )
         );
 
