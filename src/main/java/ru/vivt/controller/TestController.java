@@ -41,7 +41,7 @@ public class TestController {
     //fixme: the user with the necessary skills will simply get all the answers
     @GetMapping("/api/test")
     public JsonObject test(@RequestParam int id) {
-        logger.info("/api/test");
+        logger.info("/api/test?id="+id);
         JsonObject jsonTest = new JsonObject();
 
         jsonTest.add("test", gson.toJsonTree(testDAO.getTestById(id)));
@@ -53,6 +53,7 @@ public class TestController {
 
     @GetMapping("/api/getHashAnswer")
     public JsonObject getHash(@RequestParam String question, @RequestParam String answer) {
+        logger.info("/api/getHashAnswer");
         JsonObject json = new JsonObject();
         json.addProperty("hash", new Answer(1, question, answer, "").toString());
         return json;

@@ -1,38 +1,60 @@
 # Server_App_MVP
 Server Application for MVP Vivt
 ---
-Start: create an android application that can: generate a QR-code, display any news from the site (small, they can be opened in the application).
-Registration is as follows: download the application, everything works, if the user needs to transfer his account, etc., then he can set a password, email, phone
+тарт: создать андроид-приложение, которое умеет: генерировать QR-код, отображать любые новости с сайта (маленькие, их можно открывать в приложении).
+Регистрация происходит следующим образом: скачать приложение, все работает, если пользователю нужно перенести аккаунт и т. Д., То он может установить пароль, почту, телефон.
+Что я думаю:
+Создайте оболочку с инструментами без кода в студии Android,
+затем напишите сервер со следующей логикой:
+* REST api - https: // site / api
+* /api/news - вернет ссылку на новостной источник
 
-What are my thoughts:
-Make up shell with no-code tools in android sutdio,
-then write a server with the following logic:
-* All work on http - https: // site / api
-* /api/news - here data not ambiguous json / json with link
+* /api/registration - здесь вернет токен, для дальнейшей работы с сервером его нужно будет сохранить на клиенте
+* /api/setPersonDate - установка пароля, смена ника и т. д.
+* /api/resetPassword - "GET token" для сброса пароля
+* /api/resetPassword - "GET email" отправит сообщение
+* /api/getStatusToken - получить статус токен
+* /api/qrCode - получить QR-код по токену
+* /api/test - получить последние 10 тестов
+* /api/testAll - GET all test on DB
+* /api/getHashAnswer - GET hash answer
 
-* /api/registration - here - it will return the token, for further work with the server, it will need to be saved on the client,
-* /api/setPersonDate - password set, nickname change, etc.
-* /api/resetPassword - "GET token" for reste password
-* /api/resetPassword - "GET email" send email on accounts
-* /api/getStatusToken - check status token
-* /api/qrCode - get qr code on token
+web:
+* /testCreator - страниц для создания теста, валидность данных проверяться с помощью токена
+* /testAdd - GET запрос, которые добавляет данные в БД
 
-the file with the settings for mail has been sent to .gitignore,
-since it is not safe, in any case, I will say, it worked through mail ru,
-to send a notification you have to set up your mail a little, mail.properties looks like the following
+
+Файл с настройками для почты отправлен на .gitignore,
+так как это небезопасно, в любом случае скажу, через mail ru работало,
+чтобы отправить уведомление, вам нужно немного настроить свою почту, mail.properties выглядит следующим образом
 
 ````
 username=eamil@email.com
 password=pass
 ````
 
-The settings for the tests were also placed in a separate file, I don't want to receive spam
-test.properties
+hibernate.properties - файлы для базы данных
 
-````
-user.test.Token=bdToken
-user.test.Email=BdEmail@test.com
-user.test.password=passTest
-````
+```
+hibernate.connection.driver_class=com.mysql.jdbc.Driver
+hibernate.connection.url=jdbc:mysql://localhost:3306/MvpDB?useSSL=false&serverTimezone=UTC
+hibernate.connection.username=username
+hibernate.connection.password=password
+hibernate.c3p0.min_size=5
+hibernate.c3p0.max_size=20
+hibernate.c3p0.timeout=1800
+hibernate.c3p0.max_statements=50
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+hibernate.show_sql=false
 
-There is a database in the project files, you only need to import it
+```
+
+Сам файл с БД лежит в src/main/resource/MvpDB.sql
+
+Запуск сервера, mysql должен быть запущен
+```
+java -jar -Dserver.port=8082  
+-Dmail.properties=mail.properties 
+-Dhibernate.properties=hibernate.properties server-*-SNAPSHOT.jar
+```
+Стандартный токен администратора `abc`, может быть изменен при запуске, следующим параметром `-Dadmin.token=rrr`

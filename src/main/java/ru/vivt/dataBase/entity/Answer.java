@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Answer {
     private int id;
-    private String question;
-    private String response;
-    private String comment;
+    private final String question;
+    private final String response;
+    private final String comment;
 
     public Answer(int id, String question, String response, String comment) {
         this.question = question;

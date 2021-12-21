@@ -9,10 +9,8 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.AccountDAOImp;
-import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.entity.*;
 import ru.vivt.server.MailSender;
-import ru.vivt.server.ServerControl;
 
 import java.io.FileInputStream;
 import java.io.FileReader;
@@ -41,11 +39,6 @@ public class SpringConfig implements WebMvcConfigurer {
                 property.getProperty("usernameEmail", ""),
                 property.getProperty("passwordEmail", "")
         );
-    }
-
-    @Bean
-    public ServerControl serverControl() {
-        return new ServerControl();
     }
 
     @Bean

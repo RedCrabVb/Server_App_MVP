@@ -28,7 +28,7 @@ public class RegistrationController {
 
     @Autowired
     private AccountDAO accountDAO;
-    
+
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
         secureRandom.nextBytes(randomBytes);
@@ -63,7 +63,7 @@ public class RegistrationController {
 
     @GetMapping("/api/authorization")
     public JsonObject authorization(@RequestParam String email, @RequestParam String password) {
-        logger.info("/api/authorization");
+        logger.info("/api/authorization?email=" + email);
         try {
             if (email.isEmpty() || password.isEmpty()) {
                 throw new Exception("email or password empty");

@@ -20,12 +20,6 @@ public class ResetPasswordEntity {
 
     }
 
-    /**
-     * @param token
-     * @param tmpPassword
-     * @param dateActiveToken
-     * @param account
-     */
     public ResetPasswordEntity(String token, String tmpPassword, LocalDate dateActiveToken, AccountsEntity account) {
         this.token = token;
         this.tmpPassword = tmpPassword;
