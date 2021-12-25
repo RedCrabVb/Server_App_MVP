@@ -29,10 +29,17 @@
 
 
 <div class="container-sm p-3 mb-2 gradient-main text-dark">
-    <h1>Название теста</h1>
-    <p th:text="${testName}"/>
-    <h2>Описание теста</h2>
-    <p th:text="${testDescription}"/>
+    <div class="row d-flex">
+        <div class="container-sm">
+            <h1>Название теста</h1>
+            <p th:text="${testName}"/>
+            <h2>Описание теста</h2>
+            <p th:text="${testDescription}"/>
+        </div>
+        <div class="d-flex flex-row-reverse">
+            <a href="/" class="btn btn-dark" role="button">Главное меню</a>
+        </div>
+    </div>
 
     <table class="table table-striped">
         <thead>
