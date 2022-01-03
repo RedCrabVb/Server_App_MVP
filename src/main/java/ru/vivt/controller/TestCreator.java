@@ -48,11 +48,6 @@ public class TestCreator {
     public String testAdd(@RequestParam Map<String, String> map, ModelMap model) {
         logger.info("test add, parameter: " + map.toString());
 
-        if (!map.get("token").equals(token)) {
-            model.addAttribute("message", "Токен не верный");
-            return "error";
-        }
-
         String testName = map.get("testName");
         String testDescription = map.get("testDescription");
 
