@@ -29,7 +29,6 @@ import static ru.vivt.controller.RegistrationController.generateNewToken;
 @RestController
 @PropertySource("classpath:mail.properties")
 public class PersonDataController {
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private MailSender mailSender;
@@ -61,7 +60,6 @@ public class PersonDataController {
 
     @GetMapping("/api/setPersonDate")
     public JsonObject setPersonData(@RequestParam Map<String, String> params) {
-        logger.info("/api/setPersonDate, params: " + params.toString());
         try {
             AccountsEntity accounts = accountDAO.getAccountByToken(params.get("token"));
 
@@ -90,19 +88,16 @@ public class PersonDataController {
 
             JsonObject jsonStatus = new JsonObject();
             jsonStatus.addProperty("status", true);
-            logger.info("send status: " + jsonStatus);
             return jsonStatus;
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
             jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
-            logger.info("error: " + e.getMessage());
             return jsonError;
         }
     }
 
     @GetMapping("/api/resetPassword")
     public JsonObject resetPassword(@RequestParam Map<String, String> params) {
-        logger.info("/api/resetPassword params: " + params.toString());
         try {
             if (params.containsKey("email")) {
 
@@ -120,7 +115,6 @@ public class PersonDataController {
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "check your email");
 
-                logger.info("send status reset password: " + jsonResetPass);
                 return jsonResetPass;
             } else if (params.containsKey("token")) {
                 String token = params.get("token");
@@ -131,7 +125,6 @@ public class PersonDataController {
                 JsonObject jsonResetPass = new JsonObject();
                 jsonResetPass.addProperty("status", "reset password");
 
-                logger.info("send status reset password: " + jsonResetPass);
                 return jsonResetPass;
             } else {
                 throw new Exception("bad input data");
@@ -139,14 +132,12 @@ public class PersonDataController {
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
             jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
-            logger.info("error:  " + e.getMessage());
             return jsonError;
         }
     }
 
     @GetMapping("/api/personData")
     public JsonObject personData(@RequestParam String token) {
-        logger.info("/api/personData params: token=" + token);
         try {
             AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
             JsonObject json = new JsonObject();
@@ -154,12 +145,10 @@ public class PersonDataController {
             json.addProperty("username", Optional.ofNullable(accountsEntity.getUsername()).orElse(""));
             json.addProperty("qrCode", accountsEntity.getQrCode());
 
-            logger.info("send status: " + json);
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
-            logger.info("error:  " + e.getMessage());
             return error;
         }
     }

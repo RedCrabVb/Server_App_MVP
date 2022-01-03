@@ -32,15 +32,8 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/testCreator").setViewName("testCreator");
         registry.addViewController("/testAdd").setViewName("testAdd");
-    }
-
-    @Bean
-    public CommonsRequestLoggingFilter requestLoggingFilter() {
-        CommonsRequestLoggingFilter loggingFilter = new CommonsRequestLoggingFilter();
-        loggingFilter.setIncludeClientInfo(true);
-        loggingFilter.setIncludeQueryString(true);
-        loggingFilter.setIncludePayload(true);
-        return loggingFilter;
+        registry.addViewController("/resultsOverview").setViewName("resultsOverview");
+        registry.addViewController("/testCreator").setViewName("testCreator");
     }
 
     @Bean

@@ -18,14 +18,11 @@ import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
 public class QrCodeController {
-    private final Log logger = LogFactory.getLog(getClass());
-
     @Autowired
     private AccountDAO accountDAO;
 
     @GetMapping("/api/qrCode")
     public JsonObject getQrCode(@RequestParam String token) {
-        logger.info("/api/qrCode params: token=" + token);
         try {
             AccountsEntity accountsEntity = accountDAO.getAccountByToken(token);
 
@@ -35,12 +32,10 @@ public class QrCodeController {
 
             JsonObject jsonQrCode = new JsonObject();
             jsonQrCode.addProperty("qrCode", accountsEntity.getQrCode());
-            logger.info("send qrCode: " + jsonQrCode);
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
-            logger.info("error: " + e.getMessage());
             return error;
         }
     }
@@ -53,7 +48,6 @@ public class QrCodeController {
      */
     @GetMapping("/api/getStatusToken")
     public JsonObject getStatusToken(@RequestParam String token) {
-        logger.info("/api/getStatusToken?token=" + token);
         try {
             AccountsEntity account = accountDAO.getAccountByToken(token);
             boolean statusToken = account != null;
@@ -67,12 +61,10 @@ public class QrCodeController {
 
             JsonObject json = new JsonObject();
             json.addProperty("result", statusToken);
-            logger.info("status token + " + token + " : " + json);
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "token get from DB error or input bad " + e.getMessage());
-            logger.info("error: " + e.getMessage());
             return error;
         }
     }

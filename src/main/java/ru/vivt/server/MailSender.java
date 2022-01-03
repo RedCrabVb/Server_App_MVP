@@ -42,7 +42,6 @@ public class MailSender {
 
             Transport.send(message);
 
-            logger.info("Send message to email " + recipient);
         } catch (MessagingException e) {
             logger.error("Error send message to email", e);
         }

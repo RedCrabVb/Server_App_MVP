@@ -23,7 +23,6 @@ import static ru.vivt.controller.PersonDataController.toSHA1;
 public class RegistrationController {
     private static final SecureRandom secureRandom = new SecureRandom();
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-    private final Log logger = LogFactory.getLog(getClass());
 
     @Autowired
     private AccountDAO accountDAO;
@@ -37,7 +36,6 @@ public class RegistrationController {
 
     @GetMapping("/api/registration")
     public JsonObject registration() {
-        logger.info("/api/registration");
         try {
             String token = generateNewToken();
             String qrCode = generateNewToken().substring(5);
@@ -50,19 +48,16 @@ public class RegistrationController {
             jsonReg.addProperty("qrCode", qrCode);
             jsonReg.addProperty("token", token);
 
-            logger.info("send qrCode and token " + jsonReg);
             return jsonReg;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "error when server " + e.getMessage());
-            logger.info("error:  " + e.getMessage());
             return error;
         }
     }
 
     @GetMapping("/api/authorization")
     public JsonObject authorization(@RequestParam String email, @RequestParam String password) {
-        logger.info("/api/authorization?email=" + email);
         try {
             if (email.isEmpty() || password.isEmpty()) {
                 throw new Exception("email or password empty");
@@ -73,7 +68,6 @@ public class RegistrationController {
             if (token != null) {
                 JsonObject jsonReg = new JsonObject();
                 jsonReg.addProperty("token", token);
-                logger.info("send token: " + token);
                 return jsonReg;
             } else {
                 throw new NoSuchElementException("not found accounts with this email");
@@ -81,7 +75,6 @@ public class RegistrationController {
         } catch (Exception e) {
             JsonObject error = new JsonObject();
             error.addProperty("error", "error in server (authorization) + " + e.getMessage());
-            logger.info("error:  " + e.getMessage());
             return error;
         }
     }
