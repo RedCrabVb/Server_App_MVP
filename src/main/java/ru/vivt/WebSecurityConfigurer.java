@@ -1,5 +1,6 @@
 package ru.vivt;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+    @Value("${admin.token}")
+    private String token;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -32,9 +36,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         UserDetails user =
                 User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
+                        .username("admin")
+                        .password(token)
+                        .roles("ADMIN")
                         .build();
 
         return new InMemoryUserDetailsManager(user);

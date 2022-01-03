@@ -35,8 +35,7 @@ public class TestCreator {
     @Autowired
     private QuestionDAO questionDAO;
 
-    @Value("${admin.token}")
-    private String token;
+
 
 
     @GetMapping("/testCreator")
