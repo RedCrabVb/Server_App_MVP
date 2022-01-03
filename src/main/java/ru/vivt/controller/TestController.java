@@ -1,9 +1,7 @@
 package ru.vivt.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.TestDAO;
 import ru.vivt.dataBase.entity.Answer;
-import ru.vivt.dataBase.entity.QuestionEntity;
-
-import java.util.NoSuchElementException;
-
-import static ru.vivt.controller.PersonDataController.toSHA1;
 
 @RestController
 public class TestController {
     private final Log logger = LogFactory.getLog(getClass());
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     @Autowired
     private TestDAO testDAO;
     @Autowired

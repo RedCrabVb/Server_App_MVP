@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Optional;
 
 import static ru.vivt.controller.RegistrationController.generateNewToken;
 

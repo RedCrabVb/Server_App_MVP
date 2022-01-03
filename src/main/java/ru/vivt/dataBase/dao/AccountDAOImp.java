@@ -74,13 +74,11 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
 
     @Override
      public Collection<ArrayList> getAllAccounts() throws SQLException {
-        List accountsEntities = new ArrayList<AccountsEntity>();
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
-            accountsEntities = session.createCriteria(AccountsEntity.class).list();
+            return session.createCriteria(AccountsEntity.class).list();
         } catch (Exception e) {
             throw e;
         }
-        return accountsEntities;
     }
 
     @Override

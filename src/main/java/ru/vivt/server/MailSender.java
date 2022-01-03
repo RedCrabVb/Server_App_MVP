@@ -7,7 +7,6 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
-import java.util.logging.Level;
 
 public class MailSender {
     private final Log logger = LogFactory.getLog(getClass());
@@ -32,7 +31,7 @@ public class MailSender {
                 });
     }
 
-    public boolean sendMessage(String recipient, String header, String body) {
+    public void sendMessage(String recipient, String header, String body) {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailServer));
@@ -44,10 +43,8 @@ public class MailSender {
             Transport.send(message);
 
             logger.info("Send message to email " + recipient);
-            return true;
         } catch (MessagingException e) {
             logger.error("Error send message to email", e);
-            return false;
         }
     }
 }

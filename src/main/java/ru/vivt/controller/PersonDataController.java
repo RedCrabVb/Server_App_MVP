@@ -112,10 +112,6 @@ public class PersonDataController {
                 LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
                 resetPasswordDAO.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
 
-                Map<String, String> maps = new HashMap<>();
-                maps.put("token", token);
-                maps.put("tmpPassword", password);
-
                 String url = String.format(Optional.of(mailHref).orElseThrow(), token);
                 String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
 

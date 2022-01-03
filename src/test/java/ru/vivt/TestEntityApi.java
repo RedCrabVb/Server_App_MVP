@@ -7,14 +7,12 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,21 +32,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestEntityApi {
     private static final String serverName = "localhost";//"servermvp.ru:49379";
 
-    private final String apiNews = "api/news";
-    private final String apiQrCode = "api/qrCode";
-    private final String apiPersonData = "api/setPersonDate";
-    private final String apiRegistration = "api/registration";
-    private final String apiStatusToken = "api/getStatusToken";
-    private final String apiResetPassword = "api/resetPassword";
-    private final String apiAuthorization = "api/authorization";
-    private final String apiPersonDataGet = "api/personData";
+    private static final String apiNews = "api/news";
+    private static final String apiQrCode = "api/qrCode";
+    private static final String apiPersonData = "api/setPersonDate";
+    private static final String apiRegistration = "api/registration";
+    private static final String apiStatusToken = "api/getStatusToken";
+    private static final String apiResetPassword = "api/resetPassword";
+    private static final String apiAuthorization = "api/authorization";
+    private static final String apiPersonDataGet = "api/personData";
 
     @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
 
 
     private static String token;
-    private static String passwordNewAccount = "newPassword";
-    private static String emailTest = "emailTest";
+    private static final String passwordNewAccount = "newPassword";
+    private static final String emailTest = "emailTest";
 
     @Test
     @Order(1)
@@ -160,26 +158,25 @@ public class TestEntityApi {
 
         assertEquals(200, connection.getResponseCode());
 
-        System.out.println("URL: " + url.toString());
+        System.out.println("URL: " + url);
         return response;
     }
 
     private static HttpURLConnection getResponseServer(URL url) throws Exception {
         URLConnection urlConnection = url.openConnection();
-        HttpURLConnection connection = (HttpURLConnection) urlConnection;
 
-        return connection;
+        return (HttpURLConnection) urlConnection;
     }
 
     private static String connectionResponseToString(HttpURLConnection connection) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String urlString = "";
+        StringBuilder urlString = new StringBuilder();
         String current;
 
         while ((current = in.readLine()) != null) {
-            urlString += current;
+            urlString.append(current);
         }
 
-        return urlString;
+        return urlString.toString();
     }
 }
