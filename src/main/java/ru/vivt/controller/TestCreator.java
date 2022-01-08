@@ -52,7 +52,7 @@ public class TestCreator {
 
         var listQ = getAllCoincidences.getAll("nameQ");
         var listR = getAllCoincidences.getAll("nameR");
-        var listC = getAllCoincidences.getAll("nameС");
+        var listC = getAllCoincidences.getAll("nameC");
 
         var answers = IntStream
                 .range(0, listQ.size())

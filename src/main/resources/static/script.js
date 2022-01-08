@@ -10,7 +10,7 @@ $(document).ready(function(){
          console.log("#nameQuestion"+(num-1))
          $klon.children("#question"+(num-1)).prop('id', 'question'+num).prop('name', 'nameQ_'+num).val("");
          $klon.children("#response"+(num-1)).prop('id', 'response'+num).prop('name', 'nameR_'+num).val("");
-         $klon.children("#comment"+(num-1)).prop('id', 'comment'+num).prop('name', 'nameС_'+num).val("");
+         $klon.children("#comment"+(num-1)).prop('id', 'comment'+num).prop('name', 'nameC_'+num).val("");
 
          $klon.appendTo("#test")
     });
