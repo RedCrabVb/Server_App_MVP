@@ -35,7 +35,7 @@ public class Answer {
 
     @Override
     public String toString() {
-        return "Answer@" + question.hashCode() + response.hashCode();
+        return String.valueOf(response.hashCode());
     }
 
     @Override

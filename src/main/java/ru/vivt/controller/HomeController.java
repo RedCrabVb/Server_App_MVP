@@ -10,8 +10,5 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/resultsOverview")
-    public String resultsOverview() {
-        return "results_overview";
-    }
+
 }

@@ -12,6 +12,7 @@
           word-break: break-all;
           max-width:170px;
         }
+
     </style>
 </head>
 <body>
@@ -45,21 +46,22 @@
         <tr>
             <th scope="col"> Вопрос</th>
             <th scope="col"> Ответ</th>
+            <th scope="col"> QR-code</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${!answers.empty}">
         <tr th:each="answer : ${answers}">
             <td><p class="word" scope="row" th:text="${answer.question}"></p></td>
+            <td><p class="word" scope="row" th:text="${answer.response}"/></td>
             <td>
-                <div class="container d-flex align-items-center justify-content-center" scope="row" th:id="${answer.id}"
+                <div class="container d-flex" scope="row" th:id="${answer.id}"
                      th:text="${answer}"></div>
                 <br>
-                <p class="word" th:text="${answer.response}"/>
             </td>
         </tr>
         </tr>
-        <td th:if="${answers.empty}" colspan="2"> Нет данных</td>
+        <td th:if="${answers.empty}" colspan="3"> Нет данных</td>
         </tbody>
     </table>
 
@@ -73,6 +75,7 @@
             $(this).text("");
             new QRCode(document.getElementById($(this).attr('id')), textSpan);
         });
+
     </script>
     <div id="qrcode"></div>
 </div>
