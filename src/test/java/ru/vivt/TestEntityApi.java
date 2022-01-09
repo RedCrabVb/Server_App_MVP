@@ -40,6 +40,7 @@ public class TestEntityApi {
     private static final String apiResetPassword = "api/resetPassword";
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
+    private static final String apiSaveResultTest = "api/saveResultTest";
 
     @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
 
@@ -127,6 +128,15 @@ public class TestEntityApi {
         String result = sendInquiry(apiResetPassword, String.format("email=%s", propertySourceDataTestUser.getEmailUserTest()));
         System.out.println(result);
     }
+
+    @Test
+    @Order(9)
+    public void saveResultTest() throws Exception {
+        String result = sendInquiry(apiSaveResultTest,
+                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", token, "1.20", "22", "5", "true,true,false"));
+        System.out.println(result);
+    }
+
 
     @Test
     public void getQrCodeError() throws Exception {

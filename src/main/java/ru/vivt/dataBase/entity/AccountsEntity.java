@@ -72,4 +72,8 @@ public class AccountsEntity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public int getIdAccount() {
+        return idAccount;
+    }
 }

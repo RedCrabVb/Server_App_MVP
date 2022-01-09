@@ -46,7 +46,7 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
     }
 
     @Override
-    public AccountsEntity getAccountByToken(String token) throws SQLException {
+    public AccountsEntity getAccountByToken(String token) {
         Session session = sessionFactory.getSessionFactory().openSession();
         Query query = session.createQuery(String.format("FROM %s WHERE token = :token", AccountsEntity.class.getName()));
         AccountsEntity accounts = (AccountsEntity) query.setParameter("token", token).uniqueResult();

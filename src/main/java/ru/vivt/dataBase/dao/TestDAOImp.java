@@ -29,9 +29,9 @@ public class TestDAOImp implements TestDAO {
     public TestEntity getTestById(int id) {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             Query query = session.createQuery(String.format("FROM %s WHERE idTest = :idTest", TestEntity.class.getName()));
-            TestEntity question = (TestEntity) query.setParameter("idTest", id).uniqueResult();
-            Hibernate.initialize(question);
-            return question;
+            TestEntity tests = (TestEntity) query.setParameter("idTest", id).uniqueResult();
+            Hibernate.initialize(tests);
+            return tests;
         }
     }
 
@@ -39,9 +39,9 @@ public class TestDAOImp implements TestDAO {
     public List<TestEntity> getAllTest(int maxCount) {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             Query query = session.createQuery(String.format("FROM %s order by idTest desc", TestEntity.class.getName()));
-            List<TestEntity> question = query.setMaxResults(maxCount).getResultList();
-            Hibernate.initialize(question);
-            return question;
+            List<TestEntity> tests = query.setMaxResults(maxCount).getResultList();
+            Hibernate.initialize(tests);
+            return tests;
         }
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.vivt.dataBase.dao.AccountDAO;
@@ -62,6 +61,7 @@ public class SpringConfig implements WebMvcConfigurer {
         configuration.addAnnotatedClass(ResetPasswordEntity.class);
         configuration.addAnnotatedClass(TestEntity.class);
         configuration.addAnnotatedClass(QuestionEntity.class);
+        configuration.addAnnotatedClass(ResultTestEntity.class);
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         return configuration.buildSessionFactory(builder.build());
     }
