@@ -8,5 +8,5 @@ import java.util.List;
 public interface ResultTestDAO {
     void addResultTest(ResultTestEntity customer);
     ResultTestEntity getResultTestEntityById(int id);
-    List<ResultTestEntity> getAllResultTestEntity(int maxCount);
+    List<ResultTestEntity> getAllResultTestEntity(int id, int maxCount);
 }

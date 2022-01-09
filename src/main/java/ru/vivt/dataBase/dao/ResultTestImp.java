@@ -37,10 +37,10 @@ public class ResultTestImp implements ResultTestDAO {
     }
 
     @Override
-    public List<ResultTestEntity> getAllResultTestEntity(int maxCount) {
+    public List<ResultTestEntity> getAllResultTestEntity(int idTest, int maxCount) {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
-            Query query = session.createQuery(String.format("FROM %s order by idResultTest desc", ResultTestEntity.class.getName()));
-            List<ResultTestEntity> resultTestEntity = query.setMaxResults(maxCount).getResultList();
+            Query query = session.createQuery(String.format("FROM %s WHERE idTest = :idTest order by idResultTest desc", ResultTestEntity.class.getName()));
+            List<ResultTestEntity> resultTestEntity = query.setParameter("idTest", idTest).setMaxResults(maxCount).getResultList();
             Hibernate.initialize(resultTestEntity);
             return resultTestEntity;
         }

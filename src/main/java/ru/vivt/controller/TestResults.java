@@ -6,6 +6,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.vivt.dataBase.dao.QuestionDAO;
+import ru.vivt.dataBase.dao.ResultTestDAO;
 import ru.vivt.dataBase.dao.TestDAO;
 import ru.vivt.dataBase.entity.Answer;
 
@@ -16,9 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestResults {
     @Autowired
     private TestDAO testDAO;
-
     @Autowired
     private QuestionDAO questionDAO;
+    @Autowired
+    private ResultTestDAO resultTestDAO;
+
 
     @GetMapping("/testTemplate")
     public String resultsOverview(@RequestParam int id, ModelMap model) {
@@ -53,6 +56,10 @@ public class TestResults {
 
         model.addAttribute("testName", test.getTest());
         model.addAttribute("testDescription", test.getDescription());
+
+        var results = resultTestDAO.getAllResultTestEntity(id,10);
+
+        model.addAttribute("tests", results);
 
         return "statistics_test";
     }
