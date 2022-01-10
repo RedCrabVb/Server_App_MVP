@@ -133,7 +133,7 @@ public class TestEntityApi {
     @Order(9)
     public void saveResultTest() throws Exception {
         String result = sendInquiry(apiSaveResultTest,
-                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", token, "1.20", "22", "5", "true,true,false"));
+                String.format("token=%s&time=%s&idTest=%s&countRightAnswer=%s&jsonAnswer=%s", token, "1.20", "1", "5/6", "true,true,false"));
         System.out.println(result);
     }
 
