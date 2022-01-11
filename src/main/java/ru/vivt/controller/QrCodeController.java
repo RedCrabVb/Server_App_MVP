@@ -1,8 +1,6 @@
 package ru.vivt.controller;
 
 import com.google.gson.JsonObject;
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +33,7 @@ public class QrCodeController {
             return jsonQrCode;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
+            error.addProperty("error", e.getMessage());
             return error;
         }
     }
@@ -64,7 +62,7 @@ public class QrCodeController {
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "token get from DB error or input bad " + e.getMessage());
+            error.addProperty("error", e.getMessage());
             return error;
         }
     }

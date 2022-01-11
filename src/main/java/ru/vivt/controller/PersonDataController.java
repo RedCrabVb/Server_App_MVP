@@ -91,7 +91,7 @@ public class PersonDataController {
             return jsonStatus;
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
-            jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
+            jsonError.addProperty("error", e.getMessage());
             return jsonError;
         }
     }
@@ -131,7 +131,7 @@ public class PersonDataController {
             }
         } catch (Exception e) {
             JsonObject jsonError = new JsonObject();
-            jsonError.addProperty("error", "bad input data or error server " + e.getMessage());
+            jsonError.addProperty("error", e.getMessage());
             return jsonError;
         }
     }
@@ -148,12 +148,9 @@ public class PersonDataController {
             return json;
         } catch (Exception e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "qr get from DB error or input bad " + e.getMessage());
+            error.addProperty("error", e.getMessage());
             return error;
         }
     }
 
-    public void setResetPasswordDAO(ResetPasswordDAO resetPasswordDAO) {
-        this.resetPasswordDAO = resetPasswordDAO;
-    }
 }

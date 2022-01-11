@@ -20,7 +20,7 @@ public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
     }
 
     @Override
-    public void addAccounts(AccountsEntity entity) throws SQLException {
+    public void addAccounts(AccountsEntity entity) {
         try (Session session = sessionFactory.getSessionFactory().openSession()) {
             session.beginTransaction();
             session.save(entity);

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,31 +37,25 @@ public class RegistrationController {
 
     @GetMapping("/api/registration")
     public JsonObject registration() {
-        try {
-            String token = generateNewToken();
-            String qrCode = generateNewToken().substring(5);
+        String token = generateNewToken();
+        String qrCode = generateNewToken().substring(5);
 
-            LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate timeActive = LocalDateTime.now().plusMonths(1).atZone(ZoneId.systemDefault()).toLocalDate();
 
-            accountDAO.addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
+        accountDAO.addAccounts(new AccountsEntity(qrCode, token, timeActive, "", "", ""));
 
-            JsonObject jsonReg = new JsonObject();
-            jsonReg.addProperty("qrCode", qrCode);
-            jsonReg.addProperty("token", token);
+        JsonObject jsonReg = new JsonObject();
+        jsonReg.addProperty("qrCode", qrCode);
+        jsonReg.addProperty("token", token);
 
-            return jsonReg;
-        } catch (Exception e) {
-            JsonObject error = new JsonObject();
-            error.addProperty("error", "error when server " + e.getMessage());
-            return error;
-        }
+        return jsonReg;
     }
 
     @GetMapping("/api/authorization")
-    public JsonObject authorization(@RequestParam String email, @RequestParam String password) {
+    public JsonObject authorization(@RequestParam String email, @RequestParam String password) throws NoSuchAlgorithmException {
         try {
             if (email.isEmpty() || password.isEmpty()) {
-                throw new Exception("email or password empty");
+                throw new IllegalArgumentException("email or password empty");
             }
 
             String token = accountDAO.getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
@@ -72,9 +67,9 @@ public class RegistrationController {
             } else {
                 throw new NoSuchElementException("not found accounts with this email");
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             JsonObject error = new JsonObject();
-            error.addProperty("error", "error in server (authorization) + " + e.getMessage());
+            error.addProperty("error", e.getMessage());
             return error;
         }
     }
