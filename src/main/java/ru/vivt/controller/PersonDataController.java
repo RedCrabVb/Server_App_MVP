@@ -3,6 +3,7 @@ package ru.vivt.controller;
 import com.google.gson.JsonObject;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -15,6 +16,7 @@ import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
 import ru.vivt.server.MailSender;
 
+import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -27,8 +29,8 @@ import java.util.*;
 import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
-@PropertySource("classpath:mail.properties")
-public class PersonDataController {
+@PropertySource("classpath:application.properties")
+public class PersonDataController implements InitializingBean {
 
     @Autowired
     private MailSender mailSender;
@@ -39,14 +41,14 @@ public class PersonDataController {
     @Autowired
     private ResetPasswordDAO resetPasswordDAO;
 
-    @Value("${mailTextResetPassword}")
     private String mailText;
 
-    @Value("${mailHrefResetPassword}")
     private String mailHref;
 
-    @Value("${mailHeader}")
     private String mailHeader;
+
+    @Value("${mail.properties}")
+    private String mailProperties;
 
     public PersonDataController() {
     }
@@ -119,7 +121,9 @@ public class PersonDataController {
             } else if (params.containsKey("token")) {
                 String token = params.get("token");
                 ResetPasswordEntity resetPasswordEntity = resetPasswordDAO.getResetPasswordByToken(token);
-                resetPasswordEntity.getAccount().setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
+                AccountsEntity account = accountDAO.getAccountByToken(resetPasswordEntity.getAccount().getToken());
+                account.setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
+                accountDAO.updateAccounts(account);
                 resetPasswordDAO.deleteResetPassword(resetPasswordEntity);
 
                 JsonObject jsonResetPass = new JsonObject();
@@ -153,4 +157,14 @@ public class PersonDataController {
         }
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Properties property = new Properties();
+        FileInputStream fis = new FileInputStream(mailProperties);
+        property.load(fis);
+
+        mailText = property.getProperty("mailTextResetPassword");
+        mailHref = property.getProperty("mailHrefResetPassword");
+        mailHeader = property.getProperty("mailHeader");
+    }
 }

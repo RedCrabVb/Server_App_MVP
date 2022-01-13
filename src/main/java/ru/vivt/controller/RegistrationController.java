@@ -58,11 +58,11 @@ public class RegistrationController {
                 throw new IllegalArgumentException("email or password empty");
             }
 
-            String token = accountDAO.getAccountByEmailAndPassword(email, toSHA1(password)).getToken();
+            var token = accountDAO.getAccountByEmailAndPassword(email, toSHA1(password));
 
             if (token != null) {
                 JsonObject jsonReg = new JsonObject();
-                jsonReg.addProperty("token", token);
+                jsonReg.addProperty("token", token.getToken());
                 return jsonReg;
             } else {
                 throw new NoSuchElementException("not found accounts with this email");
