@@ -77,4 +77,18 @@ public class AccountsEntity {
     public int getIdAccount() {
         return idAccount;
     }
+
+
+    @Override
+    public String toString() {
+        return "AccountsEntity{" +
+                "idAccount=" + idAccount +
+                ", qrCode='" + qrCode + '\'' +
+                ", token='" + token + '\'' +
+                ", accountActiveTime=" + accountActiveTime +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

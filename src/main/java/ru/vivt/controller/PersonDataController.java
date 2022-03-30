@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
 @PropertySource("classpath:application.properties")
@@ -51,12 +50,7 @@ public class PersonDataController implements InitializingBean {
     public PersonDataController() {
     }
 
-    public static String toSHA1(String value) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        digest.reset();
-        digest.update(value.getBytes(StandardCharsets.UTF_8));
-        return String.format("%040x", new BigInteger(1, digest.digest()));
-    }
+
 
     @GetMapping("/api/setPersonDate")
     public JsonObject setPersonData(@RequestParam Map<String, String> params) {

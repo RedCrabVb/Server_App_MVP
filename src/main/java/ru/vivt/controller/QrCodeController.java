@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import static ru.vivt.controller.RegistrationController.generateNewToken;
 
 @RestController
 public class QrCodeController {
