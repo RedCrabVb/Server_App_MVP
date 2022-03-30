@@ -53,6 +53,7 @@ public class AccountService {
 
         var account = new AccountsEntity(qrCode, token, timeActive, "", "", "");
         repository.save(account);
+        System.out.println(account);
 
         return account;
     }
@@ -81,14 +82,13 @@ public class AccountService {
                                         String email,
                                         String username) {
         var accounts = repository.getAccountByToken(token).orElseThrow(() -> {
-                    throw new IllegalStateException("not found Accounts");
+                    throw new IllegalStateException("not found Accounts by token " + token);
                 }
         );
 
 
-        String accountsPassword = accounts.getPassword();
         if (password != null) {
-            if (!accountsPassword.isEmpty() && !accountsPassword.equals(password)) {
+            if (password.isEmpty()) {
                 throw new IllegalStateException("password incorrect");
             }
             accounts.setPassword(password);

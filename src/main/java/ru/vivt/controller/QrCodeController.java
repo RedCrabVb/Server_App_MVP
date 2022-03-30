@@ -30,6 +30,6 @@ public class QrCodeController {
     @GetMapping("/api/getStatusToken")
     public Boolean getStatusToken(@RequestParam String token) {
         var account = service.getByToken(token);
-        return account.getAccountActiveTime().isBefore(LocalDate.now());
+        return !account.getAccountActiveTime().isBefore(LocalDate.now());
     }
 }

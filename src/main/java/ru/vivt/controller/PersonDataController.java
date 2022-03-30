@@ -39,9 +39,9 @@ public class PersonDataController implements InitializingBean {
     public PersonDataController() {
     }
 
-    @PostMapping("/api/setPersonData2")
-    public AccountsEntity setPersonData2(@RequestBody String token,
-                                         @RequestBody(required = false) String password,
+    @PostMapping("/api/setPersonData")
+    public AccountsEntity setPersonData(@RequestBody String token,
+                                         @RequestParam(required = false) String password,
                                          @RequestParam(required = false) String email,
                                          @RequestParam(required = false) String username) {
         return service.updateAccount(token, password, email, username);
