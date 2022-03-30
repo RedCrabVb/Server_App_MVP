@@ -1,24 +1,8 @@
 package ru.vivt;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.vivt.dataBase.dao.AccountDAO;
-import ru.vivt.dataBase.dao.AccountDAOImp;
-import ru.vivt.dataBase.entity.*;
-import ru.vivt.server.MailSender;
-
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.vivt")

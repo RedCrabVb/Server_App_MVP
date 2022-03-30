@@ -1,8 +1,6 @@
 package ru.vivt.controller;
 
 import com.google.gson.JsonObject;
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +12,7 @@ import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.ResetPasswordDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
-import ru.vivt.server.MailSender;
+import ru.vivt.MailSender;
 
 import java.io.FileInputStream;
 import java.math.BigInteger;
