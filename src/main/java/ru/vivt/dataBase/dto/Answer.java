@@ -1,4 +1,4 @@
-package ru.vivt.dataBase.entity;
+package ru.vivt.dataBase.dto;
 
 import java.util.Objects;
 

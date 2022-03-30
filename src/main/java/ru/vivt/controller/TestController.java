@@ -10,10 +10,9 @@ import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.ResultTestDAO;
 import ru.vivt.dataBase.dao.TestDAO;
-import ru.vivt.dataBase.entity.Answer;
+import ru.vivt.dataBase.dto.Answer;
 import ru.vivt.dataBase.entity.ResultTestEntity;
 
-import java.sql.SQLException;
 import java.util.Map;
 
 @RestController

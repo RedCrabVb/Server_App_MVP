@@ -35,39 +35,35 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addViewController("/testCreator").setViewName("testCreator");
     }
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
+//    @Bean
+//    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+//        return new PropertySourcesPlaceholderConfigurer();
+//    }
 
     @Bean
-    public MailSender mailSender(@Value("${mail.properties}") String mailProperties) throws Exception {
-        Properties property = new Properties();
-        FileInputStream fis = new FileInputStream(mailProperties);
-        property.load(fis);
+    public MailSender mailSender() {
 
         return new MailSender(
-                property.getProperty("usernameEmail", ""),
-                property.getProperty("passwordEmail", "")
+                "username",
+                "password"
         );
     }
 
-    @Bean
-    public SessionFactory sessionFactory(@Value("${hibernate.properties}") String hibernateProperties) throws IOException {
-        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
-        configuration.getProperties().load(new FileReader(hibernateProperties));
-        configuration.addAnnotatedClass(AccountsEntity.class);
-        configuration.addAnnotatedClass(NewsEntity.class);
-        configuration.addAnnotatedClass(ResetPasswordEntity.class);
-        configuration.addAnnotatedClass(TestEntity.class);
-        configuration.addAnnotatedClass(QuestionEntity.class);
-        configuration.addAnnotatedClass(ResultTestEntity.class);
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-        return configuration.buildSessionFactory(builder.build());
-    }
-
-    @Bean
-    public AccountDAO<Collection<ArrayList>> accountDAO(@Autowired SessionFactory sessionFactory) {
-        return new AccountDAOImp(sessionFactory);
-    }
+//    @Bean
+//        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
+//        configuration.getProperties().load(new FileReader(hibernateProperties));
+//        configuration.addAnnotatedClass(AccountsEntity.class);
+//        configuration.addAnnotatedClass(NewsEntity.class);
+//        configuration.addAnnotatedClass(ResetPasswordEntity.class);
+//        configuration.addAnnotatedClass(TestEntity.class);
+//        configuration.addAnnotatedClass(QuestionEntity.class);
+//        configuration.addAnnotatedClass(ResultTestEntity.class);
+//        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+//        return configuration.buildSessionFactory(builder.build());
+//    }
+//
+//    @Bean
+//    public AccountDAO<Collection<ArrayList>> accountDAO(@Autowired SessionFactory sessionFactory) {
+//        return new AccountDAOImp(sessionFactory);
+//    }
 }

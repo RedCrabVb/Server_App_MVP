@@ -1,6 +1,7 @@
 package ru.vivt.dataBase.entity;
 
-import javax.persistence.*;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "test")

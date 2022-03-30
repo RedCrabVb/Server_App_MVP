@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Component;
 import ru.vivt.dataBase.entity.AccountsEntity;
 
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+@Component
 public class AccountDAOImp implements AccountDAO<Collection<ArrayList>> {
     private final SessionFactory sessionFactory;
 

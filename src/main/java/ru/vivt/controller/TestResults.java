@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.ResultTestDAO;
 import ru.vivt.dataBase.dao.TestDAO;
-import ru.vivt.dataBase.entity.Answer;
+import ru.vivt.dataBase.dto.Answer;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;

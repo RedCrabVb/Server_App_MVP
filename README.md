@@ -6,6 +6,7 @@ Server Application for MVP Vivt
 Что я думаю:
 Создайте оболочку с инструментами без кода в студии Android,
 затем напишите сервер со следующей логикой:
+##old api
 * REST api - https: // site / api
 * /api/news - вернет ссылку на новостной источник
 

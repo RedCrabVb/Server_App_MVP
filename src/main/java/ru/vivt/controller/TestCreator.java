@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.TestDAO;
-import ru.vivt.dataBase.entity.Answer;
+import ru.vivt.dataBase.dto.Answer;
 import ru.vivt.dataBase.entity.QuestionEntity;
 import ru.vivt.dataBase.entity.TestEntity;
 

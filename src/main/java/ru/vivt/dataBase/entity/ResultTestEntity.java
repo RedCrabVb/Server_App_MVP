@@ -1,7 +1,6 @@
 package ru.vivt.dataBase.entity;
 
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 @Entity
 @Table(name = "ResultTest")
 public class ResultTestEntity {
@@ -18,15 +17,6 @@ public class ResultTestEntity {
 
     }
 
-
-    /**
-     *
-     * @param idAccount
-     * @param idTest
-     * @param time
-     * @param countRightAnswer
-     * @param jsonAnswer
-     */
     public ResultTestEntity(int idAccount, int idTest, String time, String countRightAnswer, String jsonAnswer) {
         this.idAccount = idAccount;
         this.idTest = idTest;
