@@ -1,28 +1,40 @@
 package ru.vivt.controller;
 
-import com.google.gson.JsonObject;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.vivt.MailSender;
 import ru.vivt.dataBase.entity.AccountsEntity;
+import ru.vivt.dataBase.entity.ResetPasswordEntity;
+import ru.vivt.repository.AccountRepository;
+import ru.vivt.repository.ResetPasswordRepository;
 import ru.vivt.service.AccountService;
 
 import java.io.FileInputStream;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
 import java.util.Properties;
+
+import static ru.vivt.service.AccountService.generateNewToken;
+import static ru.vivt.service.AccountService.toSHA1;
 
 
 @RestController
 @PropertySource("classpath:application.properties")
 public class PersonDataController implements InitializingBean {
-
+    @Autowired
+    private ResetPasswordRepository resetPasswordRepository;
     @Autowired
     private MailSender mailSender;
-
+    @Autowired
+    private AccountRepository accountRepository;
     @Autowired
     private AccountService service;
 
@@ -41,54 +53,39 @@ public class PersonDataController implements InitializingBean {
 
     @PostMapping("/api/setPersonData")
     public AccountsEntity setPersonData(@RequestBody String token,
-                                         @RequestParam(required = false) String password,
-                                         @RequestParam(required = false) String email,
-                                         @RequestParam(required = false) String username) {
+                                        @RequestParam(required = false) String password,
+                                        @RequestParam(required = false) String email,
+                                        @RequestParam(required = false) String username) {
         return service.updateAccount(token, password, email, username);
     }
 
+    @PostMapping("/api/resetPassword/email")
+    public boolean resetPasswordEmail(@RequestParam String email) {
+        String token = generateNewToken();
+        String password = generateNewToken().substring(0, 8);
+        AccountsEntity accounts = this.accountRepository.getAccountByMail(email).orElseThrow();
+        LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
+        resetPasswordRepository.save(new ResetPasswordEntity(token, password, timeActive, accounts));
 
-//    @GetMapping("/api/resetPassword")
-//    public JsonObject resetPassword(@RequestParam Map<String, String> params) {
-//        try {
-//            if (params.containsKey("email")) {
-//
-//                String token = generateNewToken();
-//                String password = generateNewToken().substring(0, 8);
-//                AccountsEntity accounts = this.accountDAO.getAccountByEmail(params.get("email")).stream().findFirst().orElseThrow();
-//                LocalDate timeActive = LocalDateTime.now().plusDays(2).atZone(ZoneId.systemDefault()).toLocalDate();
-//                resetPasswordDAO.addResetPassword(new ResetPasswordEntity(token, password, timeActive, accounts));
-//
-//                String url = String.format(Optional.of(mailHref).orElseThrow(), token);
-//                String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
-//
-//                new Thread(() -> mailSender.sendMessage(params.get("email"), mailHeader, body)).start();
-//
-//                JsonObject jsonResetPass = new JsonObject();
-//                jsonResetPass.addProperty("status", "check your email");
-//
-//                return jsonResetPass;
-//            } else if (params.containsKey("token")) {
-//                String token = params.get("token");
-//                ResetPasswordEntity resetPasswordEntity = resetPasswordDAO.getResetPasswordByToken(token);
-//                AccountsEntity account = accountDAO.getAccountByToken(resetPasswordEntity.getAccount().getToken());
-//                account.setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
-//                accountDAO.updateAccounts(account);
-//                resetPasswordDAO.deleteResetPassword(resetPasswordEntity);
-//
-//                JsonObject jsonResetPass = new JsonObject();
-//                jsonResetPass.addProperty("status", "reset password");
-//
-//                return jsonResetPass;
-//            } else {
-//                throw new Exception("bad input data");
-//            }
-//        } catch (Exception e) {
-//            JsonObject jsonError = new JsonObject();
-//            jsonError.addProperty("error", e.getMessage());
-//            return jsonError;
-//        }
-//    }
+        String url = String.format(Optional.of(mailHref).orElseThrow(), token);
+        String body = String.format(Optional.of(mailText).orElseThrow(), password, url);
+
+        new Thread(() -> mailSender.sendMessage(email, mailHeader, body)).start();
+
+
+        return true;
+    }
+
+    @PostMapping("/api/resetPassword/token")
+    public boolean resetPasswordToken(@RequestParam String token) {
+        ResetPasswordEntity resetPasswordEntity = resetPasswordRepository.getResetPasswordByToken(token).orElseThrow();
+        AccountsEntity account = accountRepository.getAccountByToken(resetPasswordEntity.getAccount().getToken()).get();
+        account.setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
+        accountRepository.save(account);
+        resetPasswordRepository.delete(resetPasswordEntity);
+
+        return true;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

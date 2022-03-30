@@ -10,8 +10,10 @@ import java.util.List;
 public class TestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idTest;
+    private Long idTest;
+    @Lob
     private String test;
+    @Lob
     private String description;
     @OneToMany
     @JoinColumn(name = "idTest")
@@ -27,11 +29,11 @@ public class TestEntity {
     }
 
 
-    public int getIdTest() {
+    public Long getIdTest() {
         return idTest;
     }
 
-    public void setIdTest(int idTest) {
+    public void setIdTest(Long idTest) {
         this.idTest = idTest;
     }
 

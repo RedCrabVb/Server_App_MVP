@@ -5,8 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.vivt.dataBase.dao.QuestionDAO;
-import ru.vivt.dataBase.dao.TestDAO;
 import ru.vivt.dataBase.dto.Answer;
 import ru.vivt.dataBase.entity.QuestionEntity;
 import ru.vivt.dataBase.entity.TestEntity;

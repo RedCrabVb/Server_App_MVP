@@ -7,16 +7,19 @@ public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idQuestion;
+    @Lob
     private String text;
+    @Lob
     private String answer;
+    @Lob
     private String comment;
-    private int idTest;
+    private Long idTest;
 
     public QuestionEntity() {
 
     }
 
-    public QuestionEntity(String text, String answer, int idTest, String comment) {
+    public QuestionEntity(String text, String answer, Long idTest, String comment) {
         this.text = text;
         this.answer = answer;
         this.idTest = idTest;
@@ -39,11 +42,11 @@ public class QuestionEntity {
         this.text = text;
     }
 
-    public int getIdTest() {
+    public Long getIdTest() {
         return idTest;
     }
 
-    public void setIdTest(int idTest) {
+    public void setIdTest(Long idTest) {
         this.idTest = idTest;
     }
 

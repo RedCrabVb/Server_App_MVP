@@ -4,14 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.vivt.dataBase.dao.AccountDAO;
-import ru.vivt.dataBase.dao.QuestionDAO;
-import ru.vivt.dataBase.dao.ResultTestDAO;
-import ru.vivt.dataBase.dao.TestDAO;
 import ru.vivt.dataBase.dto.Answer;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResultTestEntity;
 import ru.vivt.dataBase.entity.TestEntity;
+import ru.vivt.repository.AccountRepository;
 import ru.vivt.repository.ResultTestRepository;
 import ru.vivt.repository.TestRepository;
 
@@ -29,6 +26,8 @@ public class TestController {
     private TestRepository testRepository;
     @Autowired
     private ResultTestRepository resultTestRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @GetMapping("/testAll")
     public List<TestEntity> getAllTest() {
@@ -51,8 +50,8 @@ public class TestController {
 
     @GetMapping("/saveResultTest")
     public JsonObject saveResultTest(@RequestBody Map<String, String> map) {
-        AccountsEntity account = null;
-        var resultTest = new ResultTestEntity(account.getIdAccount(),
+        AccountsEntity account = accountRepository.getAccountByToken(map.get("token")).orElseThrow();
+        var resultTest = new ResultTestEntity(account,
                 Integer.parseInt(map.get("idTest")),
                 map.get("time"),
                 map.get("countRightAnswer"),

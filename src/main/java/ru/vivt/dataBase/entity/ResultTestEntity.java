@@ -7,7 +7,9 @@ public class ResultTestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idResultTest;
-    private int idAccount;
+    @ManyToOne
+    @JoinColumn(name = "idAccount")
+    private AccountsEntity accountsEntity;
     private int idTest;
     private String time;
     private String countRightAnswer;
@@ -17,8 +19,8 @@ public class ResultTestEntity {
 
     }
 
-    public ResultTestEntity(int idAccount, int idTest, String time, String countRightAnswer, String jsonAnswer) {
-        this.idAccount = idAccount;
+    public ResultTestEntity(AccountsEntity accountsEntity, int idTest, String time, String countRightAnswer, String jsonAnswer) {
+        this.accountsEntity = accountsEntity;
         this.idTest = idTest;
         this.time = time;
         this.countRightAnswer = countRightAnswer;
@@ -37,12 +39,12 @@ public class ResultTestEntity {
         return jsonAnswer;
     }
 
-    public int getIdAccount() {
-        return idAccount;
-    }
-
     public int getIdTest() {
         return idTest;
+    }
+
+    public AccountsEntity getAccountsEntity() {
+        return accountsEntity;
     }
 }
 
