@@ -1,9 +1,7 @@
 package ru.vivt.service;
 
-import com.google.gson.JsonObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import ru.vivt.dataBase.dao.AccountDAO;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.repository.AccountRepository;
 
@@ -16,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
-import java.util.NoSuchElementException;
 
 @Service
 public class AccountService {
@@ -29,11 +26,6 @@ public class AccountService {
         this.repository = repository;
     }
 
-    public AccountsEntity getRepositoryById(long id) {
-        return repository.findById(id).get();
-    }
-
-
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];
         secureRandom.nextBytes(randomBytes);
@@ -41,7 +33,7 @@ public class AccountService {
     }
 
     public static String toSHA1(String value) {
-        MessageDigest digest = null;
+        MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException e) {
@@ -76,5 +68,48 @@ public class AccountService {
             throw new IllegalStateException("not found accounts with this email and password: " + email);
         }
         return account.get();
+    }
+
+    public AccountsEntity getByToken(String token) {
+        return repository.getAccountByToken(token).orElseThrow(() ->
+                new IllegalStateException("not found accounts with this token: " + token));
+    }
+
+    @Transactional
+    public AccountsEntity updateAccount(String token,
+                                        String password,
+                                        String email,
+                                        String username) {
+        var accounts = repository.getAccountByToken(token).orElseThrow(() -> {
+                    throw new IllegalStateException("not found Accounts");
+                }
+        );
+
+
+        String accountsPassword = accounts.getPassword();
+        if (password != null) {
+            if (!accountsPassword.isEmpty() && !accountsPassword.equals(password)) {
+                throw new IllegalStateException("password incorrect");
+            }
+            accounts.setPassword(password);
+        }
+
+
+        if (email != null) {
+            var accountsOnEqualsEmail = repository.getAccountByMail(email);
+            if (email.isEmpty() && accountsOnEqualsEmail.isPresent()) {
+                throw new IllegalStateException("Mail is already in the database");
+            }
+            accounts.setEmail(email);
+        }
+
+        if (username != null) {
+            if (username.isEmpty() || username.length() < 4) {
+                throw new IllegalStateException("not valid username");
+            }
+            accounts.setUsername(username);
+        }
+
+        return accounts;
     }
 }
