@@ -1,16 +1,17 @@
 package ru.vivt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.vivt.dataBase.dao.QuestionDAO;
 import ru.vivt.dataBase.dao.TestDAO;
 import ru.vivt.dataBase.dto.Answer;
 import ru.vivt.dataBase.entity.QuestionEntity;
 import ru.vivt.dataBase.entity.TestEntity;
+import ru.vivt.repository.QuestionRepository;
+import ru.vivt.repository.TestRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,10 +28,10 @@ public class TestCreator {
     }
 
     @Autowired
-    private TestDAO testDAO;
+    private TestRepository testRepository;
 
     @Autowired
-    private QuestionDAO questionDAO;
+    private QuestionRepository questionRepository;
 
 
     @GetMapping("/testCreator")
@@ -38,8 +39,11 @@ public class TestCreator {
         return "test";
     }
 
-    @GetMapping("/testAdd")
-    public String testAdd(@RequestParam Map<String, String> map, ModelMap model) {
+    @RequestMapping(value = "/testAdd",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public String testAdd(@RequestParam  Map<String, String> map, ModelMap model) {
         String testName = map.get("testName");
         String testDescription = map.get("testDescription");
 
@@ -61,8 +65,8 @@ public class TestCreator {
         model.addAttribute("answers", answers);
 
         var testEntity = new TestEntity(testName, testDescription);
-        testDAO.addTest(testEntity);
-        answers.forEach(answer -> questionDAO.addQuestion(
+        testRepository.save(testEntity);
+        answers.forEach(answer -> questionRepository.save(
                         new QuestionEntity(
                                 answer.getQuestion(),
                                 answer.getResponse(),

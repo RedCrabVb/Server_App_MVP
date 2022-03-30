@@ -3,6 +3,8 @@ package ru.vivt.dataBase.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "test")
 public class TestEntity {
@@ -11,6 +13,9 @@ public class TestEntity {
     private int idTest;
     private String test;
     private String description;
+    @OneToMany
+    @JoinColumn(name = "idTest")
+    private List<QuestionEntity> questions;
 
     public TestEntity() {
 
@@ -44,6 +49,10 @@ public class TestEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
     }
 }
 
