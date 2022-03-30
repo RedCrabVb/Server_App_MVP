@@ -13,7 +13,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Value("${admin.token}")
     private String token;
 
@@ -21,20 +21,21 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/api/*").permitAll()
-                .antMatchers("/resource/*").permitAll()
-                .antMatchers("/", "/*").authenticated()
-                .and()
+                    .antMatchers("/api/*").anonymous()
+                    .antMatchers("/*").permitAll()
+                    .antMatchers("/app/*").authenticated()
+                    .and()
                 .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
+                    .loginPage("/login")
+                    .permitAll()
+                    .and()
                 .logout()
-                .permitAll();
+                    .permitAll()
+                .and().csrf().disable();
     }
 
+
     @Bean
-    @Override
     public UserDetailsService userDetailsService() {
         UserDetails user =
                 User.withDefaultPasswordEncoder()

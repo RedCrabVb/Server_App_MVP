@@ -1,9 +1,10 @@
 package ru.vivt.dataBase.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
-@Entity
+@Entity(name = "ResetPassword")
 @Table(name = "ResetPassword")
 public class ResetPasswordEntity {
     @Id

@@ -18,7 +18,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">MVP server</a>
+        <a class="navbar-brand" href="/app/home">MVP server</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,10 +26,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/testCreator">Создать тест</a>
+                    <a class="nav-link" href="/app/testCreator">Создать тест</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/resultsOverview">Результаты тестов</a>
+                    <a class="nav-link" href="/app/resultsOverview">Результаты тестов</a>
                 </li>
             </ul>
             <form class="navbar-nav ms-auto mb-2 mb-lg-1" th:action="@{/logout}" method="post">

@@ -13,9 +13,9 @@ public class NewsController {
     private String news;
 
     @GetMapping("/api/news")
-    public JsonObject getNews () {
+    public String getNews () {
         JsonObject json = new JsonObject();
         json.addProperty("News", news);
-        return json;
+        return json.toString();
     }
 }

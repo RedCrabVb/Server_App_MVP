@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Results overview</title>
     <!-- CSS only -->
-    <link href="/resource/style.css" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body>
     <div th:replace="~{fragments/navbar :: navbar}"></div>
@@ -25,8 +25,8 @@
                     <p class="word" scope="row" th:text="${test.getDescription}"/>
                 </td>
                 <td>
-                    <a scope="row" th:href="@{~/testTemplate(id=${test.getIdTest})}">Для печати</a><br>
-                    <a scope="row" th:href="@{~/statisticsTest(id=${test.getIdTest})}">Статистика</a>
+                    <a scope="row" th:href="@{~/app/testTemplate(id=${test.getIdTest})}">Для печати</a><br>
+                    <a scope="row" th:href="@{~/app/statisticsTest(id=${test.getIdTest})}">Статистика</a>
                 </td>
             </tr>
             </tr>

@@ -3,63 +3,60 @@ package ru.vivt.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.vivt.dataBase.dao.AccountDAO;
-import ru.vivt.dataBase.dao.QuestionDAO;
-import ru.vivt.dataBase.dao.ResultTestDAO;
-import ru.vivt.dataBase.dao.TestDAO;
-import ru.vivt.dataBase.entity.Answer;
+import org.springframework.web.bind.annotation.*;
+import ru.vivt.dataBase.dto.Answer;
+import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResultTestEntity;
+import ru.vivt.dataBase.entity.TestEntity;
+import ru.vivt.repository.AccountRepository;
+import ru.vivt.repository.ResultTestRepository;
+import ru.vivt.repository.TestRepository;
 
-import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
+@RequestMapping(path = "api")
 public class TestController {
     private final Gson gson = new Gson();
-    @Autowired
-    private TestDAO testDAO;
-    @Autowired
-    private QuestionDAO questionDAO;
-    @Autowired
-    private AccountDAO accountDAO;
-    @Autowired
-    private ResultTestDAO resultTestDAO;
 
-    @GetMapping("/api/testAll")
-    public JsonObject getAllTest() {
-        JsonObject jsonTest = new JsonObject();
-        jsonTest.add("test", gson.toJsonTree(testDAO.getAllTest(5)));
-        return jsonTest;
+    @Autowired
+    private TestRepository testRepository;
+    @Autowired
+    private ResultTestRepository resultTestRepository;
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @GetMapping("/testAll")
+    public List<TestEntity> getAllTest() {
+        return StreamSupport.stream(testRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     //fixme: the user with the necessary skills will simply get all the answers
-    @GetMapping("/api/test")
-    public JsonObject test(@RequestParam int id) {
-        JsonObject jsonTest = new JsonObject();
-        jsonTest.add("test", gson.toJsonTree(testDAO.getTestById(id)));
-        jsonTest.add("question", gson.toJsonTree(questionDAO.getAllQuestionByIdTest(id)));
-        return jsonTest;
+    @GetMapping("/test")
+    public TestEntity test(@RequestParam Long id) {
+        return testRepository.findById(id).get();
     }
 
-    @GetMapping("/api/getHashAnswer")
+    @GetMapping("/getHashAnswer")
     public JsonObject getHash(@RequestParam String question, @RequestParam String answer) {
         JsonObject json = new JsonObject();
         json.addProperty("hash", new Answer(1, question, answer, "").toString());
         return json;
     }
 
-    @GetMapping("/api/saveResultTest")
-    public JsonObject saveResultTest(@RequestParam Map<String, String> map) {
-        var account = accountDAO.getAccountByToken(map.get("token"));
-        var resultTest = new ResultTestEntity(account.getIdAccount(),
+    @GetMapping("/saveResultTest")
+    public JsonObject saveResultTest(@RequestBody Map<String, String> map) {
+        AccountsEntity account = accountRepository.getAccountByToken(map.get("token")).orElseThrow();
+        var resultTest = new ResultTestEntity(account,
                 Integer.parseInt(map.get("idTest")),
                 map.get("time"),
                 map.get("countRightAnswer"),
                 map.get("jsonAnswer"));
-        resultTestDAO.addResultTest(resultTest);
+        resultTestRepository.save(resultTest);
 
         JsonObject jsonStatus = new JsonObject();
         jsonStatus.addProperty("status", true);

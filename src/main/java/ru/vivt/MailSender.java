@@ -1,4 +1,4 @@
-package ru.vivt.server;
+package ru.vivt;
 
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;

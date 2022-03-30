@@ -1,15 +1,23 @@
 package ru.vivt.dataBase.entity;
 
-import javax.persistence.*;
+
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "test")
 public class TestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idTest;
+    private Long idTest;
+    @Lob
     private String test;
+    @Lob
     private String description;
+    @OneToMany
+    @JoinColumn(name = "idTest")
+    private List<QuestionEntity> questions;
 
     public TestEntity() {
 
@@ -21,11 +29,11 @@ public class TestEntity {
     }
 
 
-    public int getIdTest() {
+    public Long getIdTest() {
         return idTest;
     }
 
-    public void setIdTest(int idTest) {
+    public void setIdTest(Long idTest) {
         this.idTest = idTest;
     }
 
@@ -43,6 +51,10 @@ public class TestEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
     }
 }
 
