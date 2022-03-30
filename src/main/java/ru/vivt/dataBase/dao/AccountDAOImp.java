@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
-public class AccountDAOImp {
+public class AccountDAOImp implements AccountDAO {
 //    private final SessionFactory sessionFactory;
 //
 //    public AccountDAOImp(SessionFactory sessionFactory) {

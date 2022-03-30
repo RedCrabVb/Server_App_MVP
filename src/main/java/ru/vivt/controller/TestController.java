@@ -24,8 +24,6 @@ public class TestController {
     @Autowired
     private QuestionDAO questionDAO;
     @Autowired
-    private AccountDAO accountDAO;
-    @Autowired
     private ResultTestDAO resultTestDAO;
 
     @GetMapping("/api/testAll")

@@ -10,12 +10,12 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends CrudRepository<AccountsEntity, Long> {
 
-    @Query("SELECT a FROM Accounts a WHERE s.password = ?2 AND s.email = ?1")
+    @Query("SELECT a FROM Accounts a WHERE a.password = ?2 AND a.email = ?1")
     Optional<AccountsEntity> getAccountByEmailAndPassword(String email, String password);
 
-    @Query("SELECT a FROM Accounts a WHERE s.token = ?1")
+    @Query("SELECT a FROM Accounts a WHERE a.token = ?1")
     Optional<AccountsEntity> getAccountByToken(String token);
 
-    @Query("SELECT a FROM Accounts a WHERE s.email = ?1")
+    @Query("SELECT a FROM Accounts a WHERE a.email = ?1")
     Optional<AccountsEntity> getAccountByMail(String email);
 }

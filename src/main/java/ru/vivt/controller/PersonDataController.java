@@ -90,11 +90,6 @@ public class PersonDataController implements InitializingBean {
 //        }
 //    }
 
-    @GetMapping("/api/personData")
-    public AccountsEntity personData(@RequestParam String token) {
-        return service.getByToken(token);
-    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
         Properties property = new Properties();
