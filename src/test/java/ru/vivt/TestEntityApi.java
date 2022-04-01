@@ -20,14 +20,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.commons.collections4.ListUtils;
 
 
 //@ContextConfiguration
 //@SpringBootTest
 //@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 //@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@SpringBootTest
 public class TestEntityApi {
 //    private static final String serverName = "localhost";//"servermvp.ru:49379";
 
@@ -40,6 +44,16 @@ public class TestEntityApi {
     private static final String apiAuthorization = "api/authorization";
     private static final String apiPersonDataGet = "api/personData";
     private static final String apiSaveResultTest = "api/saveResultTest";
+
+    @Test
+    public void test() {
+        var list = List.of(5, 5, 7, 1, 3, 2, 0);
+        var listPart = ListUtils.partition(list, 2);
+        listPart.forEach(x -> {
+            x.forEach(System.out::println);
+            System.out.println("===");
+        });
+    }
 //
 //    @Autowired public PropertySourceDataTestUser propertySourceDataTestUser;
 //

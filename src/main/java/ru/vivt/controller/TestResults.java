@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import org.apache.commons.collections4.ListUtils;
 
 @Controller
 @RequestMapping(path = "app")
@@ -44,7 +45,7 @@ public class TestResults {
             }
         });
 
-        model.addAttribute("answers", answers);
+        model.addAttribute("partitionAnswers", ListUtils.partition(answers, 2));
 
         return "result";
     }
