@@ -20,17 +20,20 @@
                 </thead>
                 <tbody>
                     <tr th:if="${!tests.empty}">
-                    <tr th:each="test : ${tests}">
-                        <td style="width: 75%">
+
+                    <tr th:each="test : ${tests}" th:class="${test.active} ? 'table-info' : 'table-secondary'">
+                        <td style="width: 70%">
                             <p class="word" scope="row" th:text="${test.getTest}"></p>
                             <p class="word" scope="row" th:text="${test.getDescription}"/>
                         </td>
                         <td style="width: 15%">
-                            <a scope="row" th:href="@{~/app/testTemplate(id=${test.getIdTest})}">Для печати</a><br>
-                            <a scope="row" th:href="@{~/app/statisticsTest(id=${test.getIdTest})}">Статистика</a>
+                            <a scope="row" class="btn btn-secondary mb-1" th:href="@{~/app/testTemplate(id=${test.getIdTest})}">Для печати</a><br>
+                            <a scope="row" class="btn btn-secondary" th:href="@{~/app/statisticsTest(id=${test.getIdTest})}">Статистика</a>
                         </td>
-                        <td style="width: 10%">
-                            <a th:href="${'/app/deleteTest?idTest=' + test.idTest}" class="btn btn-danger">Удалить</a>
+                        <td style="width: 15%">
+                            <a scope="row" th:href="${'/app/deleteTest?idTest=' + test.idTest}" class="btn btn-danger mb-1">Удалить</a>
+                            <a scope="row" th:href="${'/app/editTest?id=' + test.idTest}" class="btn btn-primary mb-1">Редактирование</a>
+                            <a scope="row" th:href="${'/app/activeTest?idTest=' + test.idTest}" class="btn btn-secondary" th:text="${test.active} ? 'выкл' : 'вкл'"></a>
                         </td>
                     </tr>
                     </tr>

@@ -18,6 +18,7 @@ public class TestEntity {
     @OneToMany
     @JoinColumn(name = "idTest")
     private List<QuestionEntity> questions;
+    private boolean active = false;
 
     public TestEntity() {
 
@@ -55,6 +56,14 @@ public class TestEntity {
 
     public List<QuestionEntity> getQuestions() {
         return questions;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
 

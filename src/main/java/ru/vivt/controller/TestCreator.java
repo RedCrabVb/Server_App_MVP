@@ -158,4 +158,14 @@ public class TestCreator {
         testRepository.deleteById(idTest);
         return "redirect:/app/resultsOverview";
     }
+
+    @GetMapping("activeTest")
+    @Transactional
+    public String activeTest(@RequestParam Long idTest) {
+
+        var test=  testRepository.findById(idTest).get();
+        test.setActive(!test.isActive());
+
+        return "redirect:/app/resultsOverview";
+    }
 }

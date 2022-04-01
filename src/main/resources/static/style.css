@@ -25,13 +25,13 @@
 /* test creator */
 .gradient-test {
   /* fallback for old browsers */
-  background: #48c6ef;
+  background: #b9bec0;
 
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, rgba(72, 198, 239, 0.55), rgba(111, 134, 214, 0.55));
+  background: -webkit-linear-gradient(to right, rgb(239 245 246 / 55%), rgb(225 225 228 / 55%));
 
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(to right, rgba(72, 198, 239, 0.55), rgba(111, 134, 214, 0.55))
+  background: linear-gradient(to right, rgb(191 48 48 / 55%), rgb(241 241 241 / 55%))
 }
 
 .gradient-main {
