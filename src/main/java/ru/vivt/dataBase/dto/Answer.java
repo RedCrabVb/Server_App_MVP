@@ -3,12 +3,12 @@ package ru.vivt.dataBase.dto;
 import java.util.Objects;
 
 public class Answer {
-    private int id;
+    private Long id;
     private final String question;
     private final String response;
     private final String comment;
 
-    public Answer(int id, String question, String response, String comment) {
+    public Answer(Long id, String question, String response, String comment) {
         this.question = question;
         this.response = response;
         this.id = id;
@@ -25,11 +25,11 @@ public class Answer {
     }
 
 
-    public String getId() {
-        return "answer-" + id;
+    public Long getId() {
+        return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

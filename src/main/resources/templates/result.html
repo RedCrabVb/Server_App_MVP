@@ -52,7 +52,7 @@
                     <tr th:each="partitionAnswer : ${partitionAnswers}">
                         <td th:each="answer : ${partitionAnswer}">
                             <p class="word" scope="row" th:text="${answer.comment}"></p>
-                            <div class="container d-flex" scope="row" th:id="${answer.id}"
+                            <div class="container d-flex" scope="row" th:id="${'answer-' + answer.id}"
                                  th:text="${answer}"></div>
                             <br>
                         </td>

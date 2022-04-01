@@ -27,7 +27,6 @@ import static ru.vivt.service.AccountService.toSHA1;
 
 
 @RestController
-@PropertySource("classpath:application.properties")
 public class PersonDataController implements InitializingBean {
     @Autowired
     private ResetPasswordRepository resetPasswordRepository;

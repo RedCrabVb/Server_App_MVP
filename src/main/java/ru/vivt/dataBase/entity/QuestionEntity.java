@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idQuestion;
+    private Long idQuestion;
     @Lob
     private String text;
     @Lob
@@ -56,5 +56,13 @@ public class QuestionEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getIdQuestion() {
+        return idQuestion;
+    }
+
+    public void setIdQuestion(Long idQuestion) {
+        this.idQuestion = idQuestion;
     }
 }
