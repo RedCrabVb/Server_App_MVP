@@ -12,5 +12,6 @@ public class HomeController {
         return "home";
     }
 
-
+    @GetMapping("help")
+    public String help() {return "help";}
 }
