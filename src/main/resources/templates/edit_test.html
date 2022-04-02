@@ -52,6 +52,7 @@
 
 
                 </div>
+                <a th:href="${'/app/addQuestion?idTest=' + test.idTest}" class="btn btn-info mb-2">Добавить вопрос</a>
             </div>
             <div th:if="${questions.empty}">Нет данных</div>
         </div>

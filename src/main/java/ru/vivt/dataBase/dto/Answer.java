@@ -4,26 +4,8 @@ import java.util.Objects;
 
 public class Answer {
     private Long id;
-    private final String question;
-    private final String response;
-    private final String comment;
-
-    public Answer(Long id, String question, String response, String comment) {
-        this.question = question;
-        this.response = response;
-        this.id = id;
-        this.comment = comment;
-    }
-
-    public String getResponse() {
-        return response;
-    }
-
-
-    public String getQuestion() {
-        return question;
-    }
-
+    private String question;
+    private String response;
 
     public Long getId() {
         return id;
@@ -32,6 +14,43 @@ public class Answer {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    private String comment;
+
+    public Answer() {
+    }
+
+    public Answer(Long id, String question, String response, String comment) {
+        this.question = question;
+        this.response = response;
+        this.id = id;
+        this.comment = comment;
+    }
+
 
     @Override
     public String toString() {
@@ -51,9 +70,5 @@ public class Answer {
         return Objects.hash(question, response);
     }
 
-
-    public String getComment() {
-        return comment;
-    }
 
 }

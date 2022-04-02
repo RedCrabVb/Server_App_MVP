@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
-
+//todo: instead of entities use DTO
 @Controller
 @RequestMapping(path = "app")
 public class TestCreator {
@@ -40,7 +40,6 @@ public class TestCreator {
     private ResultTestRepository resultTestDAO;
 
 
-
     @GetMapping("/testCreator")
     public String testCreatorPage() {
         return "test";
@@ -50,7 +49,7 @@ public class TestCreator {
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public String testAdd(@RequestParam  Map<String, String> map, ModelMap model) {
+    public String testAdd(@RequestParam Map<String, String> map, ModelMap model) {
         String testName = map.get("testName");
         String testDescription = map.get("testDescription");
 
@@ -84,8 +83,6 @@ public class TestCreator {
 
         return "redirect:editTest?id=" + testEntity.getIdTest();
     }
-
-
 
 
     @GetMapping("/testTemplate")
@@ -163,7 +160,7 @@ public class TestCreator {
     @Transactional
     public String activeTest(@RequestParam Long idTest) {
 
-        var test=  testRepository.findById(idTest).orElseThrow();
+        var test = testRepository.findById(idTest).orElseThrow();
         test.setActive(!test.isActive());
 
         return "redirect:/app/resultsOverview";
@@ -192,5 +189,23 @@ public class TestCreator {
         model.addAttribute("question", question);
         model.addAttribute("idTest", idTest);
         return "question_editing";
+    }
+
+    @PostMapping("addQuestion")
+    public String addQuestion(@ModelAttribute("answer") Answer answer, @RequestParam Long idTest) {
+        System.out.println(answer);
+        var q = new QuestionEntity(answer.getQuestion(),
+                answer.getResponse(),
+                idTest,
+                answer.getComment());
+        questionRepository.save(q);
+        return "redirect:/app/editTest?id=" + idTest;
+    }
+
+    @GetMapping("addQuestion")
+    public String addQuestion(@RequestParam Long idTest, Model model) {
+        model.addAttribute("answer", new Answer());
+        model.addAttribute("idTest", idTest);
+        return "add_question";
     }
 }
