@@ -46,5 +46,13 @@ public class ResultTestEntity {
     public AccountsEntity getAccountsEntity() {
         return accountsEntity;
     }
+
+    public int getIdResultTest() {
+        return idResultTest;
+    }
+
+    public void setIdResultTest(int idResultTest) {
+        this.idResultTest = idResultTest;
+    }
 }
 

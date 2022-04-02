@@ -21,7 +21,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th scope="col"> Id аккаунта</th>
+            <th scope="col"> Имя пользователя / почта</th>
             <th scope="col"> Результаты</th>
         </tr>
         </thead>
@@ -29,7 +29,8 @@
         <tr th:if="${!tests.empty}">
         <tr th:each="test : ${tests}">
             <td>
-                <p class="word" scope="row" th:text="${test.getIdAccount}"></p>
+                <p class="word" scope="row" th:text="${test.accountsEntity.username}"></p>
+                <p class="word" scope="row" th:text="${test.accountsEntity.email}"></p>
             </td>
             <td>
                 <p class="word" scope="row" th:text="${'время: ' + test.getTime}"/>

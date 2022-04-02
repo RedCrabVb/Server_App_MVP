@@ -1,5 +1,6 @@
 package ru.vivt.controller;
 
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,13 +17,18 @@ public class QrCodeController {
     private AccountService service;
 
     @GetMapping("/api/qrCode")
-    public String getQrCode(@RequestParam String token) {
-        return service.getByToken(token).getQrCode();
+    public JsonObject getQrCode(@RequestParam String token) {
+        JsonObject json = new JsonObject();
+        json.addProperty("qrCode", service.getByToken(token).getQrCode());
+        return json;
     }
 
     @GetMapping("/api/getStatusToken")
-    public Boolean getStatusToken(@RequestParam String token) {
+    public JsonObject getStatusToken(@RequestParam String token) {
         var account = service.getByToken(token);
-        return !account.getAccountActiveTime().isBefore(LocalDate.now());
+
+        JsonObject json = new JsonObject();
+        json.addProperty("result", !account.getAccountActiveTime().isBefore(LocalDate.now()));
+        return json;
     }
 }

@@ -1,5 +1,7 @@
 package ru.vivt.controller;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,15 +50,18 @@ public class PersonDataController implements InitializingBean {
     }
 
     @PostMapping("/api/setPersonData")
-    public AccountsEntity setPersonData(@RequestBody String token,
+    public AccountsEntity setPersonData(@RequestBody String body,
                                         @RequestParam(required = false) String password,
                                         @RequestParam(required = false) String email,
                                         @RequestParam(required = false) String username) {
-        return service.updateAccount(token, password, email, username);
+        return service.updateAccount(JsonParser.parseString(body)
+                .getAsJsonObject()
+                .get("token")
+                .getAsString(), password, email, username);
     }
 
     @PostMapping("/api/resetPassword/email")
-    public boolean resetPasswordEmail(@RequestParam String email) {
+    public JsonObject resetPasswordEmail(@RequestParam String email) {
         String token = generateNewToken();
         String password = generateNewToken().substring(0, 8);
         AccountsEntity accounts = this.accountRepository.getAccountByMail(email).orElseThrow();
@@ -68,19 +73,22 @@ public class PersonDataController implements InitializingBean {
 
         new Thread(() -> mailSender.sendMessage(email, mailHeader, body)).start();
 
-
-        return true;
+        JsonObject json = new JsonObject();
+        json.addProperty("result", true);
+        return json;
     }
 
     @GetMapping("/api/resetPassword/token")
-    public boolean resetPasswordToken(@RequestParam String token) {
+    public JsonObject resetPasswordToken(@RequestParam String token) {
         ResetPasswordEntity resetPasswordEntity = resetPasswordRepository.getResetPasswordByToken(token).orElseThrow();
         AccountsEntity account = accountRepository.getAccountByToken(resetPasswordEntity.getAccount().getToken()).get();
         account.setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
         accountRepository.save(account);
         resetPasswordRepository.delete(resetPasswordEntity);
 
-        return true;
+        JsonObject json = new JsonObject();
+        json.addProperty("result", true);
+        return json;
     }
 
     @Override
