@@ -4,10 +4,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.vivt.MailSender;
 import ru.vivt.dataBase.entity.AccountsEntity;
 import ru.vivt.dataBase.entity.ResetPasswordEntity;
@@ -75,7 +72,7 @@ public class PersonDataController implements InitializingBean {
         return true;
     }
 
-    @PostMapping("/api/resetPassword/token")
+    @GetMapping("/api/resetPassword/token")
     public boolean resetPasswordToken(@RequestParam String token) {
         ResetPasswordEntity resetPasswordEntity = resetPasswordRepository.getResetPasswordByToken(token).orElseThrow();
         AccountsEntity account = accountRepository.getAccountByToken(resetPasswordEntity.getAccount().getToken()).get();

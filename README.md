@@ -8,17 +8,20 @@ Server Application for MVP Vivt
 затем напишите сервер со следующей логикой:
 ##old api
 * REST api - https: // site / api
-* /api/news - вернет ссылку на новостной источник
+* GET /api/news - вернет ссылку на новостной источник
 
-* /api/registration - здесь вернет токен, для дальнейшей работы с сервером его нужно будет сохранить на клиенте
-* /api/setPersonDate - установка пароля, смена ника и т. д.
-* /api/resetPassword - "GET token" для сброса пароля
-* /api/resetPassword - "GET email" отправит сообщение
-* /api/getStatusToken - получить статус токен
-* /api/qrCode - получить QR-код по токену
-* /api/test - получить последние 10 тестов
-* /api/testAll - GET all test on DB
-* /api/getHashAnswer - GET hash answer
+* POST /api/registration () - здесь вернет токен, для дальнейшей работы с сервером его нужно будет сохранить на клиенте
+* POST /api/authorization (email, password) - получить данные об аккунте
+* POST /api/setPersonDate (token, password, email, username)- установка пароля, смена ника и т. д.
+* POST /api/resetPassword/email  (email) - "GET token" для сброса пароля
+* GET /api/resetPassword/token (token) - "GET email" отправит сообщение
+* GET /api/qrCode (token) - получить QR-код по токену
+* GET /api/getStatusToken (token) - получить статус токен (true/false)
+
+* GET /api/testAll - return json array test
+* GET /api/test (id) - return json test
+* GET /api/getHashAnswer (question, answer) - получить хеш вопроса
+* GET /api/saveResultTest (map(token, idTest, time, countRightAnswer, jsonAnswer))
 
 web:
 * /testCreator - страниц для создания теста, валидность данных проверяться с помощью токена
