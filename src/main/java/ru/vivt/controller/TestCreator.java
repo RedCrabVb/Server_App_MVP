@@ -82,7 +82,7 @@ public class TestCreator {
                 )
         );
 
-        return "redirect:testTemplate?id=" + testEntity.getIdTest();
+        return "redirect:editTest?id=" + testEntity.getIdTest();
     }
 
 
@@ -99,7 +99,7 @@ public class TestCreator {
         AtomicInteger i = new AtomicInteger();
         questionRepository.findAll().forEach(q -> {
             if (test.getIdTest() == q.getIdTest()) {
-                answers.add(new Answer(Long.valueOf(i.getAndIncrement()), q.getText(), q.getAnswer(), q.getComment()));
+                answers.add(new Answer((long) i.getAndIncrement(), q.getText(), q.getAnswer(), q.getComment()));
             }
         });
 
@@ -163,9 +163,34 @@ public class TestCreator {
     @Transactional
     public String activeTest(@RequestParam Long idTest) {
 
-        var test=  testRepository.findById(idTest).get();
+        var test=  testRepository.findById(idTest).orElseThrow();
         test.setActive(!test.isActive());
 
         return "redirect:/app/resultsOverview";
+    }
+
+    @Transactional
+    @GetMapping("editQuestion")
+    public String editQuestion(@RequestParam Long idQuestion, @RequestParam Long idTest, ModelMap model) {
+        var question = questionRepository.findById(idQuestion).orElseThrow();
+        var test = testRepository.findById(idTest).orElseThrow();
+        test.getQuestions().removeIf(q -> q.getIdQuestion() == idQuestion);
+        test.getQuestions().add(question);
+        model.addAttribute("question", question);
+        model.addAttribute("idTest", idTest);
+        return "question_editing";
+    }
+
+
+    @PostMapping("editQuestion")
+    public String editQuestion(@ModelAttribute("question") QuestionEntity question,
+                               @RequestParam Long idTest,
+                               ModelMap model) {
+        System.out.println(question);
+        System.out.println(model);
+        questionRepository.save(question);
+        model.addAttribute("question", question);
+        model.addAttribute("idTest", idTest);
+        return "question_editing";
     }
 }

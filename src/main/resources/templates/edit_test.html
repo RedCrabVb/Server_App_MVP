@@ -32,9 +32,8 @@
             <div th:if="${!questions.isEmpty()}">
                 <div th:each="question : ${questions}">
                     <form th:action="@{/app/deleteAnswer}" th:method="post">
-                        <div id="testNumber1" class="row p-5 mb-5 gradient-test text-white border rounded-pill">
-                            <!--                        <h1 id="qiText" th:text="{}">Вопрос №1</h1>-->
-                            <div class="col-sm">
+                        <div id="testNumber1" class="row p-5 mb-5 gradient-test text-white">
+                            <div class="col-sm-10">
                                 <h6>Название вопроса</h6>
                                 <p th:text="${question.question}"></p>
                                 <h6>Ответ</h6>
@@ -42,20 +41,19 @@
                                 <h6>Комментарий</h6>
                                 <p th:text="${question.comment}"></p>
                             </div>
-                            <div class="col-sm" align="right" style="padding-top: 5%">
-
-
-                                <input name="id_question" type="hidden" th:value="test">
-                                <a th:href="${'/app/deleteAnswer?idQuestion=' + question.id + '&idTest=' + test.idTest}" class="btn btn-danger">Удалить</a>
+                            <div class="col-sm-2" align="right" style="padding-top: 5%">
+                                <a th:href="${'/app/deleteAnswer?idQuestion=' + question.id + '&idTest=' + test.idTest}" class="btn btn-danger mb-2">Удалить</a>
+                                <br>
+                                <a th:href="${'/app/editQuestion?idQuestion=' + question.id + '&idTest=' + test.idTest}" class="btn btn-info mb-2">Редактировать</a>
                             </div>
 
                         </div>
                     </form>
-                    <!--            <div th:if="${tests.questions.isEmpty()}" colspan="2"> Нет данных</div>-->
 
 
                 </div>
             </div>
+            <div th:if="${questions.empty}">Нет данных</div>
         </div>
     </body>
 </html>

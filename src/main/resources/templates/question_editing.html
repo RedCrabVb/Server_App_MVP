@@ -22,21 +22,22 @@
 
 
         <div class="container-sm p-3 mb-2 gradient-main text-dark" th:object="${question}">
-            <form th:action="@{/app/deleteAnswer}" th:method="post">
-                <div id="testNumber1" class="row p-5 mb-5 gradient-test text-white border rounded-pill">
-                    <!--                        <h1 id="qiText" th:text="{}">Вопрос №1</h1>-->
-                    <div class="col-sm">
+            <a scope="row" th:href="${'/app/editTest?id=' + idTest}" class="btn btn-primary mb-1 " style="padding-left: 40%; padding-right: 40%">Редактирование теста</a>
+            <form th:action="${'/app/editQuestion?idTest=' + idTest}" th:method="post">
+                <div class="row p-5 mb-5 gradient-test text-white ">
+                    <h1 id="qiText"  th:text="${'Вопрос №' + question.idQuestion}"></h1>
+                    <input type="hidden" th:field="*{idQuestion}" id="idQuestion">
+                    <div class="col-sm-10" style="width: 90%">
                         <h6>Название вопроса</h6>
-                        <p th:text="${question.question}"></p>
+                        <textarea class="form-control mb-2" required="required" type="text" id="text" th:field="*{text}"/>
                         <h6>Ответ</h6>
-                        <p th:text="${question.response}"></p>
+                        <textarea class="form-control mb-2" required="required" type="text" id="answer" th:field="*{answer}"/>
                         <h6>Комментарий</h6>
-                        <p th:text="${question.comment}"></p>
+                        <textarea class="form-control mb-2" required="required" type="text" id="comment" th:field="*{comment}"/>
                     </div>
                     <div class="col-sm" align="right" style="padding-top: 5%">
-                        <input name="id_question" type="hidden" th:value="test">
-                        <a th:href="${'/app/deleteAnswer?idQuestion=' + question.id + '&idTest=' + test.idTest}"
-                           class="btn btn-danger">Удалить</a>
+                        <br>
+                        <button class="btn btn-info mb-2" type="submit">сохранить</button>
                     </div>
                 </div>
             </form>
