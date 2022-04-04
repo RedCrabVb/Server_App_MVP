@@ -33,9 +33,8 @@
                 <p class="word" scope="row" th:text="${test.accountsEntity.email}"></p>
             </td>
             <td>
-                <p class="word" scope="row" th:text="${'время: ' + test.getTime}"/>
-                <p class="word" scope="row" th:text="${'количество верных ответов: ' + test.getCountRightAnswer}"/>
-                <p class="word" scope="row" th:text="${'Порядок ответов: ' + test.getJsonAnswer}"/>
+                <p class="word" scope="row" th:text="${'время: ' + test.getTimeFormatString()}"/>
+                <p class="word" scope="row" th:text="${'количество не верных ответов: ' + test.getCountWrongAnswer}"/>
 
             </td>
         </tr>

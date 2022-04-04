@@ -1,6 +1,9 @@
 package ru.vivt.dataBase.entity;
 
 import jakarta.persistence.*;
+
+import java.util.concurrent.TimeUnit;
+
 @Entity
 @Table(name = "ResultTest")
 public class ResultTestEntity {
@@ -12,8 +15,7 @@ public class ResultTestEntity {
     private AccountsEntity accountsEntity;
     private int idTest;
     private String time;
-    private String countRightAnswer;
-    private String jsonAnswer;
+    private String countWrongAnswer;
 
     public ResultTestEntity() {
 
@@ -23,21 +25,17 @@ public class ResultTestEntity {
         this.accountsEntity = accountsEntity;
         this.idTest = idTest;
         this.time = time;
-        this.countRightAnswer = countRightAnswer;
-        this.jsonAnswer = jsonAnswer;
+        this.countWrongAnswer = countRightAnswer;
     }
 
     public String getTime() {
         return time;
     }
 
-    public String getCountRightAnswer() {
-        return countRightAnswer;
+    public String getCountWrongAnswer() {
+        return countWrongAnswer;
     }
 
-    public String getJsonAnswer() {
-        return jsonAnswer;
-    }
 
     public int getIdTest() {
         return idTest;
@@ -53,6 +51,14 @@ public class ResultTestEntity {
 
     public void setIdResultTest(int idResultTest) {
         this.idResultTest = idResultTest;
+    }
+
+    public String getTimeFormatString() {
+        var timeLong = Long.parseLong(getTime());
+        long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
+        long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
+        var timeString =  time + " мин. " + second + " c.";
+        return timeString;
     }
 }
 

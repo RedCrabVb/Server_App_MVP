@@ -126,6 +126,16 @@ public class TestController {
                         .filter(v -> v.getIdTest() == id)
                         .collect(Collectors.toList());
 
+        results.sort((o1, o2) -> {
+            var time = Integer.parseInt(o1.getTime()) - Integer.parseInt(o2.getTime());
+            var answer = Integer.parseInt(o1.getCountWrongAnswer()) - Integer.parseInt(o2.getCountWrongAnswer());
+            if (time != 0 && answer <= 0) {
+                return time;
+            }
+
+            return Integer.parseInt(o1.getCountWrongAnswer()) - Integer.parseInt(o2.getCountWrongAnswer());
+        });
+
         model.addAttribute("tests", results);
 
         return "statistics_test";
