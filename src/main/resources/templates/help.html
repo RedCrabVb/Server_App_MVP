@@ -5,13 +5,19 @@
         <title>Help</title>
     </head>
     <body>
-        <div th:replace="~{fragments/navbar :: navbar}"> </div>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
         <div class="container">
             <div class="row">
-                <div class="col">
-                    <a href="/app/log">Log</a>
-                </div>
-                <div class="col">
+
+                <div class="col-sm-7">
+                    <h1>
+                        Релиз: 2.2.2
+                    </h1>
+                    <p>
+                        Добалвена страница с информацией об пользователях <br>
+                        Доблавена страница с логами <br>
+                        Доблен вывод настроек сервера
+                    </p>
                     <h1>Релиз: 2.1.2</h1>
                     <p>
                         Исправление ошибок
@@ -61,6 +67,13 @@
                         Дополнительный вывод в логах <br>
                         Рефакторинг
                     </p>
+                </div>
+                <div class="col-sm-3">
+                    <a href="/app/log"><h1>Показать логи</h1></a>
+                    <hr>
+                    <h3>application.properties</h3>
+                    <hr>
+                    <p th:each="prop : ${properties}" th:text="${prop}"></p>
                 </div>
             </div>
         </div>

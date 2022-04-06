@@ -7,9 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 class PrintStreamDouble extends PrintStream {
     ByteArrayOutputStream baos;
@@ -46,7 +47,21 @@ public class HomeController implements InitializingBean {
     }
 
     @GetMapping("help")
-    public String help() {
+    public String help(Model model) {
+        Properties properties = null;
+        var listProp = new ArrayList<String>();
+
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+
+            properties = new Properties();
+
+            properties.load(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        properties.forEach((k, v) -> listProp.add(k + "=" + v));
+        model.addAttribute("properties", listProp);
         return "help";
     }
 
