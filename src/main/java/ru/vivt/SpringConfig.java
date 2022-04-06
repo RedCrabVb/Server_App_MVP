@@ -10,13 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
+//        registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/").setViewName("index");
         registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/testCreator").setViewName("testCreator");
-        registry.addViewController("/testAdd").setViewName("testAdd");
-        registry.addViewController("/resultsOverview").setViewName("resultsOverview");
-        registry.addViewController("/testCreator").setViewName("testCreator");
+//        registry.addViewController("/testCreator").setViewName("testCreator");
+//        registry.addViewController("/testAdd").setViewName("testAdd");
+//        registry.addViewController("/resultsOverview").setViewName("resultsOverview");
+//        registry.addViewController("/testCreator").setViewName("testCreator");
     }
 
     @Bean

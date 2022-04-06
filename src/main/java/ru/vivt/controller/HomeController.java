@@ -6,26 +6,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.vivt.util.PrintStreamDouble;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-class PrintStreamDouble extends PrintStream {
-    ByteArrayOutputStream baos;
-
-    public PrintStreamDouble(ByteArrayOutputStream baos, OutputStream old) {
-        super(old);
-        this.baos = baos;
-    }
-
-    @Override
-    public void write(byte[] buf, int off, int len) {
-        baos.write(buf, off, len);
-        super.write(buf, off, len);
-    }
-}
 
 @Controller
 @RequestMapping(path = "app")
@@ -38,7 +25,6 @@ public class HomeController implements InitializingBean {
     public HomeController() {
         PrintStreamDouble ps = new PrintStreamDouble(baos, System.out);
         System.setOut(ps);
-
     }
 
     @GetMapping("home")
