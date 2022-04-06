@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.concurrent.TimeUnit;
 
-@Entity
+@Entity(name = "ResultTest")
 @Table(name = "ResultTest")
 public class ResultTestEntity {
     @Id
@@ -21,7 +21,7 @@ public class ResultTestEntity {
 
     }
 
-    public ResultTestEntity(AccountsEntity accountsEntity, int idTest, String time, String countRightAnswer, String jsonAnswer) {
+    public ResultTestEntity(AccountsEntity accountsEntity, int idTest, String time, String countRightAnswer) {
         this.accountsEntity = accountsEntity;
         this.idTest = idTest;
         this.time = time;

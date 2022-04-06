@@ -41,7 +41,7 @@ public class TestRestController {
     @GetMapping("/test")
     @Transactional
     public Test test(@RequestParam Long id) {
-        TestEntity testEntity = testRepository.findById(id).get();
+        TestEntity testEntity = testRepository.findById(id).orElseThrow();
         Test test = new Test(testEntity.getIdTest(), testEntity.getTest(), testEntity.getDescription(), testEntity.isActive());
 
         List<Answer> list = test.getAnswerList();
@@ -65,8 +65,7 @@ public class TestRestController {
         var resultTest = new ResultTestEntity(account,
                 Integer.parseInt(map.get("idTest")),
                 map.get("time"),
-                map.get("countRightAnswer"),
-                map.get("jsonAnswer"));
+                map.get("countRightAnswer"));
         resultTestRepository.save(resultTest);
 
         JsonObject jsonStatus = new JsonObject();
