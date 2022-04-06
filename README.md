@@ -1,12 +1,12 @@
 # Server_App_MVP
 Server Application for MVP Vivt
 ---
-тарт: создать андроид-приложение, которое умеет: генерировать QR-код, отображать любые новости с сайта (маленькие, их можно открывать в приложении).
-Регистрация происходит следующим образом: скачать приложение, все работает, если пользователю нужно перенести аккаунт и т. Д., То он может установить пароль, почту, телефон.
-Что я думаю:
-Создайте оболочку с инструментами без кода в студии Android,
-затем напишите сервер со следующей логикой:
-##old api
+Веб-сервер для организации интерактивных квестов. 
+Приложение в данные момент может:
+* регистрировать и авторизовывать пользователей
+* создавать тест, управлять ими
+* просматривать результаты тестов
+##api
 * REST api - https: // site / api
 * GET /api/news - вернет ссылку на новостной источник
 
@@ -23,42 +23,12 @@ Server Application for MVP Vivt
 * GET /api/getHashAnswer (question, answer) - получить хеш вопроса
 * GET /api/saveResultTest (map(token, idTest, time, countRightAnswer, jsonAnswer))
 
-web:
-* /testCreator - страниц для создания теста, валидность данных проверяться с помощью токена
-* /testAdd - GET запрос, которые добавляет данные в БД
+##Install
+Для работы приложения нужна java 17. БД работает с базой данных postgres, база данных генерируеться по коду.
 
-
-Файл с настройками для почты отправлен на .gitignore,
-так как это небезопасно, в любом случае скажу, через mail ru работало,
-чтобы отправить уведомление, вам нужно немного настроить свою почту, mail.properties выглядит следующим образом
-
-````
-username=eamil@email.com
-password=pass
-````
-
-hibernate.properties - файлы для базы данных
-
+Для изменения параметров приложения во время запуска, без перкомпляции достаточно указать значение в args
+```shell
+    java -jar server.jar --server-port=8082 --mail.properties=mail.properties
 ```
-hibernate.connection.driver_class=com.mysql.jdbc.Driver
-hibernate.connection.url=jdbc:mysql://localhost:3306/MvpDB?useSSL=false&serverTimezone=UTC
-hibernate.connection.username=username
-hibernate.connection.password=password
-hibernate.c3p0.min_size=5
-hibernate.c3p0.max_size=20
-hibernate.c3p0.timeout=1800
-hibernate.c3p0.max_statements=50
-hibernate.dialect=org.hibernate.dialect.MySQLDialect
-hibernate.show_sql=false
+Данные для подключения к smtp серверу нужно указать данные для подключения отдельно. Пример файла конфиграции в ресурсах (mail.properties).
 
-```
-
-Сам файл с БД лежит в src/main/resource/MvpDB.sql
-
-Запуск сервера, mysql должен быть запущен
-```
-java -jar -Dserver.port=8082  
--Dmail.properties=mail.properties 
--Dhibernate.properties=hibernate.properties server-*-SNAPSHOT.jar
-```
-Стандартный токен администратора `abc`, может быть изменен при запуске, следующим параметром `-Dadmin.token=rrr`

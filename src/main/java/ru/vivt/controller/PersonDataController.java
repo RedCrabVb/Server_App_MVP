@@ -61,7 +61,7 @@ public class PersonDataController implements InitializingBean {
     }
 
     @PostMapping("/api/resetPassword/email")
-    public JsonObject resetPasswordEmail(@RequestParam String email) {
+    public String resetPasswordEmail(@RequestParam String email) {
         String token = generateNewToken();
         String password = generateNewToken().substring(0, 8);
         AccountsEntity accounts = this.accountRepository.getAccountByMail(email).orElseThrow();
@@ -74,21 +74,21 @@ public class PersonDataController implements InitializingBean {
         new Thread(() -> mailSender.sendMessage(email, mailHeader, body)).start();
 
         JsonObject json = new JsonObject();
-        json.addProperty("result", true);
-        return json;
+        json.addProperty("result", "true");
+        return json.toString();
     }
 
     @GetMapping("/api/resetPassword/token")
-    public JsonObject resetPasswordToken(@RequestParam String token) {
+    public String resetPasswordToken(@RequestParam String token) {
         ResetPasswordEntity resetPasswordEntity = resetPasswordRepository.getResetPasswordByToken(token).orElseThrow();
-        AccountsEntity account = accountRepository.getAccountByToken(resetPasswordEntity.getAccount().getToken()).get();
+        AccountsEntity account = resetPasswordEntity.getAccount();
         account.setPassword(toSHA1(resetPasswordEntity.getTmpPassword()));
         accountRepository.save(account);
         resetPasswordRepository.delete(resetPasswordEntity);
 
         JsonObject json = new JsonObject();
-        json.addProperty("result", true);
-        return json;
+        json.addProperty("result", "true");
+        return json.toString();
     }
 
     @Override
