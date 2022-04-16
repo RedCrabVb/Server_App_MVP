@@ -37,7 +37,6 @@ public class TestRestController {
         return list;
     }
 
-    //fixme: the user with the necessary skills will simply get all the answers
     @GetMapping("/test")
     @Transactional
     public Test test(@RequestParam Long id) {

@@ -146,6 +146,12 @@ public class TestController {
     public String editTest(@RequestParam Long id, ModelMap model) {
         var test = testRepository.findById(id).orElseThrow();
         var list = test.getQuestions().stream().map(x -> new Answer(x.getIdQuestion(), x.getText(), x.getAnswer(), x.getComment())).collect(Collectors.toList());
+        list.sort(new Comparator<Answer>() {
+            @Override
+            public int compare(Answer o1, Answer o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
         model.addAttribute("test", test);
         model.addAttribute("questions", list);
 
@@ -179,11 +185,7 @@ public class TestController {
     @Transactional
     @GetMapping("editQuestion")
     public String editQuestion(@RequestParam Long idQuestion, @RequestParam Long idTest, ModelMap model) {
-        var question = questionRepository.findById(idQuestion).orElseThrow();
-        var test = testRepository.findById(idTest).orElseThrow();
-        test.getQuestions().removeIf(q -> q.getIdQuestion() == idQuestion);
-        test.getQuestions().add(question);
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionRepository.findById(idQuestion).orElseThrow());
         model.addAttribute("idTest", idTest);
         return "question_editing";
     }

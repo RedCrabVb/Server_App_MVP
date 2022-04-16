@@ -21,26 +21,31 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col"> Имя пользователя / почта</th>
-                        <th scope="col"> Результаты</th>
+                        <th scope="col">Имя пользователя</th>
+                        <th scope="col">Почта</th>
+                        <th scope="col">Время</th>
+                        <th scope="col">Количество не верных ответов</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:if="${!tests.empty}">
                     <tr th:each="test : ${tests}">
                         <td>
-                            <p class="word" scope="row" th:text="${test.accountsEntity.username}"></p>
                             <p class="word" scope="row" th:text="${test.accountsEntity.email}"></p>
                         </td>
                         <td>
-                            <p class="word" scope="row" th:text="${'время: ' + test.getTimeFormatString()}"/>
+                            <p class="word" scope="row" th:text="${test.accountsEntity.username}"></p>
+                        </td>
+                        <td>
+                            <p class="word" scope="row" th:text="${test.getTimeFormatString()}"/>
+                        </td>
+                        <td>
                             <p class="word" scope="row"
-                               th:text="${'количество не верных ответов: ' + test.getCountWrongAnswer}"/>
-
+                               th:text="${test.getCountWrongAnswer}"/>
                         </td>
                     </tr>
                     </tr>
-                    <td th:if="${tests.empty}" colspan="2"> Нет данных</td>
+                    <td th:if="${tests.empty}" colspan="2">Нет данных</td>
                 </tbody>
             </table>
         </div>
