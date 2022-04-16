@@ -93,12 +93,13 @@ public class TestController {
         model.addAttribute("testDescription", test.getDescription());
 
         var answers = new ArrayList<Answer>();
-        AtomicInteger i = new AtomicInteger();
+//        AtomicInteger i = new AtomicInteger();
         questionRepository.findAll().forEach(q -> {
             if (test.getIdTest() == q.getIdTest()) {
-                answers.add(new Answer((long) i.getAndIncrement(), q.getText(), q.getAnswer(), q.getComment()));
+                answers.add(new Answer(q.getIdQuestion(), q.getText(), q.getAnswer(), q.getComment()));
             }
         });
+        answers.sort(Comparator.comparing(Answer::getId));
 
         model.addAttribute("partitionAnswers", ListUtils.partition(answers, 2));
 
@@ -129,11 +130,11 @@ public class TestController {
         results.sort((o1, o2) -> {
             var time = Integer.parseInt(o1.getTime()) - Integer.parseInt(o2.getTime());
             var answer = Integer.parseInt(o1.getCountWrongAnswer()) - Integer.parseInt(o2.getCountWrongAnswer());
-            if (time != 0 && answer <= 0) {
+            if (time != 0) {
                 return time;
             }
 
-            return Integer.parseInt(o1.getCountWrongAnswer()) - Integer.parseInt(o2.getCountWrongAnswer());
+            return answer;
         });
 
         model.addAttribute("tests", results);
