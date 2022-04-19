@@ -14,6 +14,7 @@ import ru.vivt.repository.AccountRepository;
 import ru.vivt.repository.ResultTestRepository;
 import ru.vivt.repository.TestRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class TestRestController {
                 Integer.parseInt(map.get("idTest")),
                 map.get("time"),
                 map.get("countRightAnswer"));
+        resultTest.setDate(LocalDateTime.now());
         resultTestRepository.save(resultTest);
 
         JsonObject jsonStatus = new JsonObject();

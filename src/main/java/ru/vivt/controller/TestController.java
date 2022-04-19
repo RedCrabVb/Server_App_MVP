@@ -163,7 +163,7 @@ public class TestController {
     public String deleteAnswer(@RequestParam Long idTest, @RequestParam Long idQuestion) {
 
         questionRepository.deleteById(idQuestion);
-        return "redirect:edit_test?id=" + idTest;
+        return "redirect:/app/editTest?id=" + idTest;
     }
 
     @GetMapping("deleteTest")

@@ -2,6 +2,9 @@ package ru.vivt.dataBase.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Entity(name = "ResultTest")
@@ -16,6 +19,7 @@ public class ResultTestEntity {
     private int idTest;
     private String time;
     private String countWrongAnswer;
+    private LocalDateTime date;
 
     public ResultTestEntity() {
 
@@ -59,6 +63,14 @@ public class ResultTestEntity {
         long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
         var timeString =  time + " мин. " + second + " c.";
         return timeString;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
 

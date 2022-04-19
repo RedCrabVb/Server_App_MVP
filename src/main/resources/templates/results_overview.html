@@ -33,7 +33,7 @@
                         <td style="width: 15%">
                             <a scope="row" th:href="${'/app/deleteTest?idTest=' + test.idTest}" class="btn btn-danger mb-1">Удалить</a>
                             <a scope="row" th:href="${'/app/editTest?id=' + test.idTest}" class="btn btn-primary mb-1">Редактирование</a>
-                            <a scope="row" th:href="${'/app/activeTest?idTest=' + test.idTest}" class="btn btn-secondary" th:text="${test.active} ? 'выкл' : 'вкл'"></a>
+                            <a scope="row" th:href="${'/app/activeTest?idTest=' + test.idTest}" class="btn btn-secondary" th:text="${test.active} ? 'Выключить' : 'Включить'"></a>
                         </td>
                     </tr>
                     </tr>

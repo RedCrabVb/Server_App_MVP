@@ -25,6 +25,7 @@
                         <th scope="col">Почта</th>
                         <th scope="col">Время</th>
                         <th scope="col">Количество не верных ответов</th>
+                        <th scope="col">Дата</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,6 +44,7 @@
                             <p class="word" scope="row"
                                th:text="${test.getCountWrongAnswer}"/>
                         </td>
+                        <td><p class="word" scope="row" th:text="${test.getDate()}"></p></td>
                     </tr>
                     </tr>
                     <td th:if="${tests.empty}" colspan="2">Нет данных</td>
