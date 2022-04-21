@@ -12,16 +12,18 @@ public class Test {
     private String description;
     private boolean active = false;
     private List<Answer> answerList = new ArrayList<>();
+    private boolean randomSortQuestion = false;
 
     public Test() {
 
     }
 
-    public Test(Long idTest, String test, String description, boolean active) {
+    public Test(Long idTest, String test, String description, boolean active, boolean randomSortQuestion) {
         this.idTest = idTest;
         this.test = test;
         this.description = description;
         this.active = active;
+        this.randomSortQuestion = randomSortQuestion;
     }
 
     public Long getIdTest() {
@@ -62,5 +64,13 @@ public class Test {
 
     public void setAnswerList(List<Answer> answerList) {
         this.answerList = answerList;
+    }
+
+    public boolean isRandomSortQuestion() {
+        return randomSortQuestion;
+    }
+
+    public void setRandomSortQuestion(boolean randomSortQuestion) {
+        this.randomSortQuestion = randomSortQuestion;
     }
 }

@@ -19,6 +19,7 @@ public class TestEntity {
     @JoinColumn(name = "idTest")
     private List<QuestionEntity> questions;
     private boolean active = false;
+    private boolean randomSortQuestion = false;
 
     public TestEntity() {
 
@@ -64,6 +65,14 @@ public class TestEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isRandomSortQuestion() {
+        return randomSortQuestion;
+    }
+
+    public void setRandomSortQuestion(boolean randomSortQuestion) {
+        this.randomSortQuestion = randomSortQuestion;
     }
 }
 

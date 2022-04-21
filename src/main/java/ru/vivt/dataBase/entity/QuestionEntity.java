@@ -11,7 +11,6 @@ public class QuestionEntity {
     private String text;
     @Lob
     private String answer;
-    @Lob
     private String comment;
     private Long idTest;
 

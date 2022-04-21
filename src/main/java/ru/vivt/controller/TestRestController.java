@@ -16,6 +16,7 @@ import ru.vivt.repository.TestRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class TestRestController {
     @GetMapping("/testAll")
     public List<Test> getAllTest() {
         List<Test> list = new ArrayList<>();
-        testRepository.findAll().forEach(t -> list.add(new Test(t.getIdTest(), t.getTest(), t.getDescription(), t.isActive())));
+        testRepository.findAll().forEach(t -> list.add(new Test(t.getIdTest(), t.getTest(), t.getDescription(), t.isActive(), t.isRandomSortQuestion())));
         return list;
     }
 
@@ -42,12 +43,19 @@ public class TestRestController {
     @Transactional
     public Test test(@RequestParam Long id) {
         TestEntity testEntity = testRepository.findById(id).orElseThrow();
-        Test test = new Test(testEntity.getIdTest(), testEntity.getTest(), testEntity.getDescription(), testEntity.isActive());
+        Test test = new Test(testEntity.getIdTest(),
+                testEntity.getTest(),
+                testEntity.getDescription(),
+                testEntity.isActive(),
+                testEntity.isRandomSortQuestion());
 
         List<Answer> list = test.getAnswerList();
         testEntity.getQuestions().forEach(
                 q -> list.add(new Answer(q.getIdQuestion(), q.getText(), q.getAnswer(), q.getComment()))
         );
+        if (test.isRandomSortQuestion()) {
+            Collections.shuffle(list);
+        }
         test.setAnswerList(list);
         return  test;
     }

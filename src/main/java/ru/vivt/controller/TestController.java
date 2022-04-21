@@ -93,7 +93,6 @@ public class TestController {
         model.addAttribute("testDescription", test.getDescription());
 
         var answers = new ArrayList<Answer>();
-//        AtomicInteger i = new AtomicInteger();
         questionRepository.findAll().forEach(q -> {
             if (test.getIdTest() == q.getIdTest()) {
                 answers.add(new Answer(q.getIdQuestion(), q.getText(), q.getAnswer(), q.getComment()));
@@ -170,6 +169,16 @@ public class TestController {
     public String deleteTest(@RequestParam Long idTest) {
 
         testRepository.deleteById(idTest);
+        return "redirect:/app/resultsOverview";
+    }
+
+    @GetMapping("enableRandomSort")
+    @Transactional
+    public String enableRandomSort(@RequestParam Long idTest) {
+
+        var test = testRepository.findById(idTest).orElseThrow();
+        test.setRandomSortQuestion(!test.isRandomSortQuestion());
+
         return "redirect:/app/resultsOverview";
     }
 
