@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
 
+        String version = "2.2.5-SNAPSHOT";
         System.out.println("   _____ ______ _______      ________ _____    __  ____      _______  \n" +
                 "  / ____|  ____|  __ \\ \\    / /  ____|  __ \\  |  \\/  \\ \\    / /  __ \\ \n" +
                 " | (___ | |__  | |__) \\ \\  / /| |__  | |__) | | \\  / |\\ \\  / /| |__) |\n" +
@@ -17,6 +18,6 @@ public class Main {
                 "  ____) | |____| | \\ \\  \\  /  | |____| | \\ \\  | |  | |  \\  /  | |     \n" +
                 " |_____/|______|_|  \\_\\  \\/   |______|_|  \\_\\ |_|  |_|   \\/   |_|     \n" +
                 "                                          ______                      \n" +
-                "                                         |______|            1.7.2-SNAPSHOT");
+                "                                         |______|            " + version);
     }
 }

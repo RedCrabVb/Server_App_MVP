@@ -3,35 +3,54 @@ package ru.vivt.dataBase.dto;
 import java.util.Objects;
 
 public class Answer {
-    private int id;
-    private final String question;
-    private final String response;
-    private final String comment;
+    private Long id;
+    private String question;
+    private String response;
 
-    public Answer(int id, String question, String response, String comment) {
-        this.question = question;
-        this.response = response;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
-        this.comment = comment;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getResponse() {
         return response;
     }
 
-
-    public String getQuestion() {
-        return question;
+    public void setResponse(String response) {
+        this.response = response;
     }
 
-
-    public String getId() {
-        return "answer-" + id;
+    public String getComment() {
+        return comment;
     }
 
-    public void setId(int id) {
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    private String comment;
+
+    public Answer() {
+    }
+
+    public Answer(Long id, String question, String response, String comment) {
+        this.question = question;
+        this.response = response;
         this.id = id;
+        this.comment = comment;
     }
+
 
     @Override
     public String toString() {
@@ -51,9 +70,5 @@ public class Answer {
         return Objects.hash(question, response);
     }
 
-
-    public String getComment() {
-        return comment;
-    }
 
 }

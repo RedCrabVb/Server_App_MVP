@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 public class NewsController {
     @Value("${news}")
     private String news;

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Log</title>
+        <!-- CSS only -->
+        <link href="/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+       <div class="container">
+           <p th:utext="${log}"></p>
+       </div>
+    </body>
+</html>

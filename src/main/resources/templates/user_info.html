@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>User info</title>
+        <!-- CSS only -->
+        <link href="/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+        <div class="container-sm p-3 mb-2 gradient-main text-dark">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Данные пользователя</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${!users.empty}">
+                    <tr th:each="user : ${users}">
+                        <td style="width: 70%">
+                            <div th:if="${!user.email.isEmpty()}">
+                                <p class="word" scope="row" th:text="${'Имя: ' + user.username}"></p>
+                                <p class="word" scope="row" th:text="${'Почта: ' + user.email}"></p>
+                                <p class="word" scope="row" th:text="${'Токен: ' + user.token}"></p>
+                            </div>
+                            <div th:unless="${!user.email.isEmpty()}">
+                                <p> Нет данных</p>
+                            </div>
+                        </td>
+                        <td style="width: 15%">
+                            <a scope="row" th:href="${'/app/deleteUser?idUser=' + user.idAccount}"
+                               class="btn btn-danger mb-1">Удалить</a>
+                        </td>
+                        </p>
+                    </tr>
+                    <td th:if="${users.empty}" colspan="3"> Нет данных</td>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

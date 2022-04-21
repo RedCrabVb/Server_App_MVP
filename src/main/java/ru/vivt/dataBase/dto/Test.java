@@ -1,35 +1,30 @@
-package ru.vivt.dataBase.entity;
-
+package ru.vivt.dataBase.dto;
 
 import jakarta.persistence.*;
+import ru.vivt.dataBase.entity.QuestionEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "test")
-public class TestEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Test {
     private Long idTest;
-    @Lob
     private String test;
-    @Lob
     private String description;
-    @OneToMany
-    @JoinColumn(name = "idTest")
-    private List<QuestionEntity> questions;
     private boolean active = false;
+    private List<Answer> answerList = new ArrayList<>();
     private boolean randomSortQuestion = false;
 
-    public TestEntity() {
+    public Test() {
 
     }
 
-    public TestEntity(String test, String description) {
+    public Test(Long idTest, String test, String description, boolean active, boolean randomSortQuestion) {
+        this.idTest = idTest;
         this.test = test;
         this.description = description;
+        this.active = active;
+        this.randomSortQuestion = randomSortQuestion;
     }
-
 
     public Long getIdTest() {
         return idTest;
@@ -55,16 +50,20 @@ public class TestEntity {
         this.description = description;
     }
 
-    public List<QuestionEntity> getQuestions() {
-        return questions;
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<Answer> getAnswerList() {
+        return answerList;
+    }
+
+    public void setAnswerList(List<Answer> answerList) {
+        this.answerList = answerList;
     }
 
     public boolean isRandomSortQuestion() {
@@ -75,4 +74,3 @@ public class TestEntity {
         this.randomSortQuestion = randomSortQuestion;
     }
 }
-

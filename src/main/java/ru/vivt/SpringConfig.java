@@ -1,8 +1,14 @@
 package ru.vivt;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.vivt")
@@ -10,21 +16,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SpringConfig implements WebMvcConfigurer {
 
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("home");
-        registry.addViewController("/").setViewName("home");
+        registry.addViewController("/").setViewName("index");
         registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/testCreator").setViewName("testCreator");
-        registry.addViewController("/testAdd").setViewName("testAdd");
-        registry.addViewController("/resultsOverview").setViewName("resultsOverview");
-        registry.addViewController("/testCreator").setViewName("testCreator");
     }
 
     @Bean
-    public MailSender mailSender() {
+    public MailSender mailSender(@Value("${mail.properties}") String mailProperties) throws IOException {
+        Properties property = new Properties();
+        property.load(new FileInputStream(mailProperties));
 
         return new MailSender(
-                "username",
-                "password"
+                property.getProperty("usernameEmail"),
+                property.getProperty("passwordEmail")
         );
     }
 }

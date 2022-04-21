@@ -1,7 +1,13 @@
 package ru.vivt.dataBase.entity;
 
 import jakarta.persistence.*;
-@Entity
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+@Entity(name = "ResultTest")
 @Table(name = "ResultTest")
 public class ResultTestEntity {
     @Id
@@ -12,32 +18,28 @@ public class ResultTestEntity {
     private AccountsEntity accountsEntity;
     private int idTest;
     private String time;
-    private String countRightAnswer;
-    private String jsonAnswer;
+    private String countWrongAnswer;
+    private LocalDateTime date;
 
     public ResultTestEntity() {
 
     }
 
-    public ResultTestEntity(AccountsEntity accountsEntity, int idTest, String time, String countRightAnswer, String jsonAnswer) {
+    public ResultTestEntity(AccountsEntity accountsEntity, int idTest, String time, String countRightAnswer) {
         this.accountsEntity = accountsEntity;
         this.idTest = idTest;
         this.time = time;
-        this.countRightAnswer = countRightAnswer;
-        this.jsonAnswer = jsonAnswer;
+        this.countWrongAnswer = countRightAnswer;
     }
 
     public String getTime() {
         return time;
     }
 
-    public String getCountRightAnswer() {
-        return countRightAnswer;
+    public String getCountWrongAnswer() {
+        return countWrongAnswer;
     }
 
-    public String getJsonAnswer() {
-        return jsonAnswer;
-    }
 
     public int getIdTest() {
         return idTest;
@@ -45,6 +47,22 @@ public class ResultTestEntity {
 
     public AccountsEntity getAccountsEntity() {
         return accountsEntity;
+    }
+
+    public int getIdResultTest() {
+        return idResultTest;
+    }
+
+    public void setIdResultTest(int idResultTest) {
+        this.idResultTest = idResultTest;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
 

@@ -1,47 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Statistics test</title>
-    <!-- CSS only -->
-    <link href="/style.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{fragments/navbar :: navbar}"></div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Statistics test</title>
+        <!-- CSS only -->
+        <link href="/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<div class="container-sm p-3 mb-2 gradient-main text-dark">
-    <div class="row d-flex">
-        <div class="container-sm">
-            <h1>Название теста</h1>
-            <p th:text="${testName}"/>
-            <h2>Описание теста</h2>
-            <p th:text="${testDescription}"/>
+        <div class="container-sm p-3 mb-2 gradient-main text-dark">
+            <div class="row d-flex">
+                <div class="container-sm">
+                    <h1>Название теста</h1>
+                    <p th:text="${testName}"/>
+                    <h2>Описание теста</h2>
+                    <p th:text="${testDescription}"/>
+                </div>
+            </div>
+            <div th:each="tdate : ${testDate}">
+                <h1 th:text="${tdate}"></h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Имя пользователя</th>
+                            <th scope="col">Почта</th>
+                            <th scope="col">Время</th>
+                            <th scope="col">Количество не верных ответов</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${!tests.get(tdate).empty}">
+                        <tr th:each="test : ${tests.get(tdate)}">
+                            <td>
+                                <p class="word" scope="row" th:text="${test.accountsEntity.email}"></p>
+                            </td>
+                            <td>
+                                <p class="word" scope="row" th:text="${test.accountsEntity.username}"></p>
+                            </td>
+                            <td>
+                                <p class="word" scope="row" th:text="${test.getTimeFormatString()}"/>
+                            </td>
+                            <td>
+                                <p class="word" scope="row"
+                                   th:text="${test.getCountWrongAnswer}"/>
+                            </td>
+                        </tr>
+                        </tr>
+                        <td th:if="${tests.empty}" colspan="2">Нет данных</td>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col"> Id аккаунта</th>
-            <th scope="col"> Результаты</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${!tests.empty}">
-        <tr th:each="test : ${tests}">
-            <td>
-                <p class="word" scope="row" th:text="${test.getIdAccount}"></p>
-            </td>
-            <td>
-                <p class="word" scope="row" th:text="${'время: ' + test.getTime}"/>
-                <p class="word" scope="row" th:text="${'количество верных ответов: ' + test.getCountRightAnswer}"/>
-                <p class="word" scope="row" th:text="${'Порядок ответов: ' + test.getJsonAnswer}"/>
-
-            </td>
-        </tr>
-        </tr>
-        <td th:if="${tests.empty}" colspan="2"> Нет данных</td>
-        </tbody>
-    </table>
-</div>
-</body>
+    </body>
 </html>

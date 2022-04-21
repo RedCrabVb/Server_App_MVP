@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class AccountsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idAccount;
+    private Long idAccount;
     private String qrCode;
     private String token;
     private LocalDate accountActiveTime;
@@ -74,7 +74,7 @@ public class AccountsEntity {
         this.username = username;
     }
 
-    public int getIdAccount() {
+    public Long getIdAccount() {
         return idAccount;
     }
 
