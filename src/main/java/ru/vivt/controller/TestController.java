@@ -8,13 +8,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.vivt.dataBase.dto.Accounts;
 import ru.vivt.dataBase.dto.Answer;
+import ru.vivt.dataBase.dto.ResultTest;
 import ru.vivt.dataBase.entity.QuestionEntity;
+import ru.vivt.dataBase.entity.ResultTestEntity;
 import ru.vivt.dataBase.entity.TestEntity;
 import ru.vivt.repository.QuestionRepository;
 import ru.vivt.repository.ResultTestRepository;
 import ru.vivt.repository.TestRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -38,7 +43,6 @@ public class TestController {
 
     @Autowired
     private ResultTestRepository resultTestDAO;
-
 
     @GetMapping("/testCreator")
     public String testCreatorPage() {
@@ -136,7 +140,36 @@ public class TestController {
             return answer;
         });
 
-        model.addAttribute("tests", results);
+
+        var listRes = results.stream().map(f -> {
+                    var ac = f.getAccountsEntity();
+                    return new ResultTest(
+                            f.getIdResultTest(),
+                            new Accounts(ac.getIdAccount(),
+                                    ac.getQrCode(),
+                                    ac.getToken(),
+                                    ac.getAccountActiveTime(),
+                                    ac.getUsername(),
+                                    ac.getEmail(),
+                                    ac.getPassword()),
+                            f.getIdTest(),
+                            f.getTime(),
+                            f.getCountWrongAnswer(),
+                            f.getDate().toLocalDate()
+                    );
+                })
+
+                .collect(Collectors.groupingBy(f -> f.getDate().toString()));
+
+        var testDate = new ArrayList(listRes
+                .keySet()
+                .stream()
+                .sorted(Comparator.comparing(LocalDate::parse))
+                .toList());
+        Collections.reverse(testDate);
+
+        model.addAttribute("tests", listRes);
+        model.addAttribute("testDate", testDate);
 
         return "statistics_test";
     }

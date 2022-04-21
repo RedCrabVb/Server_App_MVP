@@ -57,14 +57,6 @@ public class ResultTestEntity {
         this.idResultTest = idResultTest;
     }
 
-    public String getTimeFormatString() {
-        var timeLong = Long.parseLong(getTime());
-        long time = TimeUnit.MILLISECONDS.toMinutes(timeLong);
-        long second = TimeUnit.MILLISECONDS.toSeconds(timeLong) % 60;
-        var timeString =  time + " мин. " + second + " c.";
-        return timeString;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
