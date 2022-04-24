@@ -57,7 +57,7 @@ public class PersonDataController implements InitializingBean {
         return service.updateAccount(JsonParser.parseString(body)
                 .getAsJsonObject()
                 .get("token")
-                .getAsString(), password, email, username);
+                .getAsString(), toSHA1(password), email, username);
     }
 
     @PostMapping("/api/resetPassword/email")
