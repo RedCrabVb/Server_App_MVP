@@ -41,6 +41,8 @@ public class Answer {
 
     private String comment;
 
+    private String hash;
+
     public Answer() {
     }
 
@@ -49,6 +51,7 @@ public class Answer {
         this.response = response;
         this.id = id;
         this.comment = comment;
+        this.hash = toString();
     }
 
 
@@ -71,4 +74,11 @@ public class Answer {
     }
 
 
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
 }

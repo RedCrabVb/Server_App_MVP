@@ -61,10 +61,11 @@ public class TestRestController {
     }
 
     @GetMapping("/getHashAnswer")
-    public JsonObject getHash(@RequestParam String question, @RequestParam String answer) {
+    @Deprecated
+    public String getHash(@RequestParam String question, @RequestParam String answer) {
         JsonObject json = new JsonObject();
         json.addProperty("hash", new Answer(1L, question, answer, "").toString());
-        return json;
+        return json.toString();
     }
 
     @GetMapping("/saveResultTest")

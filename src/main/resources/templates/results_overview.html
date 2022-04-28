@@ -34,7 +34,7 @@
                             <a scope="row" th:href="${'/app/deleteTest?idTest=' + test.idTest}" class="btn btn-danger mb-1">Удалить</a>
                             <a scope="row" th:href="${'/app/editTest?id=' + test.idTest}" class="btn btn-primary mb-1">Редактирование</a>
                             <a scope="row" th:href="${'/app/activeTest?idTest=' + test.idTest}" class="btn btn-secondary mb-1" th:text="${test.active} ? 'Выключить' : 'Включить'"></a>
-                            <a scope="row" th:href="${'/app/enableRandomSort?idTest=' + test.idTest}" th:class="${test.randomSortQuestion} ? 'btn btn-primary mb-1' : 'btn btn-secondary mb-1'" th:text="${test.randomSortQuestion} ? 'Случайная сортировка' : 'Сортировка по порядку'"></a>
+                            <a scope="row" th:href="${'/app/enableRandomSort?idTest=' + test.idTest}" th:class="${test.randomSortQuestion} ? 'btn btn-primary mb-1' : 'btn btn-secondary mb-1'" th:text="${test.randomSortQuestion} ? 'Вопросы случайно' : 'Вопросы по порядку'"></a>
                         </td>
                     </tr>
                     </tr>
