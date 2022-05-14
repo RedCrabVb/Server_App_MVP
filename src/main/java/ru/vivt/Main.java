@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
 
-        String version = "2.3.1-SNAPSHOT";
+        String version = "2.4.0-SNAPSHOT";
         System.out.println("   _____ ______ _______      ________ _____    __  ____      _______  \n" +
                 "  / ____|  ____|  __ \\ \\    / /  ____|  __ \\  |  \\/  \\ \\    / /  __ \\ \n" +
                 " | (___ | |__  | |__) \\ \\  / /| |__  | |__) | | \\  / |\\ \\  / /| |__) |\n" +
